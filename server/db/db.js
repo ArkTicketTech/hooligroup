@@ -13,17 +13,26 @@ db.once('open', function () {
 
 
 var userSchema = mongoose.Schema({
-	email: String,
+	username: String,
+	name: String,
 	password: String,
 	recheck: String,
 	token: String,
 	create_time: Date
 })
 
+var groupSchema = mongoose.Schema({
+	name: String,
+	type: String,
+	description: String,
+	create_time: Date
+})
+
 var model = {
 	// 在此处扩展 model，例如：
 	// Article: mongoose.model('Article', articleSchema),
-	User: mongoose.model('User', userSchema)
+	User: mongoose.model('User', userSchema),
+	Group: mongoose.model('Group', groupSchema)
 }
 
 module.exports = model
