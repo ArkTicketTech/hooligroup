@@ -14,6 +14,7 @@ db.once('open', function () {
 
 var userSchema = mongoose.Schema({
 	username: String,
+	name: String,
 	password: String,
 	recheck: String,
 	token: String,

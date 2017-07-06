@@ -13,6 +13,7 @@ const Register = (req, res) => {
 		username: req.body.username,
 		password: sha1(req.body.password),
 		recheck: req.body.recheck,
+		name: req.body.name,
 		token: createToken(this.username)
 	})
 
