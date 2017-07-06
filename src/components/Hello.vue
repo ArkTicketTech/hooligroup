@@ -5,7 +5,7 @@
     <!-- v-for在进行过度时，使用 transition-group 标签，使用后内层标签需要有独有的 key 值 -->
     <transition-group name="list-complete" tag="ul">
         <li v-for="(item, index) in user" :key="item._id" class="list-complete-item">
-            {{ index+1 }}. {{ item.email }}
+            {{ index+1 }}. {{ item.username }}
         </li>
     </transition-group>
     <br>

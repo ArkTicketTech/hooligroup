@@ -43,5 +43,9 @@ export default {
 	// 删除用户
 	delUser(data) {
 		return instance.post('/api/delUser', data)
+	},
+	// 获取group
+	getGroups() {
+		return instance.get('api/groups')
 	}
 }

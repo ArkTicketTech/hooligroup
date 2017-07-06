@@ -10,10 +10,10 @@ const checkToken = require('../middleware/checkToken.js')
 // 注册
 const Register = (req, res) => {
 	let userRegister = new model.User({
-		email: req.body.email,
+		username: req.body.username,
 		password: sha1(req.body.password),
 		recheck: req.body.recheck,
-		token: createToken(this.email)
+		token: createToken(this.username)
 	})
 
 	// 将 objectid 转换为 用户创建时间
@@ -21,7 +21,7 @@ const Register = (req, res) => {
 		.format('YYYY-MM-DD HH:mm:ss');
 
 	model.User.findOne({
-		email: (userRegister.email)
+		username: (userRegister.username)
 			.toLowerCase()
 	}, (err, doc) => {
 		if(err) console.log(err)
@@ -45,11 +45,11 @@ const Register = (req, res) => {
 // 登录
 const Login = (req, res) => {
 	let userLogin = new model.User({
-		email: req.body.email,
+		username: req.body.username,
 		password: sha1(req.body.password),
-		token: createToken(this.email)
+		token: createToken(this.username)
 	})
-	model.User.findOne({ email: userLogin.email }, (err, doc) => {
+	model.User.findOne({ username: userLogin.username }, (err, doc) => {
 		if(err) console.log(err)
 		if(!doc) {
 			console.log("账号不存在");
@@ -58,10 +58,10 @@ const Login = (req, res) => {
 			})
 		} else if(userLogin.password === doc.password) {
 			console.log('登录成功')
-			var name = req.body.email;
+			var name = req.body.username;
 			res.json({
 				success: true,
-				email: doc.email,
+				username: doc.username,
 				// 账户创建日期
 				time: moment(objectIdToTimestamp(doc._id))
 					.format('YYYY-MM-DD HH:mm:ss'),

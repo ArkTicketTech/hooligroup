@@ -7,11 +7,11 @@
             <el-col >
               <el-form :model="dynamicValidateForm" label-width="100px" ref="dynamicValidateForm">
                     <el-form-item
-                      prop="email"
-                      label="邮箱"
-                      :rules="rules.email"
+                      prop="username"
+                      label="用户名"
+                      :rules="rules.username"
                     >
-                      <el-input v-model="dynamicValidateForm.email"></el-input>
+                      <el-input v-model="dynamicValidateForm.username"></el-input>
                     </el-form-item>
                     <el-form-item
                     prop="password"
@@ -43,20 +43,15 @@ export default {
     data() {
         return {
             dynamicValidateForm: {
-                email: '',
+                username: '',
                 password: ''
             },
             activeName: this.$store.state.activeName,
             // 输入校验
             rules: {
-                email: [{
+                username: [{
                         required: true,
-                        message: '请输入邮箱地址',
-                        trigger: 'blur'
-                    },
-                    {
-                        type: 'email',
-                        message: '请输入正确的邮箱地址',
+                        message: '请输入用户名',
                         trigger: 'blur'
                     }
                 ],
@@ -98,7 +93,7 @@ export default {
                                 message: '登录成功'
                             })
                             this.$store.dispatch('UserLogin', data.token)
-                            this.$store.dispatch('UserName', data.email)
+                            this.$store.dispatch('UserName', data.username)
                             let redirect = decodeURIComponent(this.$route.query.redirect || '/');
                             this.$router.push({
                                 path: redirect
