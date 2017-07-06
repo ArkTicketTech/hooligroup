@@ -24,7 +24,8 @@ var userSchema = mongoose.Schema({
 var groupSchema = mongoose.Schema({
 	name: String,
 	type: String,
-	description: String
+	description: String,
+	create_time: Date
 })
 
 var model = {
