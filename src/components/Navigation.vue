@@ -1,7 +1,7 @@
 <template scope='scope'>
     <el-menu theme="light" :default-active="defaultActiveIndex" mode="horizontal">
-        <el-menu-item index="0"><img src="../assets/logo.jpg"></el-menu-item>
-        
+        <span class="logo-sm"><img src="../assets/logo-small.gif"></span>
+
         <el-menu-item index="1">小组</el-menu-item>
         <el-menu-item index="2">活动</el-menu-item>
 
@@ -13,52 +13,61 @@
 </template>
 
 <script>
-/**
- * @author: wfnuser
- */
-import * as types from '../store/types'
-import api from '../axios'
+    /**
+     * @author: wfnuser
+     */
+    import * as types from '../store/types'
+    import api from '../axios'
 
-export default {
-    name: 'navigation',
-    data() {
-        return {
-            user: '',
-            username: ''
-        }
-    },
-    mounted() {
-        this.username = localStorage.getItem('username')
-    },
-    methods: {
-        logout() {
-            this.$store.dispatch('UserLogout')
-            if (!this.$store.state.token) {
-                this.$router.push('/login')
-                this.$message({
-                    type: 'success',
-                    message: '登出成功'
-                })
-            } else {
-                this.$message({
-                    type: 'info',
-                    message: '登出失败'
-                })
+    export default {
+        name: 'navigation',
+        data() {
+            return {
+                user: '',
+                username: ''
             }
-        }
-    },
-    computed: {
-        defaultActiveIndex: function () {
-            var navMapping = {
-                "Group": "1",
-                "Activity": "2"
+        },
+        mounted() {
+            this.username = localStorage.getItem('username')
+        },
+        methods: {
+            logout() {
+                this.$store.dispatch('UserLogout')
+                if (!this.$store.state.token) {
+                    this.$router.push('/login')
+                    this.$message({
+                        type: 'success',
+                        message: '登出成功'
+                    })
+                } else {
+                    this.$message({
+                        type: 'info',
+                        message: '登出失败'
+                    })
+                }
             }
-            return navMapping[this.$route.name];
+        },
+        computed: {
+            defaultActiveIndex: function () {
+                var navMapping = {
+                    "Group": "1",
+                    "Activity": "2"
+                }
+                return navMapping[this.$route.name];
+            }
         }
     }
-}
 </script>
 
 <style scoped>
+    .logo-sm {
+        float: left;
+        margin-top: 9px;
+        margin-left: 20px;
+    }
 
+    .right {
+        float: right !important;
+        margin-right: 20px;
+    }
 </style>
