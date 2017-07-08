@@ -1,18 +1,23 @@
 <template scope='scope'>
-    <div class="group">
-        <el-row :gutter="20">
-            <el-col :span="6" v-for="(item, index) in groups" :key="item._id">
-                <el-card class="box-card">
-                    <div slot="header" class="clearfix">
-                        <span style="line-height: 36px;">{{item.name}}</span>
-                        <el-button style="float: right;" type="primary">详情</el-button>
-                    </div>
-                    <div class="text item">
-                        {{item.description}}
-                    </div>
-                </el-card>
-            </el-col>
-        </el-row>
+    <div class="group container">
+        <div v-for="(item, index) in groups">
+            <el-row>
+                <h2>{{item.type}}</h2>
+            </el-row>
+            <el-row :gutter="20">
+                <el-col :span="6" v-for="(each, index) in item.arr" :key="each._id">
+                    <el-card class="box-card">
+                        <div slot="header" class="clearfix">
+                            <span style="line-height: 36px;">{{each.name}}</span>
+                            <el-button style="float: right;" type="primary">详情</el-button>
+                        </div>
+                        <div class="text item">
+                            {{each.description}}
+                        </div>
+                    </el-card>
+                </el-col>
+            </el-row>
+        </div>
     </div>
 </template>
 
@@ -22,7 +27,9 @@
      */
     import * as types from '../store/types'
     import api from '../axios'
-    import { Loading } from 'element-ui';
+    import {
+        Loading
+    } from 'element-ui';
     export default {
         name: 'group',
         data() {
@@ -40,7 +47,18 @@
             getGroups() {
                 let loadingInstance = Loading.service();
                 api.getGroups().then((data) => {
-                    this.groups = data.data;
+                    //TODO: rewrite the code here, and use some config file
+                    this.groups = {};
+                    data.data.forEach(function(element) {
+                        if (this.groups.hasOwnProperty(element.type)) {
+                            this.groups[element.type].arr.push(element);
+                        } else {
+                            this.groups[element.type] = {};
+                            this.groups[element.type].type = element.type;
+                            this.groups[element.type].arr = [];
+                            this.groups[element.type].arr.push(element);
+                        }
+                    }, this);
                     loadingInstance.close();
                 })
             },
@@ -80,5 +98,31 @@
 
     .clearfix:after {
         clear: both
+    }
+
+    .container {
+        padding: 24px;
+    }
+
+    .container h2 a,
+    .container h3 a,
+    .container h4 a,
+    .container h5 a {
+        float: left;
+        margin-left: -20px;
+        opacity: 0;
+        cursor: pointer;
+    }
+
+    .container h2,
+    .container h3,
+    .container h4,
+    .container h5 {
+        float: left;
+    }
+
+    a {
+        color: #4078c0;
+        text-decoration: none;
     }
 </style>
