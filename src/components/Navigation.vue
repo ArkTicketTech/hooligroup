@@ -28,26 +28,9 @@ export default {
         }
     },
     mounted() {
-        this.get_User()
         this.username = localStorage.getItem('username')
     },
     methods: {
-        get_User() {
-            setTimeout(() => {
-                api.getUser().then(({
-                    data
-                }) => {
-                    if (data.code == 401) {
-                        console.log('token')
-                        this.$router.push('/login')
-                        this.$store.dispatch('UserLogout')
-                        console.log(localStorage.token)
-                    } else {
-                        this.user = data
-                    }
-                })
-            }, 100)
-        },
         logout() {
             this.$store.dispatch('UserLogout')
             if (!this.$store.state.token) {
