@@ -1,9 +1,11 @@
 <template scope='scope'>
-    <el-menu theme="dark" :default-active="defaultActiveIndex" class="el-menu-demo" mode="horizontal">
+    <el-menu theme="light" :default-active="defaultActiveIndex" mode="horizontal">
+        <el-menu-item index="0"><img src="../assets/logo.jpg"></el-menu-item>
+        
         <el-menu-item index="1">小组</el-menu-item>
         <el-menu-item index="2">活动</el-menu-item>
-    
-        <el-submenu index="3">
+
+        <el-submenu index="3" class="right">
             <template slot="title">{{username}}</template>
             <el-menu-item index="2-1" @click="logout()">登出</el-menu-item>
         </el-submenu>
@@ -30,9 +32,6 @@ export default {
         this.username = localStorage.getItem('username')
     },
     methods: {
-        // handleSelect(key, keyPath) {
-        //     console.log(key, keyPath);
-        // },
         get_User() {
             setTimeout(() => {
                 api.getUser().then(({
