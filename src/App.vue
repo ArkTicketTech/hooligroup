@@ -1,13 +1,18 @@
 <template>
-<div id="app">
-    <img src="./assets/logo.png" class="logo">
-    <router-view></router-view>
-</div>
+    <div id="app">
+        <img src="./assets/logo.png" class="logo" v-if="['login', 'register'].indexOf($route.name) > -1">
+        <navigation v-if="['login', 'register'].indexOf($route.name) == -1"></navigation>
+        <router-view></router-view>
+    </div>
 </template>
 
 <script>
+import Navigation from '@/components/Navigation.vue'
 export default {
-    name: 'app'
+    name: 'app',
+    components: {
+        Navigation
+    }
 }
 </script>
 
@@ -18,11 +23,11 @@ export default {
     -moz-osx-font-smoothing: grayscale;
     text-align: center;
     color: #2c3e50;
-    margin-top: 120px;
 }
 
 .logo {
     position: relative;
+    margin-top: 40px;
     margin-bottom: 40px;
 }
 </style>

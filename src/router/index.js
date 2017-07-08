@@ -7,10 +7,10 @@ Vue.use(Router)
 const router = new Router({
 	routes: [{
 			path: '/',
-			name: 'Hello',
+			name: 'Group',
 			component(resolve) {
-				require.ensure(['@/components/Hello.vue'], () => {
-					resolve(require('@/components/Hello.vue'));
+				require.ensure(['@/components/Group.vue'], () => {
+					resolve(require('@/components/Group.vue'));
 				});
 			},
 			// 设置 mata 字段，表示该字段需要验证

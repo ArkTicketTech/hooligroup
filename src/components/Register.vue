@@ -18,7 +18,7 @@
         </el-form>
     </div>
 </template>
-·
+
 <script>
     import * as types from '../store/types'
     import api from '../axios'

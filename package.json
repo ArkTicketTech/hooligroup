@@ -1,7 +1,7 @@
 {
-  "name": "hooli_group",
+  "name": "hooli-group",
   "version": "1.0.0",
-  "description": "A Vue.js project",
+  "description": "A website to help people build study groups",
   "author": "wfnuser <qinghao.huang@arkticket.tech>",
   "private": true,
   "scripts": {
