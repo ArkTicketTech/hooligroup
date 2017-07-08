@@ -22,6 +22,7 @@
      */
     import * as types from '../store/types'
     import api from '../axios'
+    import { Loading } from 'element-ui';
     export default {
         name: 'group',
         data() {
@@ -37,8 +38,10 @@
         },
         methods: {
             getGroups() {
+                let loadingInstance = Loading.service();
                 api.getGroups().then((data) => {
                     this.groups = data.data;
+                    loadingInstance.close();
                 })
             },
             logout() {
