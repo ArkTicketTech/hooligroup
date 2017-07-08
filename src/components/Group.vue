@@ -1,15 +1,11 @@
 <template scope='scope'>
-<div class="hello">
-    <h1>{{ msg }}: {{ username }}</h1>
-
+<div class="group">
     <!-- v-for在进行过度时，使用 transition-group 标签，使用后内层标签需要有独有的 key 值 -->
     <transition-group name="list-complete" tag="ul">
         <li v-for="(item, index) in user" :key="item._id" class="list-complete-item">
             {{ index+1 }}. {{ item.username }}
         </li>
     </transition-group>
-    <br>
-    <el-button type="primary" @click="logout()">登出</el-button>
 </div>
 </template>
 
@@ -20,7 +16,7 @@
 import * as types from '../store/types'
 import api from '../axios'
 export default {
-    name: 'hello',
+    name: 'group',
     data() {
         return {
             msg: 'Welcome to Hooli Group',
@@ -69,38 +65,4 @@ export default {
 </script>
 
 <style scoped>
-h1,
-h2 {
-    font-weight: normal;
-}
-
-ul {
-    list-style-type: none;
-    padding: 0;
-}
-
-li {
-    /*display: inline-block;*/
-    margin: 10px 0;
-}
-
-a {
-    color: #42b983;
-}
-
-.list-complete-item {
-    transition: all 1s;
-    display: inline-block;
-    margin-right: 10px;
-}
-
-.list-complete-enter,
-.list-complete-leave-to {
-    opacity: 0;
-    transform: translateY(30px);
-}
-
-.list-complete-leave-active {
-    position: absolute;
-}
 </style>
