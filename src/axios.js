@@ -30,22 +30,22 @@ instance.interceptors.response.use(response => {
 export default {
 	// 用户注册
 	userRegister(data) {
-		return instance.post('/api/register', data)
+		return instance.post('/hapi/register', data)
 	},
 	// 用户登录
 	UserLogin(data) {
-		return instance.post('/api/login', data)
+		return instance.post('/hapi/login', data)
 	},
 	// 获取用户
 	getUser() {
-		return instance.get('/api/user')
+		return instance.get('/hapi/user')
 	},
 	// 删除用户
 	delUser(data) {
-		return instance.post('/api/delUser', data)
+		return instance.post('/hapi/delUser', data)
 	},
 	// 获取group
 	getGroups() {
-		return instance.get('api/groups')
+		return instance.get('/hapi/groups')
 	}
 }
