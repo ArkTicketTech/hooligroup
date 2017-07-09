@@ -16,7 +16,7 @@ app.use(bodyParser.urlencoded({ extended: false }));
 app.use(cookieParser());
 
 app.use(compression({ threshold: 0 }))
-app.use('/api', routes)
+app.use('/hapi', routes)
 
 app.use(function (req, res, next) {
 	var err = new Error('This page not found');
