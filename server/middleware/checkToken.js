@@ -9,10 +9,7 @@ module.exports = function (req, res, next) {
 	// console.log(Date.now() / 1000)
 	// 监测 token 是否过期
 	if(token && decoded.exp <= Date.now() / 1000) {
-		return res.json({
-			code: 401,
-			message: 'token过期，请重新登录'
-		})
+		return res.send(401, 'token过期，请重新登录')
 	}
 	next();
 }
