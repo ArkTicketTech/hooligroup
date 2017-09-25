@@ -55,8 +55,14 @@ export default {
 	delUser(data) {
 		return instance.post('/hapi/delUser', data)
 	},
+
 	// 获取group
 	getGroups() {
 		return instance.get('/hapi/groups')
+	},
+
+	// 报名参加group
+	joinGroup(groupId) {
+		return instance.post('/hapi/joinGroup', groupId)
 	}
 }
