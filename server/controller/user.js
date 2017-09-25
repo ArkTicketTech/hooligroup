@@ -6,6 +6,7 @@ const objectIdToTimestamp = require('objectid-to-timestamp')
 const createToken = require('../middleware/createToken.js')
 const sha1 = require('sha1')
 const checkToken = require('../middleware/checkToken.js')
+const getToken = require('../middleware/getToken.js')
 
 // 注册
 const Register = (req, res) => {
@@ -14,7 +15,7 @@ const Register = (req, res) => {
 		password: sha1(req.body.password),
 		recheck: req.body.recheck,
 		name: req.body.name,
-		token: createToken(this.username)
+		token: createToken(this.username, this._id)
 	})
 
 	// 将 objectid 转换为 用户创建时间
@@ -48,7 +49,7 @@ const Login = (req, res) => {
 	let userLogin = new model.User({
 		username: req.body.username,
 		password: sha1(req.body.password),
-		token: createToken(this.username)
+		token: createToken(this.username, this._id)
 	})
 	model.User.findOne({ username: userLogin.username }, (err, doc) => {
 		if(err) console.log(err)
@@ -67,7 +68,7 @@ const Login = (req, res) => {
 				time: moment(objectIdToTimestamp(doc._id))
 					.format('YYYY-MM-DD HH:mm:ss'),
 				// token 信息验证
-				token: createToken(name)
+				token: createToken(name, doc._id)
 			})
 		} else {
 			console.log('密码错误')
@@ -97,9 +98,22 @@ const delUser = (req, res) => {
 	})
 }
 
+// 用户加入group
+const joinGroup = (req, res) => {
+	let user
+	if (user = getToken(req, res)) {
+		// model.User.find
+		res.json({
+			user
+		})
+	}
+	// model.User.findOne();
+}
+
 module.exports = (router) => {
 	router.post('/register', Register),
 		router.post('/login', Login),
 		router.get('/user', checkToken, User),
-		router.post('/delUser', checkToken, delUser)
+		router.post('/delUser', checkToken, delUser),
+		router.post('/joinGroup', checkToken, joinGroup)
 }

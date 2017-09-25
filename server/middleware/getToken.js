@@ -1,9 +1,8 @@
-// 监测 token 是否过期
+// Get Token
 const jwt = require('jsonwebtoken')
-module.exports = function (req, res, next) {
-	// console.log(req.headers)
+module.exports = function (req, res) {
+	console.log(req.headers)
 	let token = req.headers['authorization'].split(' ')[1]
-	console.log(token)
 	// 解构 token，生成一个对象 { name: xx, iat: xx, exp: xx }
 	let decoded = jwt.decode(token, 'secret')
 	// console.log(decoded.exp)
@@ -12,5 +11,6 @@ module.exports = function (req, res, next) {
 	if(token && decoded.exp <= Date.now() / 1000) {
 		return res.send(401, 'token过期，请重新登录')
 	}
-	next();
+	
+	return decoded;
 }
