@@ -100,11 +100,15 @@ const delUser = (req, res) => {
 
 // 用户加入group
 const joinGroup = (req, res) => {
-	let user
-	if (user = getToken(req, res)) {
-		// model.User.find
-		res.json({
-			user
+	let user = getToken(req, res)
+	if (user) {
+		model.User.update(
+			user.id, 
+			{ $push: { groups: req.id } }
+		);
+		model.User.findById(user.id, (err, doc) => {
+			if (err) console.log(err)
+			res.send(doc)
 		})
 	}
 	// model.User.findOne();

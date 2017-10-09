@@ -80,7 +80,6 @@ export default {
                     api.UserLogin(opt).then(({
                         data
                     }) => {
-                        console.log(data)
                         if (!data.info) {
                             this.$message({
                                 type: 'info',
