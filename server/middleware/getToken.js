@@ -1,7 +1,6 @@
 // Get Token
 const jwt = require('jsonwebtoken')
 module.exports = function (req, res) {
-	console.log(req.headers)
 	let token = req.headers['authorization'].split(' ')[1]
 	// 解构 token，生成一个对象 { name: xx, iat: xx, exp: xx }
 	let decoded = jwt.decode(token, 'secret')

@@ -26,15 +26,15 @@ const Register = (req, res) => {
 		username: (userRegister.username)
 			.toLowerCase()
 	}, (err, doc) => {
-		if(err) console.log(err)
+		if (err) console.log(err)
 		// 用户名已存在，不能注册
-		if(doc) {
+		if (doc) {
 			res.json({
 				success: false
 			})
 		} else {
 			userRegister.save(err => {
-				if(err) console.log(err)
+				if (err) console.log(err)
 				console.log('register success')
 				res.json({
 					success: true
@@ -51,14 +51,16 @@ const Login = (req, res) => {
 		password: sha1(req.body.password),
 		token: createToken(this.username, this._id)
 	})
-	model.User.findOne({ username: userLogin.username }, (err, doc) => {
-		if(err) console.log(err)
-		if(!doc) {
+	model.User.findOne({
+		username: userLogin.username
+	}, (err, doc) => {
+		if (err) console.log(err)
+		if (!doc) {
 			console.log("账号不存在");
 			res.json({
 				info: false
 			})
-		} else if(userLogin.password === doc.password) {
+		} else if (userLogin.password === doc.password) {
 			console.log('登录成功')
 			var name = req.body.username;
 			res.json({
@@ -82,15 +84,17 @@ const Login = (req, res) => {
 // 所有用户打印
 const User = (req, res) => {
 	model.User.find({}, (err, doc) => {
-		if(err) console.log(err)
+		if (err) console.log(err)
 		res.send(doc)
 	})
 }
 
 // 删除用户
 const delUser = (req, res) => {
-	model.User.findOneAndRemove({ _id: req.body.id }, err => {
-		if(err) console.log(err)
+	model.User.findOneAndRemove({
+		_id: req.body.id
+	}, err => {
+		if (err) console.log(err)
 		console.log('删除用户成功')
 		res.json({
 			success: true
@@ -100,14 +104,27 @@ const delUser = (req, res) => {
 
 // 用户加入group
 const joinGroup = (req, res) => {
-	let user
-	if (user = getToken(req, res)) {
-		// model.User.find
+	console.log(req)
+	let user = getToken(req, res)
+	if (user) {
+		model.User.findById(user.id, (err, doc) => {
+			// doc.set({groups:[]})
+			doc.groups.addToSet(req.body.id)
+			doc.save(function (err, updatedUser) {
+				if (err) res.send(err)
+			})
+		})
+		model.Group.findById(req.body.id, (err, doc) => {
+			// doc.set({members:[]})			
+			doc.members.addToSet(user.id)
+			doc.save(function (err, updatedGroup) {
+				if (err) res.send(err)
+			})
+		})
 		res.json({
-			user
+			success: true
 		})
 	}
-	// model.User.findOne();
 }
 
 module.exports = (router) => {

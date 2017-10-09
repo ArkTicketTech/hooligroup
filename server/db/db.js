@@ -18,6 +18,7 @@ var userSchema = mongoose.Schema({
 	password: String,
 	recheck: String,
 	token: String,
+	groups: [String],
 	create_time: Date
 })
 
