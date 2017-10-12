@@ -10,6 +10,7 @@
                         <div slot="header" class="clearfix">
                             <span style="line-height: 36px;">{{each.name}}</span>
                             <el-button style="float: right;" type="primary">详情</el-button>
+                            <el-button style="float: right;" type="primary" @click="enroll(each._id)">报名</el-button>
                         </div>
                         <div class="text item">
                             {{each.description}}
@@ -80,6 +81,22 @@ export default {
                     message: '登出失败'
                 })
             }
+        },
+        enroll(groupId) {
+            console.log(groupId)
+            let request = {}
+            request.id = groupId
+            api.joinGroup(request).then((data) => {
+                this.$message({
+                    type: 'success',
+                    message: '报名成功'
+                })
+            }, (err) => {
+                this.$message({
+                    type: 'info',
+                    message: '报名失败'
+                })
+            })
         }
     }
 }
