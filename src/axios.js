@@ -62,7 +62,7 @@ export default {
 	},
 
 	// 报名参加group
-	joinGroup(groupId) {
-		return instance.post('/hapi/joinGroup', groupId)
+	joinGroup(data) {
+		return instance.post('/hapi/joinGroup', data)
 	}
 }
