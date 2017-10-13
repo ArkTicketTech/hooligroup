@@ -9,8 +9,8 @@
                     <el-card class="box-card">
                         <div slot="header" class="clearfix">
                             <span style="line-height: 36px;">{{each.name}}</span>
-                            <el-button style="float: right;" type="primary">详情</el-button>
-                            <el-button style="float: right;" type="primary" @click="enroll(each._id)">报名</el-button>
+                            <el-button style="float: right; margin-left: 5px;" type="success">详情</el-button>
+                            <el-button style="float: right; margin-left: 5px;" type="info" @click="enroll(each._id)">报名</el-button>
                         </div>
                         <div class="text item">
                             {{each.description}}
