@@ -34,7 +34,38 @@ const Create = (req, res) => {
 	})
 }
 
+// Group info
+const GetGroupInfoById = (req, res) => {
+	model.Group.findById(req.query.id, function(err, doc) {
+		if (err) {
+			console.log(err)
+		} else {
+			let groupInfo = doc
+			let groupMembers = []
+			Promise.all(doc.members.map(function(member) {
+				return model.User.findById(member, {password:0, token: 0, groups: 0, create_time: 0}, function(err, doc) {
+					if (err) {
+						return Promise.reject()
+					} else {
+						groupMembers.push(doc)
+						return Promise.resolve()
+					}
+				})
+			})).then(function(result) {
+				groupInfo.members = groupMembers
+				res.send(groupInfo)
+			}, function(err) {
+				console.log(err)
+				res.json({
+					success: false
+				})
+			})
+		}
+	})
+}
+
 module.exports = (router) => {
 	router.get('/groups', checkToken, Groups)
 		.post('/group/create', Create)
+		.get('/group/getGroupInfoById', checkToken, GetGroupInfoById)
 }
