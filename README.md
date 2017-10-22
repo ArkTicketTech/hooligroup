@@ -4,7 +4,8 @@
 
 ## Environment
 
-`Node >= 6`
+`Node >= 6`  
+`MongoDB`
 
 ## Start
 
@@ -28,6 +29,20 @@ npm run dev
 # build for production with minification
 npm run build
 ```
+
+## Server
+
+- To enable back-end server:
+
+``` bash
+# first start MongoDB service
+mongod
+```
+
+``` bash
+# then run server
+node server.js
+``` 
 
 ## Restful API
 
