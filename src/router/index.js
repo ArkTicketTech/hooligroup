@@ -19,6 +19,19 @@ const router = new Router({
 		}
 	},
 	{
+		path: '/group/:id',
+		name: 'GroupDetail',
+		component(resolve) {
+			require.ensure(['@/components/GroupDetail.vue'], () => {
+				resolve(require('@/components/GroupDetail.vue'));
+			});
+		},
+		// 设置 mata 字段，表示该字段需要验证
+		meta: {
+			requireAuth: true
+		}
+	},
+	{
 		path: '/login',
 		name: 'login',
 		component(resolve) {

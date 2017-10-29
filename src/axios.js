@@ -64,5 +64,9 @@ export default {
 	// 报名参加group
 	joinGroup(data) {
 		return instance.post('/hapi/joinGroup', data)
+	},
+
+	getGroupInfo(data) {
+		return instance.get('/hapi/group/getGroupInfoById?id='+data.id)
 	}
 }
