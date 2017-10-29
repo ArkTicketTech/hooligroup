@@ -1,134 +1,104 @@
 <template scope='scope'>
-    <el-row>
-        <el-col :span="6"><div class="grid-content bg-purple"></div></el-col>
-        <el-col :span="6"><div class="grid-content bg-purple-light"></div></el-col>
-        <el-col :span="6"><div class="grid-content bg-purple"></div></el-col>
-        <el-col :span="6"><div class="grid-content bg-purple-light"></div></el-col>
-    </el-row>
+    <div class="container">
+        <el-row :gutter="20">
+            <el-col :span="16">
+                <el-card class="box-card">
+                    <div slot="header" class="clearfix">
+                        <span style="line-height: 36px;">{{groupInfo.name}}</span>
+                    </div>
+                    <div class="text item">
+                        {{groupInfo.description}}
+                    </div>
+                </el-card>
+            </el-col>
+            <el-col :span="8">
+                <el-card class="box-card">
+                    <div slot="header" class="clearfix">
+                        <span style="line-height: 36px;">成员列表</span>
+                        <el-button style="float: right;" type="primary">报名</el-button>
+                    </div>
+                    <div v-for="member in groupInfo.members" class="text item">
+                        {{ member }}
+                    </div>
+                </el-card>
+            </el-col>
+        </el-row>
+    </div>
 </template>
 
 <script>
-/**
- * @author: wfnuser
- */
-import * as types from '../store/types'
-import api from '../axios'
-import {
-    Loading
-} from 'element-ui';
-export default {
-    name: 'group',
-    data() {
-        return {
-            msg: 'Welcome to Hooli Group',
-            username: '',
-            groups: {}
-        }
-    },
-    mounted() {
-        this.getGroups()
-        this.username = localStorage.getItem('username')
-    },
-    methods: {
-        getGroups() {
-            let loadingInstance = Loading.service();
-            api.getGroups().then((data) => {
-                //TODO: rewrite the code here, and use some config file
-                this.groups = {};
-                if (data.data.length > 0) {
-                    data.data.forEach(function (element) {
-                        if (this.groups.hasOwnProperty(element.type)) {
-                            this.groups[element.type].arr.push(element);
-                        } else {
-                            this.groups[element.type] = {};
-                            this.groups[element.type].type = element.type;
-                            this.groups[element.type].arr = [];
-                            this.groups[element.type].arr.push(element);
-                        }
-                    }, this);
-                }
-                loadingInstance.close();
-            }, (err) => {
-                loadingInstance.close();
-            })
-        },
-        logout() {
-            this.$store.dispatch('UserLogout')
-            if (!this.$store.state.token) {
-                this.$router.push('/login')
-                this.$message({
-                    type: 'success',
-                    message: '登出成功'
-                })
-            } else {
-                this.$message({
-                    type: 'info',
-                    message: '登出失败'
-                })
+    /**
+     * @author: wfnuser
+     */
+    import * as types from '../store/types'
+    import api from '../axios'
+    import {
+        Loading
+    } from 'element-ui';
+    export default {
+        name: 'group',
+        data() {
+            return {
+                msg: 'Welcome to Hooli Group',
+                username: '',
+                groupInfo: {}
             }
         },
-        enroll(groupId) {
-            console.log(groupId)
-            let request = {}
-            request.id = groupId
-            api.joinGroup(request).then((data) => {
-                this.$message({
-                    type: 'success',
-                    message: '报名成功'
+        mounted() {
+            this.getGroupInfo()
+            this.username = localStorage.getItem('username')
+        },
+        methods: {
+            getGroupInfo() {
+                let that = this
+                let loadingInstance = Loading.service()
+                console.log(this.$router.currentRoute.params)
+                api.getGroupInfo(this.$router.currentRoute.params).then((data) => {
+                    //TODO: rewrite the code here, and use some config file
+                    that.groupInfo = data.data
+                    console.log(that.groupInfo)
+                    loadingInstance.close()
+                }, (err) => {
+                    loadingInstance.close()
                 })
-            }, (err) => {
-                this.$message({
-                    type: 'info',
-                    message: '报名失败'
+            },
+            logout() {
+                this.$store.dispatch('UserLogout')
+                if (!this.$store.state.token) {
+                    this.$router.push('/login')
+                    this.$message({
+                        type: 'success',
+                        message: '登出成功'
+                    })
+                } else {
+                    this.$message({
+                        type: 'info',
+                        message: '登出失败'
+                    })
+                }
+            },
+            enroll(groupId) {
+                console.log(groupId)
+                let request = {}
+                request.id = groupId
+                api.joinGroup(request).then((data) => {
+                    this.$message({
+                        type: 'success',
+                        message: '报名成功'
+                    })
+                }, (err) => {
+                    this.$message({
+                        type: 'info',
+                        message: '报名失败'
+                    })
                 })
-            })
+            }
         }
     }
-}
 </script>
 
 <style scoped>
-.text {
-    font-size: 14px;
-}
-
-.item {
-    padding: 18px 0;
-}
-
-.clearfix:before,
-.clearfix:after {
-    display: table;
-    content: "";
-}
-
-.clearfix:after {
-    clear: both
-}
-
-.container {
-    padding: 24px;
-}
-
-.container h2 a,
-.container h3 a,
-.container h4 a,
-.container h5 a {
-    float: left;
-    margin-left: -20px;
-    opacity: 0;
-    cursor: pointer;
-}
-
-.container h2,
-.container h3,
-.container h4,
-.container h5 {
-    float: left;
-}
-
-a {
-    color: #4078c0;
-    text-decoration: none;
-}
+    .container {
+        padding: 24px;
+    }
 </style>
