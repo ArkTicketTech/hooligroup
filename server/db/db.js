@@ -30,11 +30,16 @@ var groupSchema = mongoose.Schema({
 	create_time: Date
 })
 
+var eventSchema = mongoose.Schema({
+	name: String,
+	type: String
+})
+
 var model = {
 	// 在此处扩展 model，例如：
-	// Article: mongoose.model('Article', articleSchema),
 	User: mongoose.model('User', userSchema),
-	Group: mongoose.model('Group', groupSchema)
+	Group: mongoose.model('Group', groupSchema),
+	Event: mongoose.model('Event', eventSchema)
 }
 
 module.exports = model

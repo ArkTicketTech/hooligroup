@@ -1,9 +1,7 @@
 const express = require('express')
 const model = require('../db/db.js')
-const router = express.Router()
 const moment = require('moment')
 const objectIdToTimestamp = require('objectid-to-timestamp')
-const sha1 = require('sha1')
 const checkToken = require('../middleware/checkToken.js')
 
 // 所有group打印
@@ -36,14 +34,19 @@ const Create = (req, res) => {
 
 // Group info
 const GetGroupInfoById = (req, res) => {
-	model.Group.findById(req.query.id, function(err, doc) {
+	model.Group.findById(req.query.id, function (err, doc) {
 		if (err) {
 			console.log(err)
 		} else {
 			let groupInfo = doc
 			let groupMembers = []
-			Promise.all(doc.members.map(function(member) {
-				return model.User.findById(member, {password:0, token: 0, groups: 0, create_time: 0}, function(err, doc) {
+			Promise.all(doc.members.map(function (member) {
+				return model.User.findById(member, {
+					password: 0,
+					token: 0,
+					groups: 0,
+					create_time: 0
+				}, function (err, doc) {
 					if (err) {
 						return Promise.reject()
 					} else {
@@ -51,10 +54,10 @@ const GetGroupInfoById = (req, res) => {
 						return Promise.resolve()
 					}
 				})
-			})).then(function(result) {
+			})).then(function (result) {
 				groupInfo.members = groupMembers
 				res.send(groupInfo)
-			}, function(err) {
+			}, function (err) {
 				console.log(err)
 				res.json({
 					success: false
@@ -64,8 +67,8 @@ const GetGroupInfoById = (req, res) => {
 	})
 }
 
-module.exports = (router) => {
-	router.get('/groups', checkToken, Groups)
-		.post('/group/create', Create)
-		.get('/group/getGroupInfoById', checkToken, GetGroupInfoById)
+module.exports = {
+	Groups,
+	Create,
+	GetGroupInfoById
 }

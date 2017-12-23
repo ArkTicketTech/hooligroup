@@ -1,11 +1,9 @@
 const express = require('express')
 const model = require('../db/db.js')
-const router = express.Router()
 const moment = require('moment')
 const objectIdToTimestamp = require('objectid-to-timestamp')
 const createToken = require('../middleware/createToken.js')
 const sha1 = require('sha1')
-const checkToken = require('../middleware/checkToken.js')
 const getToken = require('../middleware/getToken.js')
 
 // 注册
@@ -90,7 +88,7 @@ const User = (req, res) => {
 }
 
 // 删除用户
-const delUser = (req, res) => {
+const DelUser = (req, res) => {
 	model.User.findOneAndRemove({
 		_id: req.body.id
 	}, err => {
@@ -103,7 +101,7 @@ const delUser = (req, res) => {
 }
 
 // 用户加入group
-const joinGroup = (req, res) => {
+const JoinGroup = (req, res) => {
 	console.log(req)
 	let user = getToken(req, res)
 	if (user) {
@@ -127,10 +125,10 @@ const joinGroup = (req, res) => {
 	}
 }
 
-module.exports = (router) => {
-	router.post('/register', Register),
-		router.post('/login', Login),
-		router.get('/user', checkToken, User),
-		router.post('/delUser', checkToken, delUser),
-		router.post('/joinGroup', checkToken, joinGroup)
+module.exports = {
+	Register,
+	Login,
+	User,
+	DelUser,
+	JoinGroup
 }
