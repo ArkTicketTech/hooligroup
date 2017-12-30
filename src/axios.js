@@ -66,7 +66,13 @@ export default {
 		return instance.post('/hapi/joinGroup', data)
 	},
 
+	// 获得小组信息
 	getGroupInfo(data) {
 		return instance.get('/hapi/group/getGroupInfoById?id='+data.id)
+	},
+
+	// 提交vote
+	vote(data) {
+		return instance.post('/hapi/vote', data)
 	}
 }

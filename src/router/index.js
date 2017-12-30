@@ -49,6 +49,15 @@ const router = new Router({
 			});
 		}
 	},
+	{
+		path: '/vote',
+		name: 'vote',
+		component(resolve) {
+			require.ensure(['@/components/Vote.vue'], () => {
+				resolve(require('@/components/Vote.vue'));
+			});
+		}
+	},
 	// 简单设置404页面
 	{
 		path: '*',
