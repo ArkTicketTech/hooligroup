@@ -35,11 +35,17 @@ var eventSchema = mongoose.Schema({
 	type: String
 })
 
+var voteSchema = mongoose.Schema({
+	name: String,
+	date: Date
+})
+
 var model = {
 	// 在此处扩展 model，例如：
 	User: mongoose.model('User', userSchema),
 	Group: mongoose.model('Group', groupSchema),
-	Event: mongoose.model('Event', eventSchema)
+	Event: mongoose.model('Event', eventSchema),
+	Vote: mongoose.model('Vote', voteSchema)
 }
 
 module.exports = model
