@@ -1,7 +1,7 @@
 <template lang="html">
     <el-container style="margin-top:50px;">
         <el-row style="width:100%;">
-            <el-col :span="12" :offset="6">
+            <el-col :lg="{span:12, offset:'6'}" :xs="24" :sm="24">
                 <el-form ref="form" :model="form" label-width="80px">
                     <el-form-item label="你的名字">
                         <el-input v-model="form.name"></el-input>
