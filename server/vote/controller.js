@@ -22,6 +22,7 @@ const Vote = (req, res) => {
 		if (doc) {
 			console.log(doc)
 			doc.date = req.body.date
+			doc.exam = req.body.exam
 			doc.save();
 			res.json({
 				success: true
