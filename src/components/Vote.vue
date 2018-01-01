@@ -36,7 +36,9 @@
                     alert("表单不能为空")
                     return;
                 }
+                console.log(this.form.date)
                 api.vote(this.form).then(data => {
+                    console.log(data)
                     if (data.success) {
                         alert('提交成功')
                     }
