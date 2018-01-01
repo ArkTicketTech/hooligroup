@@ -37,7 +37,8 @@ var eventSchema = mongoose.Schema({
 
 var voteSchema = mongoose.Schema({
 	name: String,
-	date: Date
+	date: Date,
+	exam: Date
 })
 
 var model = {

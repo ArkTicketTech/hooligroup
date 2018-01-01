@@ -9,6 +9,9 @@
                     <el-form-item label="选择日期">
                         <el-date-picker type="date" placeholder="你将要离开学校的那天" v-model="form.date" style="width: 100%;"></el-date-picker>
                     </el-form-item>
+                    <el-form-item label="选择日期">
+                        <el-date-picker type="date" placeholder="你考完试的那天" v-model="form.exam" style="width: 100%;"></el-date-picker>
+                    </el-form-item>
                     <el-form-item>
                         <el-button type="primary" @click="onSubmit">发布</el-button>
                     </el-form-item>
@@ -26,7 +29,8 @@
             return {
                 form: {
                     name: '',
-                    date: ''
+                    date: '',
+                    exam: ''
                 }
             }
         },
