@@ -70,6 +70,7 @@ const GetGroupInfoById = (req, res) => {
 				}))
 			}).then(function () {
 				groupInfo.members = groupMembers
+				console.log(groupInfo)
 				res.send(groupInfo)
 			}, function (err) {
 				console.log(err)
