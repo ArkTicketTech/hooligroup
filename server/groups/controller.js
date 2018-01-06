@@ -62,7 +62,6 @@ const GetGroupInfoById = (req, res) => {
 						if (err) {
 							return Promise.reject()
 						} else {
-							console.log(eventDoc, 'getGroupInfo eventDoc')
 							groupEvents.push(eventDoc)
 							return Promise.resolve()
 						}
@@ -70,7 +69,7 @@ const GetGroupInfoById = (req, res) => {
 				}))
 			}).then(function () {
 				groupInfo.members = groupMembers
-				console.log(groupInfo)
+				groupInfo.events = groupEvents
 				res.send(groupInfo)
 			}, function (err) {
 				console.log(err)
