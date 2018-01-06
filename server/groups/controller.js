@@ -36,6 +36,9 @@ const GetGroupInfoById = (req, res) => {
 	model.Group.findById(req.query.id, function (err, groupDoc) {
 		if (err) {
 			console.log(err)
+			res.json({
+				success: false
+			})
 		} else {
 			let groupInfo = groupDoc
 			let groupMembers = []
@@ -51,7 +54,7 @@ const GetGroupInfoById = (req, res) => {
 						if (err) {
 							return Promise.reject()
 						} else {
-							groupMembers.push(memberDoc)
+							groupMembers.push(memberDoc.toObject())
 							return Promise.resolve()
 						}
 					})
@@ -62,15 +65,20 @@ const GetGroupInfoById = (req, res) => {
 						if (err) {
 							return Promise.reject()
 						} else {
-							groupEvents.push(eventDoc)
+							groupEvents.push(eventDoc.toObject())
+							console.log(groupEvents, 'groupEvents')
 							return Promise.resolve()
 						}
 					})
 				}))
 			}).then(function () {
+				groupInfo = groupInfo.toObject()
 				groupInfo.members = groupMembers
 				groupInfo.events = groupEvents
-				res.send(groupInfo)
+				console.log(JSON.stringify(groupEvents), 'groupEvents')
+				console.log(JSON.stringify(groupMembers), 'groupMembers')
+				console.log(JSON.stringify(groupInfo), 'groupInfo')
+				res.send(JSON.stringify(groupInfo))
 			}, function (err) {
 				console.log(err)
 				res.json({

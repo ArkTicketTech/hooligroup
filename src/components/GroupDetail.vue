@@ -15,7 +15,7 @@
                         <span style="line-height: 36px;">活动列表</span>
                     </div>
                     <div v-for="event in groupInfo.events" class="text item">
-                        {{ event }}
+                        {{ event.name }}
                     </div>
                 </el-card>
             </el-col>
@@ -26,7 +26,7 @@
                         <el-button style="float: right;" type="primary">报名</el-button>
                     </div>
                     <div v-for="member in groupInfo.members" class="text item">
-                        {{ member }}
+                        {{ member.name }}
                     </div>
                 </el-card>
             </el-col>
@@ -64,6 +64,8 @@
                 api.getGroupInfo(this.$router.currentRoute.params).then((data) => {
                     //TODO: rewrite the code here, and use some config file
                     that.groupInfo = data.data
+                    // that.groupInfo.events = JSON.parse(that.groupInfo.events)
+                    // that.groupInfo.members = JSON.parse(that.groupInfo.members)
                     console.log(that.groupInfo)
                     loadingInstance.close()
                 }, (err) => {
