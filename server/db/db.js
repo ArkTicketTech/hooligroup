@@ -18,7 +18,6 @@ var userSchema = mongoose.Schema({
 	password: String,
 	recheck: String,
 	token: String,
-	groups: [String],
 	create_time: Date
 })
 
@@ -27,18 +26,25 @@ var groupSchema = mongoose.Schema({
 	type: String,
 	description: String,
 	members: [String],
-	create_time: Date
+	create_time: Date,
+	events: [String]
 })
 
 var eventSchema = mongoose.Schema({
 	name: String,
-	type: String
+	type: String,
+	tags: [String],
+	members: [String],
+	location: String,
+	begin_time: Date,
+	end_time: Date,
+	enroll_begin_time: Date,
+	enroll_end_time: Date
 })
 
 var voteSchema = mongoose.Schema({
 	name: String,
-	date: Date,
-	exam: Date
+	date: Date
 })
 
 var model = {
