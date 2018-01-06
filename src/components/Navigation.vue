@@ -1,5 +1,5 @@
 <template scope='scope'>
-    <el-menu theme="light" :default-active="defaultActiveIndex" mode="horizontal">
+    <el-menu theme="light" :default-active="defaultActiveIndex" mode="horizontal" @select="handleSelect">
         <span class="logo-sm"><img src="../assets/logo-small.gif"></span>
 
         <el-menu-item index="1">小组</el-menu-item>
@@ -45,15 +45,22 @@
                         message: '登出失败'
                     })
                 }
+            },
+            handleSelect(e) {
+                let routeMapping = {
+                    "1": "/",
+                    "2": "/event"
+                }
+                this.$router.push(routeMapping[e])
             }
         },
         computed: {
             defaultActiveIndex: function () {
                 var navMapping = {
                     "Group": "1",
-                    "Activity": "2"
+                    "Event": "2"
                 }
-                return navMapping[this.$route.name];
+                return navMapping[this.$route.name || "Group"];
             }
         }
     }

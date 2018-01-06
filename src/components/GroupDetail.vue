@@ -2,14 +2,26 @@
     <div class="container">
         <el-row :gutter="20">
             <el-col :span="16">
-                <el-card class="box-card">
-                    <div slot="header" class="clearfix">
-                        <span style="line-height: 36px;">{{groupInfo.name}}</span>
-                    </div>
-                    <div class="text item">
-                        {{groupInfo.description}}
-                    </div>
-                </el-card>
+                <el-row>
+                    <el-card class="box-card">
+                        <div slot="header" class="clearfix">
+                            <span style="line-height: 36px;">{{groupInfo.name}}</span>
+                        </div>
+                        <div class="text item">
+                            {{groupInfo.description}}
+                        </div>
+                    </el-card>
+                </el-row>
+                <el-row>
+                    <el-card class="box-card">
+                        <div slot="header" class="clearfix">
+                            <span style="line-height: 36px;">活动列表</span>
+                        </div>
+                        <div v-for="event in groupInfo.events" class="text item">
+                            {{ event.name }}
+                        </div>
+                    </el-card>
+                </el-row>
             </el-col>
             <el-col :span="8">
                 <el-card class="box-card">
@@ -18,7 +30,7 @@
                         <el-button style="float: right;" type="primary">报名</el-button>
                     </div>
                     <div v-for="member in groupInfo.members" class="text item">
-                        {{ member }}
+                        {{ member.name }}
                     </div>
                 </el-card>
             </el-col>
@@ -56,6 +68,8 @@
                 api.getGroupInfo(this.$router.currentRoute.params).then((data) => {
                     //TODO: rewrite the code here, and use some config file
                     that.groupInfo = data.data
+                    // that.groupInfo.events = JSON.parse(that.groupInfo.events)
+                    // that.groupInfo.members = JSON.parse(that.groupInfo.members)
                     console.log(that.groupInfo)
                     loadingInstance.close()
                 }, (err) => {
@@ -97,8 +111,15 @@
     }
 </script>
 
-<style scoped>
+<style lang="scss" scoped>
     .container {
         padding: 24px;
+    }
+
+    .el-row {
+        margin-bottom: 20px;
+        &:last-child {
+            margin-bottom: 0;
+        }
     }
 </style>

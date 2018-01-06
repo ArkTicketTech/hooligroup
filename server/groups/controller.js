@@ -19,7 +19,6 @@ const Create = (req, res) => {
 		type: req.body.type,
 		description: req.body.description
 	})
-	console.log(groupCreate);
 	// 将 objectid 转换为 用户创建时间
 	groupCreate.create_time = moment(objectIdToTimestamp(groupCreate._id))
 		.format('YYYY-MM-DD HH:mm:ss');
@@ -34,29 +33,52 @@ const Create = (req, res) => {
 
 // Group info
 const GetGroupInfoById = (req, res) => {
-	model.Group.findById(req.query.id, function (err, doc) {
+	model.Group.findById(req.query.id, function (err, groupDoc) {
 		if (err) {
 			console.log(err)
+			res.json({
+				success: false
+			})
 		} else {
-			let groupInfo = doc
+			let groupInfo = groupDoc
 			let groupMembers = []
-			Promise.all(doc.members.map(function (member) {
-				return model.User.findById(member, {
-					password: 0,
-					token: 0,
-					groups: 0,
-					create_time: 0
-				}, function (err, doc) {
-					if (err) {
-						return Promise.reject()
-					} else {
-						groupMembers.push(doc)
-						return Promise.resolve()
-					}
+			let groupEvents = []
+			Promise.all(
+				groupDoc.members.map(function (member) {
+					return model.User.findById(member, {
+						password: 0,
+						token: 0,
+						groups: 0,
+						create_time: 0
+					}, function (err, memberDoc) {
+						if (err) {
+							return Promise.reject()
+						} else {
+							groupMembers.push(memberDoc.toObject())
+							return Promise.resolve()
+						}
+					})
 				})
-			})).then(function (result) {
+			).then(() => {
+				return Promise.all(groupDoc.events.map(function (event) {
+					return model.Event.findById(event, function (err, eventDoc) {
+						if (err) {
+							return Promise.reject()
+						} else {
+							groupEvents.push(eventDoc.toObject())
+							console.log(groupEvents, 'groupEvents')
+							return Promise.resolve()
+						}
+					})
+				}))
+			}).then(function () {
+				groupInfo = groupInfo.toObject()
 				groupInfo.members = groupMembers
-				res.send(groupInfo)
+				groupInfo.events = groupEvents
+				console.log(JSON.stringify(groupEvents), 'groupEvents')
+				console.log(JSON.stringify(groupMembers), 'groupMembers')
+				console.log(JSON.stringify(groupInfo), 'groupInfo')
+				res.send(JSON.stringify(groupInfo))
 			}, function (err) {
 				console.log(err)
 				res.json({

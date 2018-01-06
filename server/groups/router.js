@@ -1,8 +1,8 @@
-const userController = require('./controller')
+const groupController = require('./controller')
 const checkToken = require('../middleware/checkToken.js')
 
 module.exports = (router) => {
-	router.get('/groups', checkToken, userController.Groups)
-		.post('/group/create', userController.Create)
-		.get('/group/getGroupInfoById', checkToken, userController.GetGroupInfoById)
+	router.get('/groups', checkToken, groupController.Groups)
+		.post('/group/create', groupController.Create)
+		.get('/group/getGroupInfoById', checkToken, groupController.GetGroupInfoById)
 }
