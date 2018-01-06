@@ -105,13 +105,6 @@ const JoinGroup = (req, res) => {
 	console.log(req)
 	let user = getToken(req, res)
 	if (user) {
-		model.User.findById(user.id, (err, doc) => {
-			// doc.set({groups:[]})
-			doc.groups.addToSet(req.body.id)
-			doc.save(function (err, updatedUser) {
-				if (err) res.send(err)
-			})
-		})
 		model.Group.findById(req.body.id, (err, doc) => {
 			// doc.set({members:[]})			
 			doc.members.addToSet(user.id)
