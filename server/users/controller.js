@@ -118,10 +118,29 @@ const JoinGroup = (req, res) => {
 	}
 }
 
+// 用户加入event
+const JoinEvent = (req, res) => {
+	console.log(req)
+	let user = getToken(req, res)
+	if (user) {
+		model.Event.findById(req.body.id, (err, doc) => {
+			// doc.set({members:[]})			
+			doc.members.addToSet(user.id)
+			doc.save(function (err, updatedEvent) {
+				if (err) res.send(err)
+			})
+		})
+		res.json({
+			success: true
+		})
+	}
+}
+
 module.exports = {
 	Register,
 	Login,
 	User,
 	DelUser,
-	JoinGroup
+	JoinGroup,
+	JoinEvent
 }

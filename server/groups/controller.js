@@ -81,16 +81,9 @@ const GetGroupInfoById = (req, res) => {
 				groupInfo = groupInfo.toObject()
 				groupInfo.members = groupMembers
 				groupInfo.events = groupEvents
-				console.log(JSON.stringify(groupEvents), 'groupEvents')
-				console.log(JSON.stringify(groupMembers), 'groupMembers')
-				console.log(JSON.stringify(groupInfo), 'groupInfo')
 				res.send(JSON.stringify(groupInfo))
 			}, function (err) {
 				console.log(err)
-				res.json({
-					success: false
-				})
-			}).catch((err) => {
 				res.json({
 					success: false
 				})

@@ -52,6 +52,7 @@ const Create = (req, res) => {
 
 // Event Info
 const GetEventInfoById = (req, res) => {
+	let eventMembers = []
 	model.Event.findById(req.query.id, function (err, eventDoc) {
 		if (err) {
 			console.log(err)
@@ -60,7 +61,32 @@ const GetEventInfoById = (req, res) => {
 			})
 		} else {
 			let eventInfo = eventDoc
-			res.send(JSON.stringify(eventInfo))
+			Promise.all(
+				eventInfo.members.map(function (member) {
+					return model.User.findById(member, {
+						password: 0,
+						token: 0,
+						groups: 0,
+						create_time: 0
+					}, function (err, memberDoc) {
+						if (err) {
+							return Promise.reject()
+						} else {
+							eventMembers.push(memberDoc.toObject())
+							return Promise.resolve()
+						}
+					})
+				})
+			).then(function () {
+				eventInfo = eventInfo.toObject()
+				eventInfo.members = eventMembers
+				res.send(JSON.stringify(eventInfo))
+			}, function (err) {
+				console.log(err)
+				res.json({
+					success: false
+				})
+			})
 		}
 	})
 }

@@ -18,7 +18,9 @@
                             <span style="line-height: 36px;">活动列表</span>
                         </div>
                         <div v-for="event in groupInfo.events" class="text item">
-                            <div @click="goDetail(event._id)">{{ event.name }}</div>
+                            <div @click="goDetail(event._id)" style="height:36px;">
+                                <div style="line-height:36px;">{{event.name}}</div>
+                            </div>
                         </div>
                     </el-card>
                 </el-row>

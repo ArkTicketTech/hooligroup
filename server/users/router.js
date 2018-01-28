@@ -6,5 +6,6 @@ module.exports = (router) => {
 		router.post('/login', userController.Login),
 		router.get('/user', checkToken, userController.User),
 		router.post('/delUser', checkToken, userController.DelUser),
-		router.post('/joinGroup', checkToken, userController.JoinGroup)
+		router.post('/joinGroup', checkToken, userController.JoinGroup),
+		router.post('/joinEvent', checkToken, userController.JoinEvent)
 }
