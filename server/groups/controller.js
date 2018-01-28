@@ -43,8 +43,14 @@ const GetGroupInfoById = (req, res) => {
 			let groupInfo = groupDoc
 			let groupMembers = []
 			let groupEvents = []
+			if (!groupInfo) {
+				res.json({
+					success: false
+				})
+				return
+			}
 			Promise.all(
-				groupDoc.members.map(function (member) {
+				groupInfo.members.map(function (member) {
 					return model.User.findById(member, {
 						password: 0,
 						token: 0,
@@ -60,7 +66,7 @@ const GetGroupInfoById = (req, res) => {
 					})
 				})
 			).then(() => {
-				return Promise.all(groupDoc.events.map(function (event) {
+				return Promise.all(groupInfo.events.map(function (event) {
 					return model.Event.findById(event, function (err, eventDoc) {
 						if (err) {
 							return Promise.reject()
@@ -75,9 +81,6 @@ const GetGroupInfoById = (req, res) => {
 				groupInfo = groupInfo.toObject()
 				groupInfo.members = groupMembers
 				groupInfo.events = groupEvents
-				console.log(JSON.stringify(groupEvents), 'groupEvents')
-				console.log(JSON.stringify(groupMembers), 'groupMembers')
-				console.log(JSON.stringify(groupInfo), 'groupInfo')
 				res.send(JSON.stringify(groupInfo))
 			}, function (err) {
 				console.log(err)
