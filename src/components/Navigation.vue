@@ -1,13 +1,13 @@
 <template scope='scope'>
-    <el-menu theme="light" :default-active="defaultActiveIndex" mode="horizontal" @select="handleSelect">
+    <el-menu theme="light" router :default-active="$route.path" mode="horizontal">
         <span class="logo-sm"><img src="../assets/logo-small.gif"></span>
 
-        <el-menu-item index="1">小组</el-menu-item>
-        <el-menu-item index="2">活动</el-menu-item>
+        <el-menu-item index="/">小组</el-menu-item>
+        <el-menu-item index="/event">活动</el-menu-item>
 
-        <el-submenu index="3" class="right">
+        <el-submenu index="$route.path" class="right">
             <template slot="title">{{username}}</template>
-            <el-menu-item index="2-1" @click="logout()">登出</el-menu-item>
+            <el-menu-item index="$route.path" @click="logout()">登出</el-menu-item>
         </el-submenu>
     </el-menu>
 </template>
@@ -45,13 +45,6 @@
                         message: '登出失败'
                     })
                 }
-            },
-            handleSelect(e) {
-                let routeMapping = {
-                    "1": "/",
-                    "2": "/event"
-                }
-                this.$router.push(routeMapping[e])
             }
         },
         computed: {
