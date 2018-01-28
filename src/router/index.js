@@ -50,6 +50,15 @@ const router = new Router({
 		}
 	},
 	{
+		path: '/event/:id',
+		name: 'event',
+		component(resolve) {
+			require.ensure(['@/components/EventDetail.vue'], () => {
+				resolve(require('@/components/EventDetail.vue'));
+			});
+		}
+	},
+	{
 		path: '/vote',
 		name: 'vote',
 		component(resolve) {

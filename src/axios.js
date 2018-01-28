@@ -71,6 +71,10 @@ export default {
 		return instance.get('/hapi/group/getGroupInfoById?id='+data.id)
 	},
 
+	getEventInfo(data) {
+		return instance.get('/hapi/event/getEventInfoById?id='+data.id)
+	},
+
 	// 提交vote
 	vote(data) {
 		return instance.post('/hapi/vote', data)

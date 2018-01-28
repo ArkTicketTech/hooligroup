@@ -5,20 +5,10 @@
                 <el-row>
                     <el-card class="box-card">
                         <div slot="header" class="clearfix">
-                            <span style="line-height: 36px;">{{groupInfo.name}}</span>
+                            <span style="line-height: 36px;">{{eventInfo.name}}</span>
                         </div>
                         <div class="text item">
-                            {{groupInfo.description}}
-                        </div>
-                    </el-card>
-                </el-row>
-                <el-row>
-                    <el-card class="box-card">
-                        <div slot="header" class="clearfix">
-                            <span style="line-height: 36px;">活动列表</span>
-                        </div>
-                        <div v-for="event in groupInfo.events" class="text item">
-                            <div @click="goDetail(event._id)">{{ event.name }}</div>
+                            {{eventInfo.description}}
                         </div>
                     </el-card>
                 </el-row>
@@ -29,7 +19,7 @@
                         <span style="line-height: 36px;">成员列表</span>
                         <el-button style="float: right;" type="primary">报名</el-button>
                     </div>
-                    <div v-for="member in groupInfo.members" class="text item">
+                    <div v-for="member in eventInfo.members" class="text item">
                         {{ member.name }}
                     </div>
                 </el-card>
@@ -48,29 +38,27 @@
         Loading
     } from 'element-ui';
     export default {
-        name: 'group',
+        name: 'event',
         data() {
             return {
                 msg: 'Welcome to Hooli Group',
                 username: '',
-                groupInfo: {}
+                eventInfo: {}
             }
         },
         mounted() {
-            this.getGroupInfo()
+            this.getEventInfo()
             this.username = localStorage.getItem('username')
         },
         methods: {
-            getGroupInfo() {
+            getEventInfo() {
                 let that = this
                 let loadingInstance = Loading.service()
                 console.log(this.$router.currentRoute.params)
-                api.getGroupInfo(this.$router.currentRoute.params).then((data) => {
+                api.getEventInfo(this.$router.currentRoute.params).then((data) => {
                     //TODO: rewrite the code here, and use some config file
-                    that.groupInfo = data.data
-                    // that.groupInfo.events = JSON.parse(that.groupInfo.events)
-                    // that.groupInfo.members = JSON.parse(that.groupInfo.members)
-                    console.log(that.groupInfo)
+                    that.eventInfo = data.data
+                    console.log(that.eventInfo)
                     loadingInstance.close()
                 }, (err) => {
                     loadingInstance.close()
@@ -90,28 +78,6 @@
                         message: '登出失败'
                     })
                 }
-            },
-            enroll(groupId) {
-                console.log(groupId)
-                let request = {}
-                request.id = groupId
-                api.joinGroup(request).then((data) => {
-                    this.$message({
-                        type: 'success',
-                        message: '报名成功'
-                    })
-                }, (err) => {
-                    this.$message({
-                        type: 'info',
-                        message: '报名失败'
-                    })
-                })
-            },
-            goDetail(eventId) {
-                let url = '/event/' + eventId
-                this.$router.push({
-                    path: url
-                })
             }
         }
     }

@@ -50,7 +50,23 @@ const Create = (req, res) => {
 
 }
 
+// Event Info
+const GetEventInfoById = (req, res) => {
+	model.Event.findById(req.query.id, function (err, eventDoc) {
+		if (err) {
+			console.log(err)
+			res.json({
+				success: false
+			})
+		} else {
+			let eventInfo = eventDoc
+			res.send(JSON.stringify(eventInfo))
+		}
+	})
+}
+
 module.exports = {
 	Events,
-	Create
+	Create,
+	GetEventInfoById
 }
