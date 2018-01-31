@@ -1,5 +1,5 @@
 <template>
-    <div id="app">
+    <div id="app" align="center">
         <img src="./assets/logo.png" class="logo" v-if="['login', 'register'].indexOf($route.name) > -1">
         <navigation v-if="['login', 'register'].indexOf($route.name) == -1"></navigation>
         <router-view></router-view>
