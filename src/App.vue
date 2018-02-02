@@ -26,7 +26,7 @@ export default {
 
 .logo {
     position: relative;
-    margin-top: 40px;
-    margin-bottom: 40px;
+    display: block;
+    margin: auto;
 }
 </style>
