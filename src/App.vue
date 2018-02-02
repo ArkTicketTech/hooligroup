@@ -1,5 +1,5 @@
 <template>
-    <div id="app" align="center">
+    <div id="app">
         <img src="./assets/logo.png" class="logo" v-if="['login', 'register'].indexOf($route.name) > -1">
         <navigation v-if="['login', 'register'].indexOf($route.name) == -1"></navigation>
         <router-view></router-view>
@@ -26,7 +26,7 @@ export default {
 
 .logo {
     position: relative;
-    margin-top: 40px;
-    margin-bottom: 40px;
+    display: block;
+    margin: auto;
 }
 </style>
