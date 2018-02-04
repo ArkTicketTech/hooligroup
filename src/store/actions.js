@@ -14,5 +14,9 @@ export default {
 
 	UserName({ commit }, data) {
 		commit(types.USERNAME, data)
+	},
+
+	UserId({ commit }, data) {
+		commit(types.USERID, data)
 	}
 }

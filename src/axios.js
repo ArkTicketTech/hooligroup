@@ -80,6 +80,10 @@ export default {
 		return instance.post('/hapi/joinEvent', data)
 	},
 
+	createEvent(data) {
+		return instance.post('/hapi/event/create', data)
+	},
+
 	// 提交vote
 	vote(data) {
 		return instance.post('/hapi/vote', data)

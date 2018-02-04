@@ -26,6 +26,7 @@ var groupSchema = mongoose.Schema({
 	type: String,
 	description: String,
 	members: [String],
+	admins: [String],
 	create_time: Date,
 	events: [String]
 })

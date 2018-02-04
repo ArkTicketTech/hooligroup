@@ -3,6 +3,7 @@ const model = require('../db/db.js')
 const moment = require('moment')
 const objectIdToTimestamp = require('objectid-to-timestamp')
 const checkToken = require('../middleware/checkToken.js')
+const getToken = require('../middleware/getToken.js')
 
 // 所有group打印
 const Groups = (req, res) => {
@@ -14,10 +15,13 @@ const Groups = (req, res) => {
 
 // 创建group
 const Create = (req, res) => {
+	let user = getToken(req, res)
+
 	let groupCreate = new model.Group({
 		name: req.body.name,
 		type: req.body.type,
-		description: req.body.description
+		description: req.body.description,
+		admins: [user.id]
 	})
 	// 将 objectid 转换为 用户创建时间
 	groupCreate.create_time = moment(objectIdToTimestamp(groupCreate._id))
