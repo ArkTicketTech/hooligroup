@@ -47,7 +47,7 @@ const Login = (req, res) => {
 	let userLogin = new model.User({
 		username: req.body.username,
 		password: sha1(req.body.password),
-		token: createToken(this.username, this._id)
+		token: createToken(this.username, this._id),
 	})
 	model.User.findOne({
 		username: userLogin.username
@@ -64,6 +64,7 @@ const Login = (req, res) => {
 			res.json({
 				success: true,
 				username: doc.username,
+				_id: doc._id,
 				// 账户创建日期
 				time: moment(objectIdToTimestamp(doc._id))
 					.format('YYYY-MM-DD HH:mm:ss'),
@@ -102,7 +103,6 @@ const DelUser = (req, res) => {
 
 // 用户加入group
 const JoinGroup = (req, res) => {
-	console.log(req)
 	let user = getToken(req, res)
 	if (user) {
 		model.Group.findById(req.body.id, (err, doc) => {
@@ -120,7 +120,6 @@ const JoinGroup = (req, res) => {
 
 // 用户加入event
 const JoinEvent = (req, res) => {
-	console.log(req)
 	let user = getToken(req, res)
 	if (user) {
 		model.Event.findById(req.body.id, (err, doc) => {

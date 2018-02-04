@@ -93,6 +93,7 @@ export default {
                             })
                             this.$store.dispatch('UserLogin', data.token)
                             this.$store.dispatch('UserName', data.username)
+                            this.$store.dispatch('UserId', data._id)
                             let redirect = decodeURIComponent(this.$route.query.redirect || '/');
                             this.$router.push({
                                 path: redirect

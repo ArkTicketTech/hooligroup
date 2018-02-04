@@ -3,6 +3,7 @@ const model = require('../db/db.js')
 const moment = require('moment')
 const objectIdToTimestamp = require('objectid-to-timestamp')
 const checkToken = require('../middleware/checkToken.js')
+const getToken = require('../middleware/getToken.js')
 
 // 所有event打印
 const Events = (req, res) => {
@@ -14,6 +15,8 @@ const Events = (req, res) => {
 
 // 创建event
 const Create = (req, res) => {
+	let user = getToken(req, res)
+
 	// create event
 	let eventCreate = new model.Event({
 		name: req.body.name,
@@ -28,6 +31,9 @@ const Create = (req, res) => {
 			res.send(err)
 		} else {
 			// create event
+			console.log(groupDoc)
+			if (!groupDoc.admins.includes(user.id))
+				res.send(err)
 			eventCreate.save( (err, event) => {
 				if (err) {
 					console.log(err)

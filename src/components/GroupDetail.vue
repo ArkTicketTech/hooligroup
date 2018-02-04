@@ -16,6 +16,7 @@
                     <el-card class="box-card">
                         <div slot="header" class="clearfix">
                             <span style="line-height: 36px;">活动列表</span>
+                            <el-button style="float: right;" type="primary" @click="showEventModal" v-if="isAdmin">创建活动</el-button>
                         </div>
                         <div v-for="event in groupInfo.events" class="text item">
                             <div @click="goDetail(event._id)" style="height:36px;">
@@ -37,6 +38,32 @@
                 </el-card>
             </el-col>
         </el-row>
+        <el-dialog title="创建活动" :visible.sync="eventModalVisible" width="30%">
+            <el-form ref="eventForm" :model="eventForm" label-width="80px">
+                <el-form-item label="活动名称">
+                    <el-input v-model="eventForm.name"></el-input>
+                </el-form-item>
+                <el-form-item label="活动地点">
+                    <el-input v-model="eventForm.location" placeholder="请选择活动区域"></el-input>
+                </el-form-item>
+                <el-form-item label="报名开始时间">
+                    <el-date-picker v-model="eventForm.enroll_begin_time" type="datetime" placeholder="选择日期时间">
+                    </el-date-picker>
+                </el-form-item>
+                <el-form-item label="报名截止时间">
+                    <el-date-picker v-model="eventForm.enroll_end_time" type="datetime" placeholder="选择日期时间">
+                    </el-date-picker>
+                </el-form-item>
+                <el-form-item label="活动开始时间">
+                    <el-date-picker v-model="eventForm.begin_time" type="datetime" placeholder="选择日期时间">
+                    </el-date-picker>
+                </el-form-item>
+            </el-form>
+            <span slot="footer" class="dialog-footer">
+                <el-button @click="eventModalVisible = false">取 消</el-button>
+                <el-button type="primary" @click="createEvent">创建活动</el-button>
+            </span>
+        </el-dialog>
     </div>
 </template>
 
@@ -55,12 +82,23 @@
             return {
                 msg: 'Welcome to Hooli Group',
                 username: '',
-                groupInfo: {}
+                userid: '',
+                groupInfo: {},
+                eventForm: {
+                    name: '',
+                    location: '',
+                    begin_time: '',
+                    enroll_begin_time: '',
+                    enroll_end_time: ''
+                },
+                isAdmin: false,
+                eventModalVisible: false
             }
         },
         mounted() {
-            this.getGroupInfo()
             this.username = localStorage.getItem('username')
+            this.userid = localStorage.getItem('userid')
+            this.getGroupInfo()
         },
         methods: {
             getGroupInfo() {
@@ -70,8 +108,9 @@
                 api.getGroupInfo(this.$router.currentRoute.params).then((data) => {
                     //TODO: rewrite the code here, and use some config file
                     that.groupInfo = data.data
-                    // that.groupInfo.events = JSON.parse(that.groupInfo.events)
-                    // that.groupInfo.members = JSON.parse(that.groupInfo.members)
+                    if (that.groupInfo.admins && that.groupInfo.admins.includes(that.userid)) {
+                        that.isAdmin = true
+                    }
                     console.log(that.groupInfo)
                     loadingInstance.close()
                 }, (err) => {
@@ -113,6 +152,34 @@
                 let url = '/event/' + eventId
                 this.$router.push({
                     path: url
+                })
+            },
+            showEventModal() {
+                this.eventModalVisible = true
+            },
+            createEvent() {
+                let that = this
+                let request = Object.assign({}, that.eventForm)
+                request.group = this.$router.currentRoute.params.id
+                api.createEvent(request).then((data) => {
+                    that.eventForm = {
+                        name: '',
+                        location: '',
+                        begin_time: '',
+                        enroll_begin_time: '',
+                        enroll_end_time: ''
+                    }
+                    that.eventModalVisible = false
+                    that.$message({
+                        type: 'success',
+                        message: '创建成功'
+                    })
+                }, (err) => {
+                    that.eventModalVisible = false
+                    that.$message({
+                        type: 'info',
+                        message: '创建失败'
+                    })
                 })
             }
         }
