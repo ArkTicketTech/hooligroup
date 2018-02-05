@@ -1,5 +1,5 @@
 <template lang="html">
-    <div class="">
+    <div @keyup.enter = "submitForm('registerValidateForm')" class="">
         <el-form :model="registerValidateForm" label-width="100px" ref="registerValidateForm">
             <el-form-item prop="username" label="用户名" :rules="rules.username">
                 <el-input v-model="registerValidateForm.username"></el-input>

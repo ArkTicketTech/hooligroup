@@ -4,7 +4,7 @@
       <el-col :span="10" :offset="7">
         <el-tabs v-model="activeName" @tab-click="handleClick">
           <el-tab-pane label="用户登录" name="first">
-            <el-col >
+            <el-col @keyup.enter.native = "submitForm('dynamicValidateForm')">
               <el-form :model="dynamicValidateForm" label-width="100px" ref="dynamicValidateForm">
                     <el-form-item
                       prop="username"
