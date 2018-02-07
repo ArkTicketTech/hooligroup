@@ -2,25 +2,25 @@
 
 ---
 
-# Get All Groups
+# GetAllGroups
 
 Get all groups
 
 ### HTTP Request
 
 ```
-GET /group/getGroupInfoById
+GET /groups
 ```
 
 ### Request parameters
 
 Do not supply a request parameters with this method.
 
-### Required headers
+### Request headers
 
-| Name  | Value      | Remark   |
-| :---- | :--------- | :------- |
-| token | user_token | Required |
+| Key           | Value | Remark   |
+| :------------ | :---- | :------- |
+| Authorization | token | Required |
 
 ### Request body
 
@@ -28,21 +28,37 @@ Do not supply a request body with this method.
 
 ### Example
 
-##### Request
+##### Request Body
 
-```http
+```json
 
 ```
 
 ##### Response
 
-```http
-
+```json
+[
+  {
+    "_id": "595e72294ad3131b84083d37",
+    "create_time": "2017-07-06T17:23:53.000Z",
+    "name": "深度学习与计算机视觉",
+    "type": "study",
+    "description": "李飞飞亲授计算机视觉与深度网络。",
+    "__v": 5,
+    "events": ["5a510c2b67563b041ab214eb", "5a510c3167563b041ab214ec"],
+    "admins": [],
+    "members": [
+      "5a2d4af36e20934f2e7ab022",
+      "5a2d4b796e20934f2e7ab027",
+      "5961a66bf79ed50d198ae08e"
+    ]
+  }
+]
 ```
 
 ---
 
-# Create group
+# CreateGroup
 
 Create a new group.
 
@@ -54,11 +70,11 @@ POST /group/create
 
 ### Request parameters
 
-### Required headers
+### Request headers
 
-| Name  | Value      | Remark   |
-| :---- | :--------- | :------- |
-| token | user_token | Required |
+| Key           | Value | Remark   |
+| :------------ | :---- | :------- |
+| Authorization | token | Required |
 
 ### Request body
 
@@ -70,14 +86,154 @@ POST /group/create
 
 ### Example
 
-##### Request
+##### Request Body
 
-```http
+```json
+{
+  "name": "STP",
+  "type": "commonweal",
+  "description": "test"
+}
+```
+
+##### Response
+
+```json
+{
+  "success": true
+}
+```
+
+---
+
+# GetGroupInfoById
+
+Get group info by id.
+
+### HTTP Request
+
+```
+GET /group/getGroupInfoById?id={{id}}
+```
+
+### Request parameters
+
+### Request headers
+
+| Key           | Value | Remark   |
+| :------------ | :---- | :------- |
+| Authorization | token | Required |
+
+### Request body
+
+| Parameter | Type | Description |
+| :-------- | :--- | :---------- |
+| id        |      |             |
+
+### Example
+
+##### Request Body
+
+```json
 
 ```
 
 ##### Response
 
-```http
+```json
+{
+  "_id": "595e72294ad3131b84083d37",
+  "create_time": "2017-07-06T17:23:53.000Z",
+  "name": "深度学习与计算机视觉",
+  "type": "study",
+  "description": "李飞飞亲授计算机视觉与深度网络。",
+  "__v": 5,
+  "events": [
+    {
+      "_id": "5a510c3167563b041ab214ec",
+      "name": "测试课程2",
+      "begin_time": null,
+      "enroll_begin_time": null,
+      "location": "东川路",
+      "__v": 0,
+      "members": [],
+      "tags": []
+    },
+    {
+      "_id": "5a510c2b67563b041ab214eb",
+      "name": "测试课程",
+      "begin_time": null,
+      "enroll_begin_time": null,
+      "location": "东川路",
+      "__v": 0,
+      "members": [],
+      "tags": []
+    }
+  ],
+  "admins": [],
+  "members": [
+    {
+      "_id": "5961a66bf79ed50d198ae08e",
+      "username": "wfnuser",
+      "name": "黄清昊",
+      "__v": 0
+    },
+    {
+      "_id": "5a2d4af36e20934f2e7ab022",
+      "username": "qinghao",
+      "name": "qinghao",
+      "__v": 1
+    },
+    {
+      "_id": "5a2d4b796e20934f2e7ab027",
+      "username": "Mark",
+      "name": "李志辉",
+      "__v": 1
+    }
+  ]
+}
+```
 
+---
+
+# JoinGroup
+
+Join a group.
+
+### HTTP Request
+
+```
+POST /group/create
+```
+
+### Request parameters
+
+### Request headers
+
+| Key           | Value | Remark   |
+| :------------ | :---- | :------- |
+| Authorization | token | Required |
+
+### Request body
+
+| Parameter | Type | Description |
+| :-------- | :--- | :---------- |
+| id        |      |             |
+
+### Example
+
+##### Request Body
+
+```json
+{
+  "id": "595e72294ad3131b84083d37"
+}
+```
+
+##### Response
+
+```json
+{
+  "success": true
+}
 ```
