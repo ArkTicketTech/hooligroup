@@ -6,6 +6,11 @@
 * API文档补全
 * jsdoc
 * mongodb调研
-* 
+* express\vue 调研
+
+* 爬虫项目\微信机器人项目
+
+
+
 
 
