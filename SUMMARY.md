@@ -4,5 +4,5 @@
   * [API](api.md)
 * [Code Style Guide](code-style-guide.md)
 * [Environment](environment.md)
-* Git
+* [Git](git.md)
 
