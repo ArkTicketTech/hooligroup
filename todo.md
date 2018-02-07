@@ -7,6 +7,7 @@
 * jsdoc
 * mongodb调研
 * code review
+* docker
 * express\vue 调研
 
 * 爬虫项目\微信机器人项目
