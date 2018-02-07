@@ -8,9 +8,12 @@
 * mongodb调研
 * code review
 * docker
+* 需求文档、如何理解需求、如何不产生歧义
 * express\vue 调研
 
 * 爬虫项目\微信机器人项目
+
+* 工具 （vscode sourcetree mongovue）
 
 
 
