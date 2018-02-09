@@ -7,4 +7,6 @@
 * [Git](git.md)
 * [Todo](todo.md)
 * [VSCODE](vscode.md)
+* User APIs
+* Event APIs
 
