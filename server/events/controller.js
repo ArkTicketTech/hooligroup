@@ -1,5 +1,5 @@
 const express = require('express')
-const model = require('../db/db.js')
+const model = require('../db/model.js')
 const moment = require('moment')
 const objectIdToTimestamp = require('objectid-to-timestamp')
 const checkToken = require('../middleware/checkToken.js')
