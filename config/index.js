@@ -29,7 +29,7 @@ module.exports = {
 		assetsPublicPath: '/',
 		proxyTable: {
 			'/hapi': {
-				target: 'http://localhost:3000',
+				target: 'http://106.15.92.51',
 				changeOrigin: true
 			}
 		},
