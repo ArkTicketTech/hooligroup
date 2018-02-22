@@ -61,7 +61,7 @@ getApiUrls(function(apiUrls){
   if (process.env.NODE_ENV === 'development'){
     console.log('------------------------------mock------------------------')
     server(apiUrls);
-  } else {
+  } else if (process.env.NODE_ENV === 'debug') {
     console.log('-----------------------------proxy---------------------------')
     // proxy api requests
     Object.keys(proxyTable).forEach(function (context) {
@@ -75,7 +75,7 @@ getApiUrls(function(apiUrls){
 })
 
 function getApiUrls(cb) {
-  var mockDir = path.join(_dirname, '../mock');
+  var mockDir = path.join(__dirname, '../mock');
   var routers = {
     '/':{}
   };
