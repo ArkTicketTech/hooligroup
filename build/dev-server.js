@@ -11,6 +11,9 @@ var express = require('express')
 var webpack = require('webpack')
 var proxyMiddleware = require('http-proxy-middleware')
 var webpackConfig = require('./webpack.dev.conf')
+var fs = require('fs')
+var klaw = require('klaw')
+var _ = require('lodash')
 
 // default port where dev server listens for incoming traffic
 var port = process.env.PORT || config.dev.port
@@ -39,15 +42,6 @@ compiler.plugin('compilation', function (compilation) {
   })
 })
 
-// proxy api requests
-Object.keys(proxyTable).forEach(function (context) {
-  var options = proxyTable[context]
-  if (typeof options === 'string') {
-    options = { target: options }
-  }
-  app.use(proxyMiddleware(options.filter || context, options))
-})
-
 // handle fallback for HTML5 history API
 app.use(require('connect-history-api-fallback')())
 
@@ -61,6 +55,108 @@ app.use(hotMiddleware)
 // serve pure static assets
 var staticPath = path.posix.join(config.dev.assetsPublicPath, config.dev.assetsSubDirectory)
 app.use(staticPath, express.static('./static'))
+
+getApiUrls(function(apiUrls){
+  // mock api requests
+  if (process.env.NODE_ENV === 'development'){
+    console.log('------------------------------mock------------------------')
+    server(apiUrls);
+  } else {
+    console.log('-----------------------------proxy---------------------------')
+    // proxy api requests
+    Object.keys(proxyTable).forEach(function (context) {
+      var options = proxyTable[context]
+      if (typeof options === 'string') {
+        options = { target: options }
+      }
+      app.use(proxyMiddleware(options.filter || context, options))
+    })
+  }
+})
+
+function getApiUrls(cb) {
+  var mockDir = path.join(_dirname, '../mock');
+  var routers = {
+    '/':{}
+  };
+  var mockFiles = [];
+  klaw(mockDir)
+    .on('data', function(item){
+      //如果是js文件
+      if (/^.*\.js$/.test(item.path)){
+        mockFiles.push(item.path);
+      }
+    })
+    .on('end', function(){
+      mockFiles.forEach(function(route){
+        try{
+          var routeObj = require(route);
+          if (routeObj.$router) {
+            routers[routeObj.$router] = routeObj;
+          } else {
+            routers['/'] = Object.assign({}, routers['/'], routeObj);
+          }
+          delete routeObj.$router;
+        }
+        catch (e){
+          console.log(e);
+        }
+      })
+      cb && cb(routers);
+    })
+}
+
+function server(routers) {
+  // 常用的请求方法
+  var methodFlag = ['$get', '$post']; 
+  var router = new express.Router();
+  Object.keys(routers).forEach(function(key) {
+    var routerConfig = routers[key];
+    Object.keys(routerConfig).forEach(function (routeKey) {
+      var routeHandle = routerConfig[routeKey];
+      //如果内容是一个函数
+      if (_.isFunction(routeHandle)) {
+        router.use(routeKey, routeHandle);
+      } // 如果内容是一个对象
+      else if (_.isObject(routeHandle)){
+        //如果对象属性有methodFlag数组中的某个方法
+        if (methodFlag.some(function(item){
+          return routeHandle[item];
+        })){
+          methodFlag.forEach(function(item){
+            if (routeHandle[item]){
+              if (_.isFunction(routeHandle[item])){
+                router[item.toLowerCase().replace('$', '')](routeKey, routeHandle[item]);
+              } //如果$get或$post是对象
+              else if (_.isObject(routeHandle[item])){
+                router[item.toLowerCase().replace('$', '')](routeKey, function(req, res, next){
+                  res.json(routeHandle);
+                  next();
+                })
+              }
+            }
+          })
+        }
+        //如果只是普通对象
+        else {
+          router.use(routeKey, function(req, res, next){
+            res.json(routeHandle);
+            next();
+          })
+        }
+      }
+      //如果内容是字符串
+      else if (_.isString(routeHandle)){
+        router.use(routeKey, function(req, res, next){
+          res.json(routeHandle);
+          next();
+        })
+      }
+    })
+  })
+  //将路由挂载至应用
+  app.use('/', router);
+}
 
 var uri = 'http://localhost:' + port
 
