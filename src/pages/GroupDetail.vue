@@ -18,7 +18,7 @@
                             <span style="line-height: 36px;">活动列表</span>
                             <el-button style="float: right;" type="primary" @click="showEventModal" v-if="isAdmin">创建活动</el-button>
                         </div>
-                        <div v-for="event in groupInfo.events" class="text item">
+                        <div v-for="event in groupInfo.events" v-bind:key="event._id" class="text item">
                             <div @click="goDetail(event._id)" style="height:36px;">
                                 <div style="line-height:36px;">{{event.name}}</div>
                             </div>
@@ -32,7 +32,7 @@
                         <span style="line-height: 36px;">成员列表</span>
                         <el-button style="float: right;" type="primary">报名</el-button>
                     </div>
-                    <div v-for="member in groupInfo.members" class="text item">
+                    <div v-for="member in groupInfo.members" v-bind:key="member._id" class="text item">
                         {{ member.name }}
                     </div>
                 </el-card>
@@ -68,133 +68,133 @@
 </template>
 
 <script>
-    /**
-     * @author: wfnuser
-     */
-    import * as types from '../store/types'
-    import api from '../axios'
-    import {
-        Loading
-    } from 'element-ui';
-    export default {
-        name: 'group',
-        data() {
-            return {
-                msg: 'Welcome to Hooli Group',
-                username: '',
-                userid: '',
-                groupInfo: {},
-                eventForm: {
+/**
+ * @author: wfnuser
+ */
+import * as types from '../store/types'
+import api from '../axios'
+import {
+    Loading
+} from 'element-ui';
+export default {
+    name: 'group',
+    data() {
+        return {
+            msg: 'Welcome to Hooli Group',
+            username: '',
+            userid: '',
+            groupInfo: {},
+            eventForm: {
+                name: '',
+                location: '',
+                begin_time: '',
+                enroll_begin_time: '',
+                enroll_end_time: ''
+            },
+            isAdmin: false,
+            eventModalVisible: false
+        }
+    },
+    mounted() {
+        this.username = localStorage.getItem('username')
+        this.userid = localStorage.getItem('userid')
+        this.getGroupInfo()
+    },
+    methods: {
+        getGroupInfo() {
+            let that = this
+            let loadingInstance = Loading.service()
+            console.log(this.$router.currentRoute.params)
+            api.getGroupInfo(this.$router.currentRoute.params).then((data) => {
+                //TODO: rewrite the code here, and use some config file
+                that.groupInfo = data.data
+                if (that.groupInfo.admins && that.groupInfo.admins.includes(that.userid)) {
+                    that.isAdmin = true
+                }
+                console.log(that.groupInfo)
+                loadingInstance.close()
+            }, (err) => {
+                loadingInstance.close()
+            })
+        },
+        logout() {
+            this.$store.dispatch('UserLogout')
+            if (!this.$store.state.token) {
+                this.$router.push('/login')
+                this.$message({
+                    type: 'success',
+                    message: '登出成功'
+                })
+            } else {
+                this.$message({
+                    type: 'info',
+                    message: '登出失败'
+                })
+            }
+        },
+        enroll(groupId) {
+            console.log(groupId)
+            let request = {}
+            request.id = groupId
+            api.joinGroup(request).then((data) => {
+                this.$message({
+                    type: 'success',
+                    message: '报名成功'
+                })
+            }, (err) => {
+                this.$message({
+                    type: 'info',
+                    message: '报名失败'
+                })
+            })
+        },
+        goDetail(eventId) {
+            let url = '/event/' + eventId
+            this.$router.push({
+                path: url
+            })
+        },
+        showEventModal() {
+            this.eventModalVisible = true
+        },
+        createEvent() {
+            let that = this
+            let request = Object.assign({}, that.eventForm)
+            request.group = this.$router.currentRoute.params.id
+            api.createEvent(request).then((data) => {
+                that.eventForm = {
                     name: '',
                     location: '',
                     begin_time: '',
                     enroll_begin_time: '',
                     enroll_end_time: ''
-                },
-                isAdmin: false,
-                eventModalVisible: false
-            }
-        },
-        mounted() {
-            this.username = localStorage.getItem('username')
-            this.userid = localStorage.getItem('userid')
-            this.getGroupInfo()
-        },
-        methods: {
-            getGroupInfo() {
-                let that = this
-                let loadingInstance = Loading.service()
-                console.log(this.$router.currentRoute.params)
-                api.getGroupInfo(this.$router.currentRoute.params).then((data) => {
-                    //TODO: rewrite the code here, and use some config file
-                    that.groupInfo = data.data
-                    if (that.groupInfo.admins && that.groupInfo.admins.includes(that.userid)) {
-                        that.isAdmin = true
-                    }
-                    console.log(that.groupInfo)
-                    loadingInstance.close()
-                }, (err) => {
-                    loadingInstance.close()
-                })
-            },
-            logout() {
-                this.$store.dispatch('UserLogout')
-                if (!this.$store.state.token) {
-                    this.$router.push('/login')
-                    this.$message({
-                        type: 'success',
-                        message: '登出成功'
-                    })
-                } else {
-                    this.$message({
-                        type: 'info',
-                        message: '登出失败'
-                    })
                 }
-            },
-            enroll(groupId) {
-                console.log(groupId)
-                let request = {}
-                request.id = groupId
-                api.joinGroup(request).then((data) => {
-                    this.$message({
-                        type: 'success',
-                        message: '报名成功'
-                    })
-                }, (err) => {
-                    this.$message({
-                        type: 'info',
-                        message: '报名失败'
-                    })
+                that.eventModalVisible = false
+                that.$message({
+                    type: 'success',
+                    message: '创建成功'
                 })
-            },
-            goDetail(eventId) {
-                let url = '/event/' + eventId
-                this.$router.push({
-                    path: url
+            }, (err) => {
+                that.eventModalVisible = false
+                that.$message({
+                    type: 'info',
+                    message: '创建失败'
                 })
-            },
-            showEventModal() {
-                this.eventModalVisible = true
-            },
-            createEvent() {
-                let that = this
-                let request = Object.assign({}, that.eventForm)
-                request.group = this.$router.currentRoute.params.id
-                api.createEvent(request).then((data) => {
-                    that.eventForm = {
-                        name: '',
-                        location: '',
-                        begin_time: '',
-                        enroll_begin_time: '',
-                        enroll_end_time: ''
-                    }
-                    that.eventModalVisible = false
-                    that.$message({
-                        type: 'success',
-                        message: '创建成功'
-                    })
-                }, (err) => {
-                    that.eventModalVisible = false
-                    that.$message({
-                        type: 'info',
-                        message: '创建失败'
-                    })
-                })
-            }
+            })
         }
     }
+}
 </script>
 
 <style lang="scss" scoped>
-    .container {
-        padding: 24px;
-    }
+.container {
+  padding: 24px;
+}
 
-    .el-row {
-        margin-bottom: 20px;
-        &:last-child {
-            margin-bottom: 0;
-        }
-    }
+.el-row {
+  margin-bottom: 20px;
+  &:last-child {
+    margin-bottom: 0;
+  }
+}
 </style>

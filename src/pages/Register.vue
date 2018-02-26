@@ -20,100 +20,100 @@
 </template>
 
 <script>
-    import * as types from '../store/types'
-    import api from '../axios'
-    export default {
-        name: 'login',
-        data() {
-            // 密码安全性要求
-            let validatePass1 = (rule, value, callback) => {
-                // 6-16位, 数字, 字母, 字符至少包含两种, 同时不能包含中文和空格
-                let reg = /(?!^[0-9]+$)(?!^[A-z]+$)(?!^[^A-z0-9]+$)^[^\s\u4e00-\u9fa5]{6,16}$/;
-                if (!reg.test(value)) {
-                    callback(new Error('密码长度需6-16位，且包含字母和字符'))
-                } else {
-                    callback()
-                }
-            };
-            // 监测两次密码是否相同
-            let validatePass2 = (rule, value, callback) => {
-                value === '' ? callback(new Error('请再次输入密码')) :
-                    value !== this.registerValidateForm.password ? callback(new Error('两次输入密码不一致!')) :
-                    callback()
-            };
-            return {
-                registerValidateForm: {
-                    username: '',
-                    password: '',
-                    name: '',
-                    checkPass: '',
-                    first: 'first'
-                },
-                rules: {
-                    username: [{
-                        required: true,
-                        message: '请输入用户名',
-                        trigger: 'blur'
-                    }],
-                    password: [{
-                            required: true,
-                            message: '请输入密码',
-                            trigger: 'blur'
-                        },
-                        {
-                            validator: validatePass1,
-                            trigger: 'blur'
-                        }
-                    ],
-                    checkPass: [{
-                            required: true,
-                            message: '请再次输入密码',
-                            trigger: 'blur'
-                        },
-                        {
-                            validator: validatePass2,
-                            trigger: 'blur'
-                        }
-                    ]
-                }
+import * as types from '../store/types'
+import api from '../axios'
+export default {
+    name: 'login',
+    data() {
+        // 密码安全性要求
+        let validatePass1 = (rule, value, callback) => {
+            // 6-16位, 数字, 字母, 字符至少包含两种, 同时不能包含中文和空格
+            let reg = /(?!^[0-9]+$)(?!^[A-z]+$)(?!^[^A-z0-9]+$)^[^\s\u4e00-\u9fa5]{6,16}$/;
+            if (!reg.test(value)) {
+                callback(new Error('密码长度需6-16位，且包含字母和字符'))
+            } else {
+                callback()
             }
-        },
-        methods: {
-            resetForm(formName) {
-                this.$refs[formName].resetFields();
+        };
+        // 监测两次密码是否相同
+        let validatePass2 = (rule, value, callback) => {
+            value === '' ? callback(new Error('请再次输入密码')) :
+                value !== this.registerValidateForm.password ? callback(new Error('两次输入密码不一致!')) :
+                    callback()
+        };
+        return {
+            registerValidateForm: {
+                username: '',
+                password: '',
+                name: '',
+                checkPass: '',
+                first: 'first'
             },
-            submitForm(formName) {
-                this.$refs[formName].validate((valid) => {
-                    if (valid) {
-                        let opt = this.registerValidateForm;
-                        api.userRegister(opt).then(({
-                            data
-                        }) => {
-                            if (data.success) {
-                                this.$message({
-                                    type: 'success',
-                                    message: `注册成功，请登录`
-                                })
-                                //  Register 设计为了 Login 的组件，所以成功跳转时刷新一次页面
-                                this.$router.go(0)
-                                this.$router.push('/login')
-                            } else {
-                                this.$message({
-                                    type: 'info',
-                                    message: '此账户已存在'
-                                })
-                            }
-                        }).catch((err) => {
-                            console.log(err);
-                        })
-                    } else {
-                        console.log('Error Submit!!');
-                        return false;
-                    }
-                });
+            rules: {
+                username: [{
+                    required: true,
+                    message: '请输入用户名',
+                    trigger: 'blur'
+                }],
+                password: [{
+                    required: true,
+                    message: '请输入密码',
+                    trigger: 'blur'
+                },
+                {
+                    validator: validatePass1,
+                    trigger: 'blur'
+                }
+                ],
+                checkPass: [{
+                    required: true,
+                    message: '请再次输入密码',
+                    trigger: 'blur'
+                },
+                {
+                    validator: validatePass2,
+                    trigger: 'blur'
+                }
+                ]
             }
         }
+    },
+    methods: {
+        resetForm(formName) {
+            this.$refs[formName].resetFields();
+        },
+        submitForm(formName) {
+            this.$refs[formName].validate((valid) => {
+                if (valid) {
+                    let opt = this.registerValidateForm;
+                    api.userRegister(opt).then(({
+                            data
+                        }) => {
+                        if (data.success) {
+                            this.$message({
+                                type: 'success',
+                                message: `注册成功，请登录`
+                            })
+                            //  Register 设计为了 Login 的组件，所以成功跳转时刷新一次页面
+                            this.$router.go(0)
+                            this.$router.push('/login')
+                        } else {
+                            this.$message({
+                                type: 'info',
+                                message: '此账户已存在'
+                            })
+                        }
+                    }).catch((err) => {
+                        console.log(err);
+                    })
+                } else {
+                    console.log('Error Submit!!');
+                    return false;
+                }
+            });
+        }
     }
+}
 </script>
 
 <style lang="css">

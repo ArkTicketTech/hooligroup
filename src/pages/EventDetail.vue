@@ -19,7 +19,7 @@
                         <span style="line-height: 36px;">成员列表</span>
                         <el-button style="float: right;" type="primary" @click="enroll(eventInfo._id)">报名</el-button>
                     </div>
-                    <div v-for="member in eventInfo.members" class="text item">
+                    <div v-for="member in eventInfo.members" v-bind:key="member.id" class="text item">
                         {{ member.name }}
                     </div>
                 </el-card>
@@ -29,85 +29,85 @@
 </template>
 
 <script>
-    /**
-     * @author: wfnuser
-     */
-    import * as types from '../store/types'
-    import api from '../axios'
-    import {
-        Loading
-    } from 'element-ui';
-    export default {
-        name: 'event',
-        data() {
-            return {
-                msg: 'Welcome to Hooli Group',
-                username: '',
-                eventInfo: {}
-            }
+/**
+ * @author: wfnuser
+ */
+import * as types from '../store/types'
+import api from '../axios'
+import {
+    Loading
+} from 'element-ui';
+export default {
+    name: 'event',
+    data() {
+        return {
+            msg: 'Welcome to Hooli Group',
+            username: '',
+            eventInfo: {}
+        }
+    },
+    mounted() {
+        this.getEventInfo()
+        this.username = localStorage.getItem('username')
+    },
+    methods: {
+        getEventInfo() {
+            let that = this
+            let loadingInstance = Loading.service()
+            console.log(this.$router.currentRoute.params)
+            api.getEventInfo(this.$router.currentRoute.params).then((data) => {
+                //TODO: rewrite the code here, and use some config file
+                that.eventInfo = data.data
+                console.log(that.eventInfo)
+                loadingInstance.close()
+            }, (err) => {
+                loadingInstance.close()
+            })
         },
-        mounted() {
-            this.getEventInfo()
-            this.username = localStorage.getItem('username')
-        },
-        methods: {
-            getEventInfo() {
-                let that = this
-                let loadingInstance = Loading.service()
-                console.log(this.$router.currentRoute.params)
-                api.getEventInfo(this.$router.currentRoute.params).then((data) => {
-                    //TODO: rewrite the code here, and use some config file
-                    that.eventInfo = data.data
-                    console.log(that.eventInfo)
-                    loadingInstance.close()
-                }, (err) => {
-                    loadingInstance.close()
+        logout() {
+            this.$store.dispatch('UserLogout')
+            if (!this.$store.state.token) {
+                this.$router.push('/login')
+                this.$message({
+                    type: 'success',
+                    message: '登出成功'
                 })
-            },
-            logout() {
-                this.$store.dispatch('UserLogout')
-                if (!this.$store.state.token) {
-                    this.$router.push('/login')
-                    this.$message({
-                        type: 'success',
-                        message: '登出成功'
-                    })
-                } else {
-                    this.$message({
-                        type: 'info',
-                        message: '登出失败'
-                    })
-                }
-            },
-            enroll(eventId) {
-                console.log(eventId)
-                let request = {}
-                request.id = eventId
-                api.joinEvent(request).then((data) => {
-                    this.$message({
-                        type: 'success',
-                        message: '报名成功'
-                    })
-                }, (err) => {
-                    this.$message({
-                        type: 'info',
-                        message: '报名失败'
-                    })
+            } else {
+                this.$message({
+                    type: 'info',
+                    message: '登出失败'
                 })
             }
+        },
+        enroll(eventId) {
+            console.log(eventId)
+            let request = {}
+            request.id = eventId
+            api.joinEvent(request).then((data) => {
+                this.$message({
+                    type: 'success',
+                    message: '报名成功'
+                })
+            }, (err) => {
+                this.$message({
+                    type: 'info',
+                    message: '报名失败'
+                })
+            })
         }
     }
+}
 </script>
 
 <style lang="scss" scoped>
-    .container {
-        padding: 24px;
-    }
+.container {
+  padding: 24px;
+}
 
-    .el-row {
-        margin-bottom: 20px;
-        &:last-child {
-            margin-bottom: 0;
-        }
-    }
+.el-row {
+  margin-bottom: 20px;
+  &:last-child {
+    margin-bottom: 0;
+  }
+}
 </style>
