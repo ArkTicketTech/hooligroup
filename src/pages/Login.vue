@@ -35,7 +35,7 @@
 </template>
 
 <script>
-import Register from '@/components/Register.vue'
+import Register from '@/pages/Register.vue'
 import * as types from '../store/types'
 import api from '../axios'
 export default {
