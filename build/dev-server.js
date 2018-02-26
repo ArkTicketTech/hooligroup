@@ -21,7 +21,10 @@ var port = process.env.PORT || config.dev.port
 var autoOpenBrowser = !!config.dev.autoOpenBrowser
 // Define HTTP proxies to your custom API backend
 // https://github.com/chimurai/http-proxy-middleware
-var proxyTable = config.dev.proxyTable
+var proxyTable = {
+  'dev':config.dev.proxyTable,
+  'local': config.local.proxyTable
+}
 
 var app = express()
 var compiler = webpack(webpackConfig)
@@ -62,10 +65,20 @@ getApiUrls(function(apiUrls){
     console.log('------------------------------mock------------------------')
     server(apiUrls);
   } else if (process.env.NODE_ENV === 'debug') {
-    console.log('-----------------------------proxy---------------------------')
+    console.log('-----------------------------proxy test server---------------------------')
     // proxy api requests
-    Object.keys(proxyTable).forEach(function (context) {
-      var options = proxyTable[context]
+    Object.keys(proxyTable.dev).forEach(function (context) {
+      var options = proxyTable.dev[context]
+      if (typeof options === 'string') {
+        options = { target: options }
+      }
+      app.use(proxyMiddleware(options.filter || context, options))
+    })
+  } else if (process.env.NODE_ENV === 'local') {
+    console.log('-----------------------------proxy local server---------------------------')
+    // proxy api requests
+    Object.keys(proxyTable.local).forEach(function (context) {
+      var options = proxyTable.local[context]
       if (typeof options === 'string') {
         options = { target: options }
       }
