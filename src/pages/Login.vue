@@ -50,10 +50,10 @@ export default {
             // 输入校验
             rules: {
                 username: [{
-                        required: true,
-                        message: '请输入用户名',
-                        trigger: 'blur'
-                    }
+                    required: true,
+                    message: '请输入用户名',
+                    trigger: 'blur'
+                }
                 ],
                 password: {
                     required: true,
@@ -67,7 +67,7 @@ export default {
         Register
     },
     methods: {
-        handleClick(tab, event) {},
+        handleClick(tab, event) { },
         // 重置
         resetForm(formName) {
             this.$refs[formName].resetFields();
@@ -116,4 +116,5 @@ export default {
 </script>
 
 <style lang="scss">
+
 </style>

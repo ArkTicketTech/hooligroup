@@ -22,33 +22,33 @@
 </template>
 
 <script>
-    import api from '../axios'
+import api from '../axios'
 
-    export default {
-        data() {
-            return {
-                form: {
-                    name: '',
-                    date: '',
-                    exam: ''
-                }
-            }
-        },
-        methods: {
-            onSubmit() {
-                if (!this.form.name || !this.form.date) {
-                    alert("表单不能为空")
-                    return;
-                }
-                console.log(this.form.date)
-                api.vote(this.form).then(res => {
-                    if (res.data.success) {
-                        alert('提交成功')
-                    }
-                })
+export default {
+    data() {
+        return {
+            form: {
+                name: '',
+                date: '',
+                exam: ''
             }
         }
+    },
+    methods: {
+        onSubmit() {
+            if (!this.form.name || !this.form.date) {
+                alert("表单不能为空")
+                return;
+            }
+            console.log(this.form.date)
+            api.vote(this.form).then(res => {
+                if (res.data.success) {
+                    alert('提交成功')
+                }
+            })
+        }
     }
+}
 </script>
 
 <style lang="scss">
