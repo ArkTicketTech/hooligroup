@@ -61,6 +61,11 @@ export default {
 		return instance.get('/hapi/groups')
 	},
 
+	// 新建group
+	createGroup(data) {
+		return instance.post('/hapi/group/create', data)
+	},
+
 	// 报名参加group
 	joinGroup(data) {
 		return instance.post('/hapi/joinGroup', data)
