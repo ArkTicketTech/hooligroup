@@ -9,8 +9,8 @@ const router = new Router({
 		path: '/',
 		name: 'Group',
 		component(resolve) {
-			require.ensure(['@/components/Group.vue'], () => {
-				resolve(require('@/components/Group.vue'));
+			require.ensure(['@/pages/Group.vue'], () => {
+				resolve(require('@/pages/Group.vue'));
 			});
 		},
 		// 设置 mata 字段，表示该字段需要验证
@@ -22,8 +22,8 @@ const router = new Router({
 		path: '/group/:id',
 		name: 'GroupDetail',
 		component(resolve) {
-			require.ensure(['@/components/GroupDetail.vue'], () => {
-				resolve(require('@/components/GroupDetail.vue'));
+			require.ensure(['@/pages/GroupDetail.vue'], () => {
+				resolve(require('@/pages/GroupDetail.vue'));
 			});
 		},
 		// 设置 mata 字段，表示该字段需要验证
@@ -35,8 +35,8 @@ const router = new Router({
 		path: '/login',
 		name: 'login',
 		component(resolve) {
-			require.ensure(['@/components/Login.vue'], () => {
-				resolve(require('@/components/Login.vue'));
+			require.ensure(['@/pages/Login.vue'], () => {
+				resolve(require('@/pages/Login.vue'));
 			});
 		}
 	},
@@ -44,8 +44,8 @@ const router = new Router({
 		path: '/register',
 		name: 'register',
 		component(resolve) {
-			require.ensure(['@/components/Register.vue'], () => {
-				resolve(require('@/components/Register.vue'));
+			require.ensure(['@/pages/Register.vue'], () => {
+				resolve(require('@/pages/Register.vue'));
 			});
 		}
 	},
@@ -53,8 +53,8 @@ const router = new Router({
 		path: '/event/:id',
 		name: 'event',
 		component(resolve) {
-			require.ensure(['@/components/EventDetail.vue'], () => {
-				resolve(require('@/components/EventDetail.vue'));
+			require.ensure(['@/pages/EventDetail.vue'], () => {
+				resolve(require('@/pages/EventDetail.vue'));
 			});
 		}
 	},
@@ -62,8 +62,8 @@ const router = new Router({
 		path: '/vote',
 		name: 'vote',
 		component(resolve) {
-			require.ensure(['@/components/Vote.vue'], () => {
-				resolve(require('@/components/Vote.vue'));
+			require.ensure(['@/pages/Vote.vue'], () => {
+				resolve(require('@/pages/Vote.vue'));
 			});
 		}
 	},
@@ -71,8 +71,8 @@ const router = new Router({
 	{
 		path: '*',
 		component(resolve) {
-			require.ensure(['@/components/404.vue'], () => {
-				resolve(require('@/components/404.vue'));
+			require.ensure(['@/pages/404.vue'], () => {
+				resolve(require('@/pages/404.vue'));
 			});
 		},
 		hidden: true
