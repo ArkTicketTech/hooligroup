@@ -82,7 +82,7 @@ export default {
         return {
             msg: 'Welcome to Hooli Group',
             username: '',
-            userid: '',
+            userId: '',
             groupInfo: {},
             eventForm: {
                 name: '',
@@ -97,7 +97,7 @@ export default {
     },
     mounted() {
         this.username = localStorage.getItem('username')
-        this.userid = localStorage.getItem('userid')
+        this.userId = localStorage.getItem('userid')
         this.getGroupInfo()
     },
     methods: {
@@ -108,8 +108,12 @@ export default {
             api.getGroupInfo(this.$router.currentRoute.params).then((data) => {
                 //TODO: rewrite the code here, and use some config file
                 that.groupInfo = data.data
-                if (that.groupInfo.admins && that.groupInfo.admins.includes(that.userid)) {
-                    that.isAdmin = true
+                if (that.groupInfo.admins) {
+                    that.groupInfo.admins.forEach(admin => {
+                        if (admin._id === that.userId) {
+                            that.isAdmin = true
+                        }
+                    });
                 }
                 console.log(that.groupInfo)
                 loadingInstance.close()
