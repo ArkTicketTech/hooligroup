@@ -112,6 +112,38 @@ const JoinGroup = (req, res) => {
 				if (err) res.send(err)
 			})
 		})
+		model.User.findById(user.id, (err, doc) => {
+			doc.groups.addToSet(req.body.id)
+			doc.save(function (err, updatedUser) {
+				if (err) res.send(err)
+			})
+		})
+		res.json({
+			success: true
+		})
+	}
+}
+
+// 用户退出group
+const LeaveGroup = (req, res) => {
+	let user = getToken(req, res)
+	if (user) {
+		model.Group.findById(req.body.id, (err, groupDoc) => {
+			if (groupDoc.members) {
+				groupDoc.members.remove(user.id)
+				groupDoc.save((err, updatedGroup) => {
+					if (err) console.log(err)
+				})
+			}
+		})
+		model.User.findById(user.id, (err, userDoc) => {
+			if (userDoc.groups) {
+				userDoc.groups.remove(req.body.id)
+				userDoc.save((err, updatedUser) => {
+					if (err) console.log(err)
+				})
+			}
+		})
 		res.json({
 			success: true
 		})
@@ -140,5 +172,6 @@ module.exports = {
 	User,
 	DelUser,
 	JoinGroup,
+	LeaveGroup,
 	JoinEvent
 }

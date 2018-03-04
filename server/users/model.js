@@ -6,6 +6,7 @@ var userSchema = mongoose.Schema({
 	password: String,
 	recheck: String,
 	token: String,
+	groups: [{ type: mongoose.Schema.Types.ObjectId, ref: 'Group' }],
 	create_time: Date
 })
 
