@@ -30,8 +30,8 @@
                 <el-card class="box-card">
                     <div slot="header" class="clearfix">
                         <span style="line-height: 36px;">成员列表</span>
-                        <el-button  v-if="isInGroup" style="float: right;" type="warning">退出</el-button>
-                        <el-button  v-else style="float: right;" type="primary">报名</el-button>
+                        <el-button v-if="isInGroup" style="float: right;" type="danger">退出</el-button>
+                        <el-button v-else style="float: right;" type="primary">报名</el-button>
                     </div>
                     <div v-for="member in groupInfo.members" v-bind:key="member._id" class="text item">
                         {{ member.name }}
@@ -101,11 +101,13 @@ export default {
         this.userId = localStorage.getItem('userid')
         this.getGroupInfo()
     },
-    computed:{
+    computed: {
         isInGroup: function () {
-            for(let i = 0; i < this.groupInfo.members.length; i++){
-                if(this.groupInfo.members[i]._id === this.userid){
-                    return true;
+            if (this.groupInfo.members) {
+                for (let i = 0; i < this.groupInfo.members.length; i++) {
+                    if (this.groupInfo.members[i]._id === this.userId) {
+                        return true;
+                    }
                 }
             }
             return false;

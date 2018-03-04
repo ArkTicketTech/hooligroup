@@ -36,6 +36,7 @@ const Create = (req, res) => {
 				res.json({
 					success: false
 				})
+				return
 			}
 			eventCreate.save((err, event) => {
 				if (err) {
@@ -46,6 +47,7 @@ const Create = (req, res) => {
 				groupDoc.events.addToSet(event.id)
 				groupDoc.save(function (err, updatedGroup) {
 					if (err) {
+						console.log(err)
 						res.send(err)
 					} else {
 						res.json({
