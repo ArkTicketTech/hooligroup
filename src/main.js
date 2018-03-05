@@ -7,8 +7,14 @@ import ElementUI from 'element-ui'
 import 'element-ui/lib/theme-chalk/index.css'
 import axios from './axios'
 import store from './store/index.js'
+import Filters from './common/filters'
 
 Vue.use(ElementUI)
+
+// 注册过滤器
+Object.keys(Filters).forEach( key => {
+	Vue.filter(key, Filters[key])
+})
 
 /* eslint-disable no-new */
 new Vue({

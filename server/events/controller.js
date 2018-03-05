@@ -20,8 +20,10 @@ const Create = (req, res) => {
 	// create event
 	let eventCreate = new model.Event({
 		name: req.body.name,
+		end_time: req.body.end_time,
 		begin_time: req.body.begin_time,
-		enroll_begin_time: req.body.enroll_begin_time,
+		enroll_end_time: req.body.enroll_end_time,
+		info: req.body.info,
 		location: req.body.location
 	})
 	// check if the groupId is legal
@@ -30,12 +32,9 @@ const Create = (req, res) => {
 			console.log(err)
 			res.send(err)
 		} else {
-			// create event
-			console.log(groupDoc)
-			if (!groupDoc.admins.includes(user.id)) {
-				res.json({
-					success: false
-				})
+			// TODO: find out why includes not working here
+			if (groupDoc.admins.indexOf(user.id) === -1) {
+				res.json({ success: false })
 				return
 			}
 			eventCreate.save((err, event) => {

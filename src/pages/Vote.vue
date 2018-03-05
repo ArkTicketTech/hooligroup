@@ -40,7 +40,6 @@ export default {
                 alert("表单不能为空")
                 return;
             }
-            console.log(this.form.date)
             api.vote(this.form).then(res => {
                 if (res.data.success) {
                     alert('提交成功')

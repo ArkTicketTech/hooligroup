@@ -9,7 +9,8 @@ var eventSchema = mongoose.Schema({
 	begin_time: Date,
 	end_time: Date,
 	enroll_begin_time: Date,
-	enroll_end_time: Date
+	enroll_end_time: Date,
+	Info: String
 })
 
 var Event = mongoose.model('Event', eventSchema)

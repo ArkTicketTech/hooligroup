@@ -19,9 +19,19 @@
                             <el-button style="float: right;" type="primary" @click="showEventModal" v-if="isAdmin">创建活动</el-button>
                         </div>
                         <div v-for="event in groupInfo.events" v-bind:key="event._id" class="text item">
-                            <div @click="goDetail(event._id)" style="height:36px;">
-                                <div style="line-height:36px;">{{event.name}}</div>
-                            </div>
+                            <el-card class="box-card">
+                                <div slot="header" class="clearfix">
+                                    <span style="line-height: 36px;">{{event.name}}</span>
+                                    <el-button style="float: right; margin-left: 5px;" type="success" @click="goDetail(event._id)">详情</el-button>
+                                    <el-button style="float: right; margin-left: 5px;" type="primary" @click="enrollEvent(event._id)">报名</el-button>
+                                </div>
+                                <div class="text item">
+                                    报名截止时间：{{event.enroll_end_time | formatDate}}
+                                    <br/> 活动时间：{{event.begin_time | formatDate}} 至 {{event.end_time | formatDate}}
+                                    <br/> 活动地点： {{event.location}}
+                                    <br/> 活动简介：{{event.Info}}
+                                </div>
+                            </el-card>
                         </div>
                     </el-card>
                 </el-row>
@@ -47,10 +57,6 @@
                 <el-form-item label="活动地点">
                     <el-input v-model="eventForm.location" placeholder="请选择活动区域"></el-input>
                 </el-form-item>
-                <el-form-item label="报名开始时间">
-                    <el-date-picker v-model="eventForm.enroll_begin_time" type="datetime" placeholder="选择日期时间">
-                    </el-date-picker>
-                </el-form-item>
                 <el-form-item label="报名截止时间">
                     <el-date-picker v-model="eventForm.enroll_end_time" type="datetime" placeholder="选择日期时间">
                     </el-date-picker>
@@ -58,6 +64,13 @@
                 <el-form-item label="活动开始时间">
                     <el-date-picker v-model="eventForm.begin_time" type="datetime" placeholder="选择日期时间">
                     </el-date-picker>
+                </el-form-item>
+                <el-form-item label="活动截止时间">
+                    <el-date-picker v-model="eventForm.end_time" type="datetime" placeholder="选择日期时间">
+                    </el-date-picker>
+                </el-form-item>
+                <el-form-item label="活动简介">
+                    <el-input type="textarea" v-model="eventForm.info"></el-input>
                 </el-form-item>
             </el-form>
             <span slot="footer" class="dialog-footer">
@@ -117,7 +130,6 @@ export default {
         getGroupInfo() {
             let that = this
             let loadingInstance = Loading.service()
-            console.log(this.$router.currentRoute.params)
             api.getGroupInfo(this.$router.currentRoute.params).then((data) => {
                 //TODO: rewrite the code here, and use some config file
                 that.groupInfo = data.data
@@ -128,7 +140,6 @@ export default {
                         }
                     });
                 }
-                console.log(that.groupInfo)
                 loadingInstance.close()
             }, (err) => {
                 loadingInstance.close()
@@ -150,10 +161,24 @@ export default {
             }
         },
         enroll(groupId) {
-            console.log(groupId)
             let request = {}
             request.id = groupId
             api.joinGroup(request).then((data) => {
+                this.$message({
+                    type: 'success',
+                    message: '报名成功'
+                })
+            }, (err) => {
+                this.$message({
+                    type: 'info',
+                    message: '报名失败'
+                })
+            })
+        },
+        enrollEvent(eventId) {
+            let request = {}
+            request.id = eventId
+            api.joinEvent(request).then((data) => {
                 this.$message({
                     type: 'success',
                     message: '报名成功'
