@@ -21,17 +21,15 @@
                         <div v-for="event in groupInfo.events" v-bind:key="event._id" class="text item">
                             <el-card class="box-card">
                                 <div slot="header" class="clearfix">
-                                    <span>{{event.name}}</span>
-                                    <el-button style="float: right; padding: 3px 0" type="text" @click="goDetail(event._id)">详情</el-button>
+                                    <span style="line-height: 36px;">{{event.name}}</span>
+                                    <el-button style="float: right; margin-left: 5px;" type="success" @click="goDetail(event._id)">详情</el-button>
+                                    <el-button style="float: right; margin-left: 5px;" type="primary" @click="enrollEvent(event._id)">报名</el-button>
                                 </div>
                                 <div class="text item">
                                     报名截止时间：{{event.enroll_end_time | formatDate}}
-                                    <br/>
-                                    活动时间：{{event.begin_time | formatDate}} 至 {{event.end_time | formatDate}}
-                                    <br/>
-                                    活动地点： {{event.location}}
-                                    <br/>
-                                    活动简介：{{event.Info}}
+                                    <br/> 活动时间：{{event.begin_time | formatDate}} 至 {{event.end_time | formatDate}}
+                                    <br/> 活动地点： {{event.location}}
+                                    <br/> 活动简介：{{event.Info}}
                                 </div>
                             </el-card>
                         </div>
@@ -166,6 +164,21 @@ export default {
             let request = {}
             request.id = groupId
             api.joinGroup(request).then((data) => {
+                this.$message({
+                    type: 'success',
+                    message: '报名成功'
+                })
+            }, (err) => {
+                this.$message({
+                    type: 'info',
+                    message: '报名失败'
+                })
+            })
+        },
+        enrollEvent(eventId) {
+            let request = {}
+            request.id = eventId
+            api.joinEvent(request).then((data) => {
                 this.$message({
                     type: 'success',
                     message: '报名成功'
