@@ -28,6 +28,7 @@ export default {
         // 密码安全性要求
         let validatePass1 = (rule, value, callback) => {
             // 6-16位, 数字, 字母, 字符至少包含两种, 同时不能包含中文和空格
+            // TODO: move to common.js or util.js
             let reg = /(?!^[0-9]+$)(?!^[A-z]+$)(?!^[^A-z0-9]+$)^[^\s\u4e00-\u9fa5]{6,16}$/;
             if (!reg.test(value)) {
                 callback(new Error('密码长度需6-16位，且包含字母和字符'))

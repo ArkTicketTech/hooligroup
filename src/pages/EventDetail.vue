@@ -54,11 +54,9 @@ export default {
         getEventInfo() {
             let that = this
             let loadingInstance = Loading.service()
-            console.log(this.$router.currentRoute.params)
             api.getEventInfo(this.$router.currentRoute.params).then((data) => {
                 //TODO: rewrite the code here, and use some config file
                 that.eventInfo = data.data
-                console.log(that.eventInfo)
                 loadingInstance.close()
             }, (err) => {
                 loadingInstance.close()
