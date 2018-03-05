@@ -5,10 +5,22 @@
                 <el-row>
                     <el-card class="box-card">
                         <div slot="header" class="clearfix">
-                            <span style="line-height: 36px;">{{eventInfo.name}}</span>
+                            <span>{{eventInfo.name}}</span>
                         </div>
                         <div class="text item">
-                            {{eventInfo.description}}
+                            报名截止时间：{{eventInfo.enroll_end_time | formatDate}}
+                            <br/> 活动时间：{{eventInfo.begin_time | formatDate}} 至 {{eventInfo.end_time | formatDate}}
+                            <br/> 活动地点： {{eventInfo.location}}
+                        </div>
+                    </el-card>
+                </el-row>
+                <el-row>
+                    <el-card class="box-card">
+                        <div slot="header" class="clearfix">
+                            <span>活动介绍</span>
+                        </div>
+                        <div class="text item">
+                            {{eventInfo.Info}}
                         </div>
                     </el-card>
                 </el-row>
@@ -78,7 +90,6 @@ export default {
             }
         },
         enroll(eventId) {
-            console.log(eventId)
             let request = {}
             request.id = eventId
             api.joinEvent(request).then((data) => {

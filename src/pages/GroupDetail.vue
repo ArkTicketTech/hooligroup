@@ -132,7 +132,6 @@ export default {
         getGroupInfo() {
             let that = this
             let loadingInstance = Loading.service()
-            console.log(this.$router.currentRoute.params)
             api.getGroupInfo(this.$router.currentRoute.params).then((data) => {
                 //TODO: rewrite the code here, and use some config file
                 that.groupInfo = data.data
@@ -143,7 +142,6 @@ export default {
                         }
                     });
                 }
-                console.log(that.groupInfo)
                 loadingInstance.close()
             }, (err) => {
                 loadingInstance.close()
@@ -165,7 +163,6 @@ export default {
             }
         },
         enroll(groupId) {
-            console.log(groupId)
             let request = {}
             request.id = groupId
             api.joinGroup(request).then((data) => {
