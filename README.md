@@ -20,7 +20,7 @@ npm install
 
 ```bash
 # serve with hot reload at localhost:8010
-npm run dev
+npm run local
 ```
 
 ## Build

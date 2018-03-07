@@ -6,6 +6,8 @@
                     <el-card class="box-card">
                         <div slot="header" class="clearfix">
                             <span style="line-height: 36px;">{{groupInfo.name}}</span>
+                            <el-button v-if="isInGroup" style="float: right;" type="danger" @click="leaveGroup(groupInfo._id)">退出</el-button>
+                            <el-button v-else style="float: right;" type="primary" @click="enroll(groupInfo._id)">报名</el-button>
                         </div>
                         <div class="text item">
                             {{groupInfo.description}}
@@ -24,8 +26,6 @@
                 <el-card class="box-card">
                     <div slot="header" class="clearfix">
                         <span style="line-height: 36px;">成员列表</span>
-                        <el-button v-if="isInGroup" style="float: right;" type="danger">退出</el-button>
-                        <el-button v-else style="float: right;" type="primary">报名</el-button>
                     </div>
                     <div v-for="member in groupInfo.members" v-bind:key="member._id" class="text item">
                         {{ member.name }}
@@ -112,7 +112,22 @@ export default {
         },
         selectPanel(key, keyPath) {
             this.currentPanel = key
-        }
+        },  
+        leaveGroup(groupId) {
+            let request = {}
+            request.id = groupId
+            api.leaveGroup(request).then((data) => {
+                this.$message({
+                    type: 'success',
+                    message: '退出成功'
+                })
+            }, (err) => {
+                this.$message({
+                    type: 'info',
+                    message: '退出失败'
+                })
+            })
+        },
     }
 }
 </script>
