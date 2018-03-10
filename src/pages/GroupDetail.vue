@@ -99,6 +99,7 @@ export default {
             let request = {}
             request.id = groupId
             api.joinGroup(request).then((data) => {
+                this.getGroupInfo()
                 this.$message({
                     type: 'success',
                     message: '报名成功'
@@ -117,6 +118,7 @@ export default {
             let request = {}
             request.id = groupId
             api.leaveGroup(request).then((data) => {
+                this.getGroupInfo()
                 this.$message({
                     type: 'success',
                     message: '退出成功'
@@ -127,7 +129,7 @@ export default {
                     message: '退出失败'
                 })
             })
-        },
+        }
     }
 }
 </script>
