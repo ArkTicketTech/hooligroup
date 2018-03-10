@@ -5,7 +5,7 @@
                 <span style="line-height: 36px;">活动列表</span>
                 <el-button style="float: right;" type="primary" @click="showEventModal" v-if="isAdmin">创建活动</el-button>
             </div>
-            <div v-for="event in groupInfo.events" v-bind:key="event._id" class="text item">
+            <div v-for="event in orderedEvents" v-bind:key="event._id" class="text item">
                 <el-card class="box-card">
                     <div slot="header" class="clearfix">
                         <span style="line-height: 36px;">{{event.name}}</span>
@@ -58,6 +58,7 @@
  * @author: wfnuser
  */
 import * as types from '../../../store/types'
+import _ from 'lodash'
 import api from '../../../axios'
 import {
     Loading
@@ -85,6 +86,11 @@ export default {
             type: Boolean
         }
     },
+    watch: {
+        groupInfo: function(newVal){
+            this.orderedEvents = _.orderBy(newVal.events, 'begin_time');
+        }
+    },
     mounted() {
         this.userId = localStorage.getItem('userid')
     },
@@ -98,6 +104,14 @@ export default {
                 }
             }
             return false;
+        },
+        orderedEvents: {
+            get: function(){
+                return _.orderBy(this.groupInfo.events, 'begin_time');
+            },
+            set: function(newVal) {
+                return newVal;
+            }
         }
     },
     methods: {
@@ -141,7 +155,8 @@ export default {
                 that.$message({
                     type: 'success',
                     message: '创建成功'
-                })
+                });
+                that.groupInfo.events.push(request);
             }, (err) => {
                 that.eventModalVisible = false
                 that.$message({
