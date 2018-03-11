@@ -16,7 +16,7 @@
                         报名截止时间：{{event.enroll_end_time | formatDate}}
                         <br/> 活动时间：{{event.begin_time | formatDate}} 至 {{event.end_time | formatDate}}
                         <br/> 活动地点： {{event.location}}
-                        <br/> 活动简介：{{event.Info}}
+                        <br/> 活动简介：{{event.description}}
                     </div>
                 </el-card>
             </div>
@@ -42,7 +42,7 @@
                     </el-date-picker>
                 </el-form-item>
                 <el-form-item label="活动简介">
-                    <el-input type="textarea" v-model="eventForm.info"></el-input>
+                    <el-input type="textarea" v-model="eventForm.description"></el-input>
                 </el-form-item>
             </el-form>
             <span slot="footer" class="dialog-footer">
@@ -149,7 +149,8 @@ export default {
                     location: '',
                     begin_time: '',
                     enroll_begin_time: '',
-                    enroll_end_time: ''
+                    enroll_end_time: '',
+                    description: ''
                 }
                 that.eventModalVisible = false
                 that.$message({
