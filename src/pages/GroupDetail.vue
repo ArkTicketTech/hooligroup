@@ -52,6 +52,8 @@ export default {
         return {
             msg: 'Welcome to Hooli Group',
             userId: '',
+            username: '',
+            indexOfUser: '',
             groupInfo: {},
             isAdmin: false,
             currentPanel: 'events'
@@ -62,6 +64,7 @@ export default {
     },
     mounted() {
         this.userId = localStorage.getItem('userid')
+        this.username = localStorage.getItem('username')
         this.getGroupInfo()
     },
     computed: {
@@ -69,6 +72,7 @@ export default {
             if (this.groupInfo.members) {
                 for (let i = 0; i < this.groupInfo.members.length; i++) {
                     if (this.groupInfo.members[i]._id === this.userId) {
+                        this.indexOfUser = i;
                         return true;
                     }
                 }
@@ -99,7 +103,10 @@ export default {
             let request = {}
             request.id = groupId
             api.joinGroup(request).then((data) => {
-                this.getGroupInfo()
+                var newUser = {};
+                newUser._id = this.userId;
+                newUser.name = this.username;
+                this.groupInfo.members.push(newUser)
                 this.$message({
                     type: 'success',
                     message: '报名成功'
@@ -118,7 +125,7 @@ export default {
             let request = {}
             request.id = groupId
             api.leaveGroup(request).then((data) => {
-                this.getGroupInfo()
+                this.groupInfo.members.splice(this.indexOfUser, 1);
                 this.$message({
                     type: 'success',
                     message: '退出成功'
