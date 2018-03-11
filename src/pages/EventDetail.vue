@@ -20,7 +20,7 @@
                             <span>活动介绍</span>
                         </div>
                         <div class="text item">
-                            {{eventInfo.Info}}
+                            {{eventInfo.description}}
                         </div>
                     </el-card>
                 </el-row>
