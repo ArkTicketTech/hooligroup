@@ -51,7 +51,7 @@
             </el-form>
             <span slot="footer" class="dialog-footer">
                 <el-button @click="groupModalVisible = false">取 消</el-button>
-                <el-button type="primary" @click="createGroup">创建活动</el-button>
+                <el-button type="primary" @click="createGroup">创建小组</el-button>
             </span>
         </el-dialog>
     </div>

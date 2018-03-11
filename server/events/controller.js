@@ -23,7 +23,7 @@ const Create = (req, res) => {
 		end_time: req.body.end_time,
 		begin_time: req.body.begin_time,
 		enroll_end_time: req.body.enroll_end_time,
-		info: req.body.info,
+		description: req.body.description,
 		location: req.body.location
 	})
 	// check if the groupId is legal
