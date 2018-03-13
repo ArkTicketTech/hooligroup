@@ -80,6 +80,7 @@ export default {
 		return instance.get('/hapi/group/getGroupInfoById?id='+data.id)
 	},
 
+	// 获得活动信息
 	getEventInfo(data) {
 		return instance.get('/hapi/event/getEventInfoById?id='+data.id)
 	},
@@ -89,6 +90,7 @@ export default {
 		return instance.post('/hapi/joinEvent', data)
 	},
 
+	// 创建活动
 	createEvent(data) {
 		return instance.post('/hapi/event/create', data)
 	},
