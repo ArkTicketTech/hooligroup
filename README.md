@@ -19,8 +19,17 @@ npm install
 ## Develop
 
 ```bash
-# serve with hot reload at localhost:8010
+# serve with hot reload at localhost:8089
+# You need to start local server
 npm run local
+
+# serve with hot reload at localhost:8089
+# proxy on test server
+npm run debug
+
+# serve with hot reload at localhost:8089
+npm run dev
+
 ```
 
 ## Build
