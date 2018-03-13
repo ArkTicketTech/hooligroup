@@ -14,13 +14,14 @@
                         </div>
                     </el-card>
                 </el-row>
-                <el-menu :default-active="currentPanel" mode="horizontal" @select="selectPanel">
-                    <el-menu-item index="events">活动</el-menu-item>
-                    <el-menu-item index="forum">论坛</el-menu-item>
-                </el-menu>
-                <el-row>
-                    <event-list :groupInfo="groupInfo" :isAdmin="isAdmin"></event-list>
-                </el-row>
+                <el-tabs v-model="currentPanel" @tab-click="selectPanel">
+                    <el-tab-pane label="活动" name="events">
+                        <event-list :groupInfo="groupInfo" :isAdmin="isAdmin"></event-list>
+                    </el-tab-pane>
+                    <el-tab-pane label="论坛" name="forum">
+                        <event-list :groupInfo="groupInfo" :isAdmin="isAdmin"></event-list>
+                    </el-tab-pane>
+                </el-tabs>
             </el-col>
             <el-col :span="8">
                 <el-card class="box-card">
@@ -121,8 +122,8 @@ export default {
                 })
             })
         },
-        selectPanel(key, keyPath) {
-            this.currentPanel = key
+        selectPanel(tab, event) {
+            this.currentPanel = tab.name
         },  
         leaveGroup(groupId) {
             let request = {}
