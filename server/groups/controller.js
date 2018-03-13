@@ -8,7 +8,13 @@ const getToken = require('../middleware/getToken.js')
 // 所有group打印
 const Groups = (req, res) => {
 	model.Group.find({}, (err, doc) => {
-		if (err) console.log(err)
+		if (err) {
+			console.log(err)
+			res.json({
+				success: false
+			})
+			return
+		}
 		res.send(doc)
 	})
 }
@@ -27,8 +33,13 @@ const Create = (req, res) => {
 	groupCreate.create_time = moment(objectIdToTimestamp(groupCreate._id))
 		.format('YYYY-MM-DD HH:mm:ss');
 	groupCreate.save(err => {
-		if (err) console.log(err)
-		console.log('create success')
+		if (err) {
+			console.log(err)
+			res.json({
+				success: false
+			})
+			return
+		}
 		res.json({
 			success: true
 		})
