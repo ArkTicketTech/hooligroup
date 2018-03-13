@@ -6,8 +6,8 @@
                     <el-card class="box-card">
                         <div slot="header" class="clearfix">
                             <span style="line-height: 36px;">{{groupInfo.name}}</span>
-                            <el-button v-if="isInGroup" style="float: right;" type="danger" @click="leaveGroup(groupInfo._id)">退出</el-button>
-                            <el-button v-else style="float: right;" type="primary" @click="enroll(groupInfo._id)">报名</el-button>
+                            <el-button v-if="isInGroup && !isAdmin" style="float: right;" type="danger" @click="leaveGroup(groupInfo._id)">退出</el-button>
+                            <el-button v-if="!isInGroup && !isAdmin" style="float: right;" type="primary" @click="enroll(groupInfo._id)">报名</el-button>
                         </div>
                         <div class="text item">
                             {{groupInfo.description}}
@@ -26,6 +26,9 @@
                 <el-card class="box-card">
                     <div slot="header" class="clearfix">
                         <span style="line-height: 36px;">成员列表</span>
+                    </div>
+                    <div v-for="admin in groupInfo.admins" v-bind:key="admin._id" class="text item">
+                        {{ admin.name }} <el-tag type="success">管理员</el-tag>
                     </div>
                     <div v-for="member in groupInfo.members" v-bind:key="member._id" class="text item">
                         {{ member.name }}

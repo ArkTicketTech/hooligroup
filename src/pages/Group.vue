@@ -10,7 +10,7 @@
                     <div slot="header" class="clearfix">
                         <span style="line-height: 36px;">{{group.name}}</span>
                         <el-button style="float: right; margin-left: 5px;" type="success" @click="goDetail(group._id)">详情</el-button>
-                        <el-button style="float: right; margin-left: 5px;" type="danger" @click="leaveGroup(group._id)">退出</el-button>
+                        <el-button v-if="!group.admins.includes(userId)" style="float: right; margin-left: 5px;" type="danger" @click="leaveGroup(group._id)">退出</el-button>
                     </div>
                     <div class="text item">
                         {{group.description}}
@@ -152,7 +152,12 @@ export default {
             let request = {}
             request.id = groupId
             api.joinGroup(request).then((data) => {
-                this.getGroups()
+                this.groups.forEach((eachGroup, index) => {
+                    if (eachGroup._id === groupId) {
+                        this.myGroups.push(eachGroup)
+                        this.groups.splice(index, 1)
+                    }
+                });
                 this.$message({
                     type: 'success',
                     message: '报名成功'
@@ -168,6 +173,12 @@ export default {
             let request = {}
             request.id = groupId
             api.leaveGroup(request).then((data) => {
+                this.myGroups.forEach((eachGroup, index) => {
+                    if (eachGroup._id === groupId) {
+                        this.groups.push(eachGroup)
+                        this.myGroups.splice(index, 1)
+                    }
+                });
                 this.$message({
                     type: 'success',
                     message: '退出成功'
