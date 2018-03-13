@@ -10,8 +10,7 @@
                     <div slot="header" class="clearfix">
                         <span style="line-height: 36px;">{{group.name}}</span>
                         <el-button style="float: right; margin-left: 5px;" type="success" @click="goDetail(group._id)">详情</el-button>
-                        <el-button v-if="isInGroup(group.members)" style="float: right; margin-left: 5px;" type="danger" @click="leaveGroup(group._id)">退出</el-button>
-                        <el-button v-else style="float: right; margin-left: 5px;" type="primary" @click="enroll(group._id)">报名</el-button>
+                        <el-button style="float: right; margin-left: 5px;" type="danger" @click="leaveGroup(group._id)">退出</el-button>
                     </div>
                     <div class="text item">
                         {{group.description}}
@@ -28,8 +27,7 @@
                     <div slot="header" class="clearfix">
                         <span style="line-height: 36px;">{{group.name}}</span>
                         <el-button style="float: right; margin-left: 5px;" type="success" @click="goDetail(group._id)">详情</el-button>
-                        <el-button v-if="isInGroup(group.members)" style="float: right; margin-left: 5px;" type="danger" @click="leaveGroup(group._id)">退出</el-button>
-                        <el-button v-else style="float: right; margin-left: 5px;" type="primary" @click="enroll(group._id)">报名</el-button>
+                        <el-button style="float: right; margin-left: 5px;" type="primary" @click="enroll(group._id)">报名</el-button>
                     </div>
                     <div class="text item">
                         {{group.description}}
@@ -91,25 +89,18 @@ export default {
         this.userId = localStorage.getItem('userid')
     },
     methods: {
-        isInGroup: function (members) {
-            if (members) {
-                for (let i = 0; i < members.length; i++) {
-                    if (members[i]._id === this.userId) {
-                        return true;
-                    }
-                }
-            }
-            return false;
-        },
         getGroups() {
             let loadingInstance = Loading.service();
             let that = this
             api.getGroups().then((res) => {
                 //TODO: seperate my group API
                 if (res.data.length > 0) {
-                    that.groups = res.data
-                    that.myGroups = that.groups.filter((each) => {
+                    let allGroups = res.data
+                    that.myGroups = allGroups.filter((each) => {
                         return each.members.includes(that.userId) || each.admins.includes(that.userId)
+                    })
+                    that.groups = allGroups.filter((each) => {
+                        return !each.members.includes(that.userId) && !each.admins.includes(that.userId)
                     })
                 }
                 loadingInstance.close();
@@ -177,7 +168,6 @@ export default {
             let request = {}
             request.id = groupId
             api.leaveGroup(request).then((data) => {
-                this.getGroups()
                 this.$message({
                     type: 'success',
                     message: '退出成功'
