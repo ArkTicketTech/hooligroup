@@ -1,10 +1,10 @@
 <template>
     <div>
         <div style="margin-bottom: 15px;">
-            <el-button type="primary" round>全部</el-button>
-            <el-button type="" round>公告</el-button>
-            <el-button type="" round>水</el-button>
-            <el-button style="float: right; margin-left: 5px;" type="primary">发帖</el-button>
+            <el-button @click="selectSection()" type="primary" round>全部</el-button>
+            <el-button @click="selectSection()" type="" round>公告</el-button>
+            <el-button @click="selectSection()" type="" round>水</el-button>
+            <el-button @click="toCreateTopic" style="float: right; margin-left: 5px;" type="primary">发帖</el-button>
         </div>
         <div v-for="topic in topics" v-bind:key="topic._id" class="text item">
         </div>
@@ -38,6 +38,10 @@ export default {
         this.userId = localStorage.getItem('userid')
     },
     methods: {
+        toCreateTopic() {
+            let url = '/topic/create'
+            this.$router.push({ path: url })
+        }
     }
 }
 </script>
