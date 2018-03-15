@@ -19,7 +19,7 @@
                         <event-list :groupInfo="groupInfo" :isAdmin="isAdmin"></event-list>
                     </el-tab-pane>
                     <el-tab-pane label="论坛" name="forum">
-                        <event-list :groupInfo="groupInfo" :isAdmin="isAdmin"></event-list>
+                        <topic-list :isAdmin="isAdmin"></topic-list>
                     </el-tab-pane>
                 </el-tabs>
             </el-col>
@@ -50,6 +50,7 @@ import {
     Loading
 } from 'element-ui';
 import EventList from '../components/pages/GroupDetail/EventList'
+import TopicList from '../components/pages/GroupDetail/TopicList'
 export default {
     name: 'group',
     data() {
@@ -64,7 +65,8 @@ export default {
         }
     },
     components: {
-        EventList
+        EventList,
+        TopicList
     },
     mounted() {
         this.userId = localStorage.getItem('userid')
