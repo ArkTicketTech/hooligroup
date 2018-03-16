@@ -33,12 +33,11 @@ export default {
             type: Boolean
         },
         sections: {
-            type: [String]
+            type: Array
         }
     },
     mounted() {
-        this.userId = localStorage.getItem('userid')
-        this.sections = this.sections.unshift('全部')
+        this.userId = localStorage.getItem('userid')        
     },
     methods: {
         toCreateTopic() {

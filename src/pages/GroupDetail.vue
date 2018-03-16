@@ -100,6 +100,7 @@ export default {
                         }
                     });
                 }
+                that.groupInfo.sections = ['全部'].concat(that.groupInfo.sections)
                 loadingInstance.close()
             }, (err) => {
                 loadingInstance.close()
