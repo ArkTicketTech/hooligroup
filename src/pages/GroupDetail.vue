@@ -19,7 +19,7 @@
                         <event-list :groupInfo="groupInfo" :isAdmin="isAdmin"></event-list>
                     </el-tab-pane>
                     <el-tab-pane label="论坛" name="forum">
-                        <topic-list :isAdmin="isAdmin"></topic-list>
+                        <topic-list :sections="groupInfo.sections" :isAdmin="isAdmin"></topic-list>
                     </el-tab-pane>
                 </el-tabs>
             </el-col>

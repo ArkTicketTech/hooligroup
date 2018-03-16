@@ -1,9 +1,7 @@
 <template>
     <div>
         <div style="margin-bottom: 15px;">
-            <el-button @click="selectSection()" type="primary" round>全部</el-button>
-            <el-button @click="selectSection()" type="" round>公告</el-button>
-            <el-button @click="selectSection()" type="" round>水</el-button>
+            <el-button v-for="section in sections" v-bind:key="section" @click="selectSection(section)"  :type="section === selectedSection ? 'primary' : ''" round>{{section}}</el-button>
             <el-button @click="toCreateTopic" style="float: right; margin-left: 5px;" type="primary">发帖</el-button>
         </div>
         <div v-for="topic in topics" v-bind:key="topic._id" class="text item">
@@ -26,21 +24,29 @@ export default {
     data() {
         return {
             userId: '',
-            topics: []
+            topics: [],
+            selectedSection: '全部'
         }
     },
     props: {
         isAdmin: {
             type: Boolean
+        },
+        sections: {
+            type: [String]
         }
     },
     mounted() {
         this.userId = localStorage.getItem('userid')
+        this.sections = this.sections.unshift('全部')
     },
     methods: {
         toCreateTopic() {
             let url = '/topic/create'
             this.$router.push({ path: url })
+        },
+        selectSection(section) {
+            this.selectedSection = section;
         }
     }
 }
