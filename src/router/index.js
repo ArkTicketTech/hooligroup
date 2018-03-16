@@ -19,6 +19,15 @@ const router = new Router({
 		}
 	},
 	{
+		path: '/group/:gid/topic/:tid',
+		name: 'topicDetail',
+		component(resolve) {
+			require.ensure(['@/pages/TopicDetail.vue'], () => {
+				resolve(require('@/pages/TopicDetail.vue'));
+			});
+		}
+	},
+	{
 		path: '/group/:id',
 		name: 'GroupDetail',
 		component(resolve) {

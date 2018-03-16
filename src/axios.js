@@ -85,6 +85,11 @@ export default {
 		return instance.get('/hapi/event/getEventInfoById?id='+data.id)
 	},
 
+	// 获得主题信息
+	getTopicInfo(data) {
+		return instance.get('/hapi/topic/getTopicInfoById?id='+data.id)
+	},
+
 	// 报名参加event
 	joinEvent(data) {
 		return instance.post('/hapi/joinEvent', data)

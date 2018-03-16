@@ -53,6 +53,23 @@ const Create = (req, res) => {
 
 }
 
+// Topic Info
+const GetTopicInfoById = (req, res) => {
+	model.Topic.findById(req.query.id)
+		.populate('user')
+		.populate('comments')
+		.exec((err, topic) => {
+			if (err || !topic) {
+				res.json({
+					success: false
+				})
+				return
+			}
+			res.send(topic)
+		})
+}
+
 module.exports = {
-	Create
+	Create,
+	GetTopicInfoById
 }

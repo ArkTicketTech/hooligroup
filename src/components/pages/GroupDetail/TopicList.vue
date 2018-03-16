@@ -6,7 +6,7 @@
         </div>
         <el-card v-for="topic in filteredTopics" v-bind:key="topic._id" class="box-card">
             <el-tag type="success">{{topic.section}}</el-tag>
-            <a class="topic_title" :href="'/group/'+groupId+'/topic/' + topic._id">{{topic.title}}</a>
+            <router-link class="topic_title" :to="'/group/'+groupId+'/topic/'+topic._id+'/'">{{topic.title}}</router-link>
             <span style="float:right;">{{topic.created_at | formatDateDiff}}</span>
         </el-card>
     </div>
