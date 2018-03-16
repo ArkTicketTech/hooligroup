@@ -8,7 +8,8 @@ var groupSchema = mongoose.Schema({
 	admins: [{ type: mongoose.Schema.Types.ObjectId, ref: 'User' }],
 	create_time: Date,
 	events: [{ type: mongoose.Schema.Types.ObjectId, ref: 'Event' }],
-	sections: [String]
+	sections: [String],
+	topics: [{ type: mongoose.Schema.Types.ObjectId, ref: 'Topic'}]
 })
 
 var Group = mongoose.model('Group', groupSchema)
