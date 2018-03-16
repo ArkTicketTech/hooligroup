@@ -67,6 +67,15 @@ const router = new Router({
 			});
 		}
 	},
+	{
+		path: '/topic/create',
+		name: 'createTopic',
+		component(resolve) {
+			require.ensure(['@/pages/TopicCreate.vue'], () => {
+				resolve(require('@/pages/TopicCreate.vue'));
+			});
+		}
+	},
 	// 简单设置404页面
 	{
 		path: '*',

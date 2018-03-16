@@ -130,7 +130,9 @@ const LeaveGroup = (req, res) => {
 	if (user) {
 		model.Group.findById(req.body.id, (err, groupDoc) => {
 			if (groupDoc.members) {
-				groupDoc.members.remove(user.id)
+				groupDoc.members = groupDoc.members.filter((member) => {
+					member != user.id
+				})
 				groupDoc.save((err, updatedGroup) => {
 					if (err) console.log(err)
 				})
@@ -138,7 +140,9 @@ const LeaveGroup = (req, res) => {
 		})
 		model.User.findById(user.id, (err, userDoc) => {
 			if (userDoc.groups) {
-				userDoc.groups.remove(req.body.id)
+				userDoc.groups = userDoc.groups.filter((group) => {
+					group != req.body.id
+				})
 				userDoc.save((err, updatedUser) => {
 					if (err) console.log(err)
 				})

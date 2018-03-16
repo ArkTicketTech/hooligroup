@@ -6,26 +6,30 @@
                     <el-card class="box-card">
                         <div slot="header" class="clearfix">
                             <span style="line-height: 36px;">{{groupInfo.name}}</span>
-                            <el-button v-if="isInGroup" style="float: right;" type="danger" @click="leaveGroup(groupInfo._id)">退出</el-button>
-                            <el-button v-else style="float: right;" type="primary" @click="enroll(groupInfo._id)">报名</el-button>
+                            <el-button v-if="isInGroup && !isAdmin" style="float: right;" type="danger" @click="leaveGroup(groupInfo._id)">退出</el-button>
+                            <el-button v-if="!isInGroup && !isAdmin" style="float: right;" type="primary" @click="enroll(groupInfo._id)">报名</el-button>
                         </div>
                         <div class="text item">
                             {{groupInfo.description}}
                         </div>
                     </el-card>
                 </el-row>
-                <el-menu :default-active="currentPanel" mode="horizontal" @select="selectPanel">
-                    <el-menu-item index="events">活动</el-menu-item>
-                    <el-menu-item index="forum">论坛</el-menu-item>
-                </el-menu>
-                <el-row>
-                    <event-list :groupInfo="groupInfo" :isAdmin="isAdmin"></event-list>
-                </el-row>
+                <el-tabs v-model="currentPanel" @tab-click="selectPanel">
+                    <el-tab-pane label="活动" name="events">
+                        <event-list :groupInfo="groupInfo" :isAdmin="isAdmin"></event-list>
+                    </el-tab-pane>
+                    <el-tab-pane label="论坛" name="forum">
+                        <topic-list :isAdmin="isAdmin"></topic-list>
+                    </el-tab-pane>
+                </el-tabs>
             </el-col>
             <el-col :span="8">
                 <el-card class="box-card">
                     <div slot="header" class="clearfix">
                         <span style="line-height: 36px;">成员列表</span>
+                    </div>
+                    <div v-for="admin in groupInfo.admins" v-bind:key="admin._id" class="text item">
+                        {{ admin.name }} <el-tag type="success">管理员</el-tag>
                     </div>
                     <div v-for="member in groupInfo.members" v-bind:key="member._id" class="text item">
                         {{ member.name }}
@@ -46,6 +50,7 @@ import {
     Loading
 } from 'element-ui';
 import EventList from '../components/pages/GroupDetail/EventList'
+import TopicList from '../components/pages/GroupDetail/TopicList'
 export default {
     name: 'group',
     data() {
@@ -60,7 +65,8 @@ export default {
         }
     },
     components: {
-        EventList
+        EventList,
+        TopicList
     },
     mounted() {
         this.userId = localStorage.getItem('userid')
@@ -118,8 +124,8 @@ export default {
                 })
             })
         },
-        selectPanel(key, keyPath) {
-            this.currentPanel = key
+        selectPanel(tab, event) {
+            this.currentPanel = tab.name
         },  
         leaveGroup(groupId) {
             let request = {}
