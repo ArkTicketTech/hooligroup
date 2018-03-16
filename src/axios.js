@@ -80,6 +80,11 @@ export default {
 		return instance.get('/hapi/group/getGroupInfoById?id='+data.id)
 	},
 
+	// 获得小组论坛板块
+	getGroupSections(data) {
+		return instance.get('/hapi/group/getGroupSectionsById?id='+data.id)
+	},
+
 	// 获得活动信息
 	getEventInfo(data) {
 		return instance.get('/hapi/event/getEventInfoById?id='+data.id)
@@ -88,6 +93,11 @@ export default {
 	// 获得主题信息
 	getTopicInfo(data) {
 		return instance.get('/hapi/topic/getTopicInfoById?id='+data.id)
+	},
+
+	// 发布主题
+	createTopic(data) {
+		return instance.post('/hapi/topic/create', data)
 	},
 
 	// 报名参加event

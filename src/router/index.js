@@ -19,6 +19,15 @@ const router = new Router({
 		}
 	},
 	{
+		path: '/group/:gid/topic/create',
+		name: 'createTopic',
+		component(resolve) {
+			require.ensure(['@/pages/TopicCreate.vue'], () => {
+				resolve(require('@/pages/TopicCreate.vue'));
+			});
+		}
+	},
+	{
 		path: '/group/:gid/topic/:tid',
 		name: 'topicDetail',
 		component(resolve) {
@@ -73,15 +82,6 @@ const router = new Router({
 		component(resolve) {
 			require.ensure(['@/pages/Vote.vue'], () => {
 				resolve(require('@/pages/Vote.vue'));
-			});
-		}
-	},
-	{
-		path: '/topic/create',
-		name: 'createTopic',
-		component(resolve) {
-			require.ensure(['@/pages/TopicCreate.vue'], () => {
-				resolve(require('@/pages/TopicCreate.vue'));
 			});
 		}
 	},

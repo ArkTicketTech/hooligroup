@@ -70,8 +70,23 @@ const GetGroupInfoById = (req, res) => {
 		})
 }
 
+// Group info
+const GetGroupSectionsById = (req, res) => {
+	model.Group.findById(req.query.id).select({ "sections": 1})
+		.exec((err, group) => {
+			if (err || !group) {
+				res.json({
+					success: false
+				})
+				return
+			}
+			res.send(group.sections)
+		})
+}
+
 module.exports = {
 	Groups,
 	Create,
-	GetGroupInfoById
+	GetGroupInfoById,
+	GetGroupSectionsById
 }
