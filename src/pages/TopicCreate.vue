@@ -4,7 +4,7 @@
             <el-card class="box-card">
                 <div slot="header" class="clearfix">
                     <el-breadcrumb separator="/">
-                        <el-breadcrumb-item :to="{ path: from }">论坛</el-breadcrumb-item>
+                        <el-breadcrumb-item :to="{ path: '/group/' + groupId }">论坛</el-breadcrumb-item>
                         <el-breadcrumb-item>发布话题</el-breadcrumb-item>
                     </el-breadcrumb>
                 </div>
@@ -42,6 +42,7 @@ export default {
     data() {
         return {
             content: '',
+            groupId: '',
             editorOption: {
                 placeholder: '您想说点什么？',
                 modules: {
@@ -59,14 +60,7 @@ export default {
                     ]
                 }
             },
-            sections: [
-                {
-                    value: '灌水'
-                },
-                {
-                    value: '公告'
-                }
-            ],
+            sections: [],
             title: '',
             selectedSection: '',
             from: ''
@@ -76,14 +70,46 @@ export default {
         quillEditor
     },
     methods: {
-    },
-    beforeRouteEnter(to, from, next) {
-        next(vm => {
-            vm.from = from.path
-        })
+        createTopic() {
+            let data = {
+                content: this.content,
+                title: this.title,
+                section: this.selectedSection,
+                group: this.groupId
+            }
+            let that = this
+            api.createTopic(data).then(res => {
+                this.$message({
+                    type: 'success',
+                    message: '发帖成功'
+                })
+                // TODO: redirect to topic detail page
+                let url = '/group/' + that.groupId;
+                that.$router.push({ path: url })
+            }, (err) => {
+                this.$message({
+                    type: 'info',
+                    message: '发帖失败'
+                })
+            })
+        }
     },
     mounted() {
+        this.groupId = this.$route.params.gid
         this.editorOption.toolbar = this.toolbarOptions
+        let data = {
+            id: this.groupId
+        }
+        let that = this
+        api.getGroupSections(data).then(res => {
+            res.data.forEach(section => {
+                that.sections.push({
+                    value: section
+                })
+            });
+        }, err => {
+            console.log(err)
+        })
     }
 }
 </script>
