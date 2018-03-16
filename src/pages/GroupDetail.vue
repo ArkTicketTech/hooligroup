@@ -19,7 +19,7 @@
                         <event-list :groupInfo="groupInfo" :isAdmin="isAdmin"></event-list>
                     </el-tab-pane>
                     <el-tab-pane label="论坛" name="forum">
-                        <topic-list :isAdmin="isAdmin"></topic-list>
+                        <topic-list :sections="groupInfo.sections" :groupId="groupInfo._id" :topics="groupInfo.topics" :isAdmin="isAdmin"></topic-list>
                     </el-tab-pane>
                 </el-tabs>
             </el-col>
@@ -100,6 +100,7 @@ export default {
                         }
                     });
                 }
+                that.groupInfo.sections = ['全部'].concat(that.groupInfo.sections)
                 loadingInstance.close()
             }, (err) => {
                 loadingInstance.close()
