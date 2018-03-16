@@ -1,9 +1,14 @@
 import moment from 'moment'
 
 const Filters = {
-    formatDate: (value) => {
-        if (value) {
-            return moment(String(value)).format('YYYY/MM/DD hh:mm')
+    formatDate: (time) => {
+        if (time) {
+            return moment(String(time)).format('YYYY/MM/DD hh:mm')
+        }
+    },
+    formatDateDiff: (time) => {
+        if (time) {
+            return moment(String(time)).from(new Date())
         }
     }
 }

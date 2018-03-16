@@ -58,6 +58,7 @@ const GetGroupInfoById = (req, res) => {
 			}
 		})
 		.populate('events')
+		.populate('topics')
 		.exec((err, group) => {
 			if (err || !group) {
 				res.json({

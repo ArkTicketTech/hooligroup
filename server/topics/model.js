@@ -5,7 +5,8 @@ var topicSchema = mongoose.Schema({
 	content: String,
 	user: { type: mongoose.Schema.Types.ObjectId, ref: 'User' },
 	group: { type: mongoose.Schema.Types.ObjectId, ref: 'Group' },
-	comments: [{ type: mongoose.Schema.Types.ObjectId, ref: 'Comment'}],
+	comments: [{ type: mongoose.Schema.Types.ObjectId, ref: 'Comment' }],
+	created_at: { type: Date, required: true, default: Date.now },
 	section: String,
 	likes: Number,
 	views: Number
