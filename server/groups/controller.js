@@ -81,7 +81,7 @@ const GetGroupInfoById = (req, res) => {
 		})
 }
 
-// Group info
+// Get group sections
 const GetGroupSectionsById = (req, res) => {
 	model.Group.findById(req.query.id).select({ "sections": 1})
 		.exec((err, group) => {
@@ -95,9 +95,51 @@ const GetGroupSectionsById = (req, res) => {
 		})
 }
 
+// Delete group section
+const DeleteGroupSection = (req, res) => {
+	let isSuccess = true
+	model.Group.findById(req.body.groupId, (err, groupDoc) => {
+		if (groupDoc.sections) {
+			groupDoc.sections = groupDoc.sections.filter((section) => {
+				return section !== req.body.section
+			})
+			groupDoc.save((err, updatedGroup) => {
+				if (err) {
+					console.log(err)
+					isSuccess = false
+				}
+			})
+		}
+	})
+	res.json({
+		success: true
+	})
+} 
+
+// New group section
+const NewGroupSection = (req, res) => {
+	let isSuccess = true
+	model.Group.findById(req.body.groupId, (err, groupDoc) => {
+		if (groupDoc.sections) {
+			groupDoc.sections.addToSet(req.body.section)
+			groupDoc.save((err, updatedGroup) => {
+				if (err) {
+					console.log(err)
+					isSuccess = false
+				}
+			})
+		}
+	})
+	res.json({
+		success: true
+	})
+}
+
 module.exports = {
 	Groups,
 	Create,
 	GetGroupInfoById,
-	GetGroupSectionsById
+	GetGroupSectionsById,
+	DeleteGroupSection,
+	NewGroupSection
 }
