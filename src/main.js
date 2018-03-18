@@ -9,6 +9,11 @@ import axios from './axios'
 import store from './store/index.js'
 import Filters from './common/filters'
 
+// require styles
+import 'quill/dist/quill.core.css'
+import 'quill/dist/quill.snow.css'
+import 'quill/dist/quill.bubble.css'
+
 Vue.use(ElementUI)
 
 // 注册过滤器

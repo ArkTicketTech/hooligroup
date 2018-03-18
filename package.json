@@ -18,6 +18,7 @@
     "element-ui": "^2.2.1",
     "uglify-js2": "^2.1.11",
     "vue": "^2.5.13",
+    "vue-quill-editor": "^3.0.5",
     "vue-router": "^2.8.1"
   },
   "devDependencies": {

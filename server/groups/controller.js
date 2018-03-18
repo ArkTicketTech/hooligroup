@@ -8,7 +8,13 @@ const getToken = require('../middleware/getToken.js')
 // 所有group打印
 const Groups = (req, res) => {
 	model.Group.find({}, (err, doc) => {
-		if (err) console.log(err)
+		if (err) {
+			console.log(err)
+			res.json({
+				success: false
+			})
+			return
+		}
 		res.send(doc)
 	})
 }
@@ -21,14 +27,20 @@ const Create = (req, res) => {
 		name: req.body.name,
 		type: req.body.type,
 		description: req.body.description,
-		admins: [user.id]
+		admins: [user.id],
+		sections: ['公告', '问答', '分享', '灌水', '其他']
 	})
 	// 将 objectid 转换为 用户创建时间
 	groupCreate.create_time = moment(objectIdToTimestamp(groupCreate._id))
 		.format('YYYY-MM-DD HH:mm:ss');
 	groupCreate.save(err => {
-		if (err) console.log(err)
-		console.log('create success')
+		if (err) {
+			console.log(err)
+			res.json({
+				success: false
+			})
+			return
+		}
 		res.json({
 			success: true
 		})
@@ -57,6 +69,7 @@ const GetGroupInfoById = (req, res) => {
 			}
 		})
 		.populate('events')
+		.populate('topics')
 		.exec((err, group) => {
 			if (err || !group) {
 				res.json({
@@ -68,8 +81,23 @@ const GetGroupInfoById = (req, res) => {
 		})
 }
 
+// Group info
+const GetGroupSectionsById = (req, res) => {
+	model.Group.findById(req.query.id).select({ "sections": 1})
+		.exec((err, group) => {
+			if (err || !group) {
+				res.json({
+					success: false
+				})
+				return
+			}
+			res.send(group.sections)
+		})
+}
+
 module.exports = {
 	Groups,
 	Create,
-	GetGroupInfoById
+	GetGroupInfoById,
+	GetGroupSectionsById
 }
