@@ -20,7 +20,7 @@ const router = new Router({
 	},
 	{
 		path: '/group/:gid/topic/create',
-		name: 'createTopic',
+		name: 'CreateTopic',
 		component(resolve) {
 			require.ensure(['@/pages/TopicCreate.vue'], () => {
 				resolve(require('@/pages/TopicCreate.vue'));
@@ -29,11 +29,24 @@ const router = new Router({
 	},
 	{
 		path: '/group/:gid/topic/:tid',
-		name: 'topicDetail',
+		name: 'TopicDetail',
 		component(resolve) {
 			require.ensure(['@/pages/TopicDetail.vue'], () => {
 				resolve(require('@/pages/TopicDetail.vue'));
 			});
+		}
+	},
+	{
+		path: '/group/:gid/admin',
+		name: 'GroupAdmin',
+		component(resolve) {
+			require.ensure(['@/pages/GroupAdmin.vue'], () => {
+				resolve(require('@/pages/GroupAdmin.vue'));
+			});
+		},
+		// 设置 mata 字段，表示该字段需要验证
+		meta: {
+			requireAuth: true
 		}
 	},
 	{
