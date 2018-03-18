@@ -6,6 +6,7 @@
                     <el-card class="box-card">
                         <div slot="header" class="clearfix">
                             <span style="line-height: 36px;">{{groupInfo.name}}</span>
+                            <el-button v-if="isAdmin" style="float: right;" type="primary" @click="goAdmin(groupInfo._id)">管理</el-button>
                             <el-button v-if="isInGroup && !isAdmin" style="float: right;" type="danger" @click="leaveGroup(groupInfo._id)">退出</el-button>
                             <el-button v-if="!isInGroup && !isAdmin" style="float: right;" type="primary" @click="enroll(groupInfo._id)">报名</el-button>
                         </div>
@@ -127,7 +128,14 @@ export default {
         },
         selectPanel(tab, event) {
             this.currentPanel = tab.name
-        },  
+        },
+        goAdmin(groupId) {
+            let url = '/group/' + groupId + '/admin'
+            console.log(url)
+            this.$router.push({
+                path: url
+            })
+        },
         leaveGroup(groupId) {
             let request = {}
             request.id = groupId
