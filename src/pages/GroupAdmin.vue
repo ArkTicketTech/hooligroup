@@ -50,7 +50,24 @@ export default {
         deleteSection(section) {
             // TODO: modal ask admins confirm deleting section
             alert("删除操作将导致相关帖子标签失去意义")
-            this.groupInfo.sections.splice(this.groupInfo.sections.indexOf(section), 1);
+            let data = {
+                groupId: this.groupId,
+                section: section
+            }
+            let that = this
+            api.deleteGroupSection(data).then(res => {
+                that.groupInfo.sections.splice(that.groupInfo.sections.indexOf(section), 1)
+                that.$message({
+                    type: 'success',
+                    message: '删除成功'
+                })
+            }, err => {
+                that.$message({
+                    type: 'info',
+                    message: '删除失败'
+                })
+            })
+
         },
 
         showSectionInput() {
@@ -59,8 +76,24 @@ export default {
 
         handleSectionInputConfirm() {
             let inputSection = this.inputSection;
+            let that = this
+            let data = {
+                groupId: this.groupId,
+                section: inputSection
+            }
             if (inputSection) {
-                this.groupInfo.sections.push(inputSection);
+                api.newGroupSection(data).then(res => {
+                    that.groupInfo.sections.push(inputSection);
+                    that.$message({
+                        type: 'success',
+                        message: '添加成功'
+                    })
+                }, err => {
+                    that.$message({
+                        type: 'info',
+                        message: '添加失败'
+                    })
+                })
             }
             this.inputSectionVisible = false;
             this.inputSection = '';
