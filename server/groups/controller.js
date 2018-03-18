@@ -27,7 +27,8 @@ const Create = (req, res) => {
 		name: req.body.name,
 		type: req.body.type,
 		description: req.body.description,
-		admins: [user.id]
+		admins: [user.id],
+		sections: ['公告', '问答', '分享', '灌水', '其他']
 	})
 	// 将 objectid 转换为 用户创建时间
 	groupCreate.create_time = moment(objectIdToTimestamp(groupCreate._id))
@@ -68,6 +69,7 @@ const GetGroupInfoById = (req, res) => {
 			}
 		})
 		.populate('events')
+		.populate('topics')
 		.exec((err, group) => {
 			if (err || !group) {
 				res.json({
@@ -79,8 +81,23 @@ const GetGroupInfoById = (req, res) => {
 		})
 }
 
+// Group info
+const GetGroupSectionsById = (req, res) => {
+	model.Group.findById(req.query.id).select({ "sections": 1})
+		.exec((err, group) => {
+			if (err || !group) {
+				res.json({
+					success: false
+				})
+				return
+			}
+			res.send(group.sections)
+		})
+}
+
 module.exports = {
 	Groups,
 	Create,
-	GetGroupInfoById
+	GetGroupInfoById,
+	GetGroupSectionsById
 }

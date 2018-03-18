@@ -10,8 +10,7 @@
                     <div slot="header" class="clearfix">
                         <span style="line-height: 36px;">{{group.name}}</span>
                         <el-button style="float: right; margin-left: 5px;" type="success" @click="goDetail(group._id)">详情</el-button>
-                        <el-button v-if="isInGroup(group.members)" style="float: right; margin-left: 5px;" type="danger" @click="leaveGroup(group)">退出</el-button>
-                        <el-button v-else style="float: right; margin-left: 5px;" type="primary" @click="enroll(group)">报名</el-button>
+                        <el-button v-if="!group.admins.includes(userId)" style="float: right; margin-left: 5px;" type="danger" @click="leaveGroup(group._id)">退出</el-button>
                     </div>
                     <div class="text item">
                         {{group.description}}
@@ -28,8 +27,7 @@
                     <div slot="header" class="clearfix">
                         <span style="line-height: 36px;">{{group.name}}</span>
                         <el-button style="float: right; margin-left: 5px;" type="success" @click="goDetail(group._id)">详情</el-button>
-                        <el-button v-if="isInGroup(group.members)" style="float: right; margin-left: 5px;" type="danger" @click="leaveGroup(group)">退出</el-button>
-                        <el-button v-else style="float: right; margin-left: 5px;" type="primary" @click="enroll(group)">报名</el-button>
+                        <el-button style="float: right; margin-left: 5px;" type="primary" @click="enroll(group._id)">报名</el-button>
                     </div>
                     <div class="text item">
                         {{group.description}}
@@ -91,26 +89,18 @@ export default {
         this.userId = localStorage.getItem('userid')
     },
     methods: {
-        isInGroup: function (members) {
-            if (members) {
-                for (let i = 0; i < members.length; i++) {
-                    if (members[i] === this.userId) {
-                        return true;
-                    }
-                }
-                //console.log(members);
-            }
-            return false;
-        },
         getGroups() {
             let loadingInstance = Loading.service();
             let that = this
             api.getGroups().then((res) => {
                 //TODO: seperate my group API
                 if (res.data.length > 0) {
-                    that.groups = res.data
-                    that.myGroups = that.groups.filter((each) => {
+                    let allGroups = res.data
+                    that.myGroups = allGroups.filter((each) => {
                         return each.members.includes(that.userId) || each.admins.includes(that.userId)
+                    })
+                    that.groups = allGroups.filter((each) => {
+                        return !each.members.includes(that.userId) && !each.admins.includes(that.userId)
                     })
                 }
                 loadingInstance.close();
@@ -162,7 +152,12 @@ export default {
             let request = {}
             request.id = group._id
             api.joinGroup(request).then((data) => {
-                group.members.push(this.userId);
+                this.groups.forEach((eachGroup, index) => {
+                    if (eachGroup._id === groupId) {
+                        this.myGroups.push(eachGroup)
+                        this.groups.splice(index, 1)
+                    }
+                });
                 this.$message({
                     type: 'success',
                     message: '报名成功'
@@ -178,12 +173,12 @@ export default {
             let request = {}
             request.id = group._id
             api.leaveGroup(request).then((data) => {
-                for (let i = 0; i < group.members.length; i++) {
-                    if (group.members[i] === this.userId) {
-                        group.members.splice(i, 1);
-                        break;
+                this.myGroups.forEach((eachGroup, index) => {
+                    if (eachGroup._id === groupId) {
+                        this.groups.push(eachGroup)
+                        this.myGroups.splice(index, 1)
                     }
-                }
+                });
                 this.$message({
                     type: 'success',
                     message: '退出成功'
