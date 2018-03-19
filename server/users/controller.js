@@ -156,16 +156,21 @@ const LeaveGroup = (req, res) => {
 
 // 用户加入event
 const JoinEvent = (req, res) => {
+	let isSuccess = true;
 	let user = getToken(req, res)
 	if (user) {
 		model.Event.findById(req.body.id, (err, doc) => {
-			doc.members.addToSet(user.id)
-			doc.save(function (err, updatedEvent) {
-				if (err) res.send(err)
-			})
+			if (doc) {
+				doc.members.addToSet(user.id)
+				doc.save(function (err, updatedEvent) {
+					if (err) res.send(err)
+				})
+			} else {
+				isSuccess = false;
+			}
 		})
 		res.json({
-			success: true
+			success: isSuccess
 		})
 	}
 }
