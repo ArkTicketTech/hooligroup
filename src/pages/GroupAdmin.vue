@@ -9,25 +9,73 @@
                     </el-breadcrumb>
                 </div>
                 <div class="group-admin">
-                    <el-tag
-                        v-for="section in groupInfo.sections"
-                        :key="section"
-                        closable
-                        type="primary"
-                        @close="deleteSection(section)">
-                        {{section}}
-                    </el-tag>
-                    <el-input
-                        class="input-new-section"
-                        v-if="inputSectionVisible"
-                        v-model="inputSection"
-                        ref="saveSectionInput"
-                        size="small"
-                        @keyup.enter.native="handleSectionInputConfirm"
-                        @blur="handleSectionInputConfirm"
-                    >
-                    </el-input>
-                    <el-button v-else class="button-new-section" size="small" @click="showSectionInput">+ 版块</el-button>
+                    <el-tabs v-model="currentPanel" @tab-click="selectPanel">
+                        <el-tab-pane label="论坛管理" name="forum">
+                            <el-tag
+                                v-for="section in groupInfo.sections"
+                                :key="section"
+                                closable
+                                type="primary"
+                                @close="deleteSection(section)">
+                                {{section}}
+                            </el-tag>
+                            <el-input
+                                class="input-new-section"
+                                v-if="inputSectionVisible"
+                                v-model="inputSection"
+                                ref="saveSectionInput"
+                                size="small"
+                                @keyup.enter.native="handleSectionInputConfirm"
+                                @blur="handleSectionInputConfirm"
+                            >
+                            </el-input>
+                            <el-button v-else class="button-new-section" size="small" @click="showSectionInput">+ 版块</el-button>        
+                        </el-tab-pane>
+                        <el-tab-pane label="成员管理" name="member">
+                            <el-table :data="groupInfo.members"
+                                    tooltip-effect="dark"
+                                    style="width: 100%"
+                                    @selection-change="handleMemberSelectionChange">
+                                <el-table-column type="selection"
+                                                width="55">
+                                </el-table-column>
+                                <el-table-column prop="name"
+                                                label="姓名"
+                                                width="120">
+                                </el-table-column>
+                                <el-table-column prop="username"
+                                                label="用户名"
+                                                show-overflow-tooltip>
+                                </el-table-column>
+                            </el-table>
+                        </el-tab-pane>
+                        <el-tab-pane label="审核加入" name="pendingMember">
+                            <el-table :data="groupInfo.pendingMembers"
+                                    tooltip-effect="dark"
+                                    style="width: 100%"
+                                    @selection-change="handlePendingMemberSelectionChange">
+                                <el-table-column type="selection"
+                                                width="55">
+                                </el-table-column>
+                                <el-table-column prop="name"
+                                                label="姓名"
+                                                width="120">
+                                </el-table-column>
+                                <el-table-column prop="username"
+                                                label="用户名"
+                                                show-overflow-tooltip>
+                                </el-table-column>
+                                    <el-table-column
+                                        fixed="right"
+                                        label="操作"
+                                        width="100">
+                                        <template slot-scope="scope">
+                                            <el-button @click="confirmJoin(scope.row)" type="text" size="small">通过</el-button>
+                                        </template>
+                                    </el-table-column>
+                            </el-table>
+                        </el-tab-pane>
+                    </el-tabs>
                 </div>
             </el-card>
         </el-row>
@@ -43,7 +91,10 @@ export default {
             groupInfo: '',
             groupId: '',
             inputSectionVisible: false,
-            inputSection: ''
+            inputSection: '',
+            currentPanel: 'forum',
+            multipleMemberSelection: [],
+            multiplePendingMemberSelection: []
         }
     },
     methods: {
@@ -74,6 +125,33 @@ export default {
             this.inputSectionVisible = true;
         },
 
+        selectPanel(tab, event) {
+            this.currentPanel = tab.name
+        },
+
+        confirmJoin(pendingMember) {
+            let that = this
+            let data = {
+                gid: that.groupId,
+                uid: pendingMember._id 
+            }
+            api.confirmJoinGroup(data).then(res => {
+                that.groupInfo.members.push(pendingMember)
+                that.groupInfo.pendingMembers = that.groupInfo.pendingMembers.filter((member) => {
+                    member._id != pendingMember._id
+                })
+                that.$message({
+                    type: 'success',
+                    message: '该成员已通过审核'
+                })
+            }, err => {
+                that.$message({
+                    type: 'info',
+                    message: '该成员审核失败'
+                })
+            })
+        },
+
         handleSectionInputConfirm() {
             let inputSection = this.inputSection;
             let that = this
@@ -97,6 +175,15 @@ export default {
             }
             this.inputSectionVisible = false;
             this.inputSection = '';
+        },
+
+        handleMemberSelectionChange(val) {
+            this.multipleMemberSelection = val;
+            console.log(val)
+        },
+        handlePendingMemberSelectionChange(val) {
+            this.multiplePendingMemberSelection = val;
+            console.log(val)
         }
     },
     mounted() {
