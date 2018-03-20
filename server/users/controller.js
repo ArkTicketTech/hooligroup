@@ -107,21 +107,54 @@ const JoinGroup = (req, res) => {
 	if (user) {
 		model.Group.findById(req.body.id, (err, doc) => {
 			// doc.set({members:[]})			
-			doc.members.addToSet(user.id)
+			doc.pendingMembers.addToSet(user.id)
 			doc.save(function (err, updatedGroup) {
 				if (err) res.send(err)
 			})
 		})
-		model.User.findById(user.id, (err, doc) => {
-			doc.groups.addToSet(req.body.id)
-			doc.save(function (err, updatedUser) {
-				if (err) res.send(err)
-			})
-		})
+		// model.User.findById(user.id, (err, doc) => {
+		// 	doc.groups.addToSet(req.body.id)
+		// 	doc.save(function (err, updatedUser) {
+		// 		if (err) res.send(err)
+		// 	})
+		// })
 		res.json({
 			success: true
 		})
 	}
+}
+
+// 管理员通过用户加入小组请求
+const ConfirmJoinGroup = (req, res) => {
+	let user = getToken(req, res)
+	let isSuccess = true
+	if (user) {
+		model.Group.findById(req.body.gid, (err, doc) => {
+			if (doc.admins.indexOf(user.id) === -1) {
+				isSuccess = false;
+			}
+			doc.pendingMembers = doc.pendingMembers.filter((member) => {
+				member != req.body.uid
+			})
+			doc.members.addToSet(req.body.uid)
+			doc.save(function (err, updatedGroup) {
+				if (err) {
+					console.log(err)
+					isSuccess = false
+				}
+			})
+		})
+		model.User.findById(req.body.uid, (err, doc) => {
+			doc.groups.addToSet(req.body.id)
+			doc.save(function (err, updatedUser) {
+				if (err) {
+					console.log(err)
+					isSuccess = false
+				}
+			})
+		})
+	}
+	res.json({success: isSuccess})
 }
 
 // 用户退出group
@@ -131,6 +164,9 @@ const LeaveGroup = (req, res) => {
 		model.Group.findById(req.body.id, (err, groupDoc) => {
 			if (groupDoc.members) {
 				groupDoc.members = groupDoc.members.filter((member) => {
+					member != user.id
+				})
+				groupDoc.pendingMembers = groupDoc.pendingMembers.filter((member) => {
 					member != user.id
 				})
 				groupDoc.save((err, updatedGroup) => {
@@ -182,5 +218,6 @@ module.exports = {
 	DelUser,
 	JoinGroup,
 	LeaveGroup,
-	JoinEvent
+	JoinEvent,
+	ConfirmJoinGroup
 }

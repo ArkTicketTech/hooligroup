@@ -4,6 +4,7 @@ var groupSchema = mongoose.Schema({
 	name: String,
 	type: String,
 	description: String,
+	pendingMembers: [{ type: mongoose.Schema.Types.ObjectId, ref: 'User' }],
 	members: [{ type: mongoose.Schema.Types.ObjectId, ref: 'User' }],
 	admins: [{ type: mongoose.Schema.Types.ObjectId, ref: 'User' }],
 	create_time: Date,

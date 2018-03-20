@@ -71,6 +71,11 @@ export default {
 		return instance.post('/hapi/joinGroup', data)
 	},
 
+	// 通过用户加入group申请
+	confirmJoinGroup(data) {
+		return instance.post('/hapi/confirmJoinGroup', data)
+	},
+
 	leaveGroup(data) {
 		return instance.post('/hapi/leaveGroup', data)
 	},

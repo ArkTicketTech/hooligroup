@@ -60,6 +60,15 @@ const GetGroupInfoById = (req, res) => {
 			}
 		})
 		.populate({
+			path: 'pendingMembers',
+			select: {
+				password: 0,
+				token: 0,
+				groups: 0,
+				create_time: 0
+			}
+		})
+		.populate({
 			path: 'admins',
 			select: {
 				password: 0,
