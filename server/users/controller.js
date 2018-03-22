@@ -88,6 +88,34 @@ const User = (req, res) => {
 	})
 }
 
+// 更新用户信息
+const UpdateUserInfo = (req, res) => {
+	model.User.findByIdAndUpdate({
+		_id: req.body.id, 
+		userInfo: req.body
+	}, err => {
+		if (err) console.log(err)
+		console.log('更新用户信息成功')
+		res.json({
+			success: true
+		})
+	})
+}
+
+// 更新密码
+const UpdatePassword = (req, res) => {
+	model.User.findByIdAndUpdate({
+		_id: req.body.id, 
+		userInfo: { password: req.body.password }
+	}, err => {
+		if (err) console.log(err)
+		console.log('更新密码成功')
+		res.json({
+			success: true
+		})
+	})
+}
+
 // 删除用户
 const DelUser = (req, res) => {
 	model.User.findOneAndRemove({
@@ -215,6 +243,8 @@ module.exports = {
 	Register,
 	Login,
 	User,
+	UpdateUserInfo,
+	UpdatePassword,
 	DelUser,
 	JoinGroup,
 	LeaveGroup,
