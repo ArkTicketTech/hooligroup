@@ -4,7 +4,8 @@
             <el-col :span="16">
                 <el-row>
                     <el-card class="box-card">
-                        <div slot="header" class="clearfix">
+                        <div slot="header"
+                             class="clearfix">
                             <span>{{eventInfo.name}}</span>
                         </div>
                         <div class="text item">
@@ -16,7 +17,8 @@
                 </el-row>
                 <el-row>
                     <el-card class="box-card">
-                        <div slot="header" class="clearfix">
+                        <div slot="header"
+                             class="clearfix">
                             <span>活动介绍</span>
                         </div>
                         <div class="text item">
@@ -27,11 +29,21 @@
             </el-col>
             <el-col :span="8">
                 <el-card class="box-card">
-                    <div slot="header" class="clearfix">
+                    <div slot="header"
+                         class="clearfix">
                         <span style="line-height: 36px;">成员列表</span>
-                        <el-button style="float: right;" type="primary" @click="enroll(eventInfo._id)">报名</el-button>
+                        <el-button style="float: right;"
+                                   type="primary"
+                                   v-if="isInGroup && !isInEvent"
+                                   @click="enroll(eventInfo._id)">报名</el-button>
+                        <el-button style="float: right;"
+                                   type="danger"
+                                   v-if="isInGroup && isInEvent"
+                                   @click="leave(eventInfo._id)">退出</el-button>
                     </div>
-                    <div v-for="member in eventInfo.members" v-bind:key="member.id" class="text item">
+                    <div v-for="member in eventInfo.members"
+                         v-bind:key="member.id"
+                         class="text item">
                         {{ member.name }}
                     </div>
                 </el-card>
@@ -55,23 +67,59 @@ export default {
         return {
             msg: 'Welcome to Hooli Group',
             username: '',
-            eventInfo: {}
+            eventInfo: {},
+            groupInfo: {},
+            isInGroup: false,
+            isInEvent: false,
+            userId: ''
         }
     },
     mounted() {
-        this.getEventInfo()
+        this.userId = localStorage.getItem('userid')
         this.username = localStorage.getItem('username')
+        this.getEventInfo()
+        this.getGroupInfo()
     },
     methods: {
         getEventInfo() {
+            let data = {
+                id: this.$router.currentRoute.params.eid
+            }
             let that = this
             let loadingInstance = Loading.service()
-            api.getEventInfo(this.$router.currentRoute.params).then((data) => {
+            api.getEventInfo(data).then((res) => {
                 //TODO: rewrite the code here, and use some config file
-                that.eventInfo = data.data
+                that.eventInfo = res.data
+                that.eventInfo.members.forEach(member => {
+                    if (member._id === that.userId) {
+                        that.isInEvent = true
+                    }
+                })
                 loadingInstance.close()
             }, (err) => {
                 loadingInstance.close()
+            })
+        },
+        getGroupInfo() {
+            let data = {
+                id: this.$router.currentRoute.params.gid
+            }
+            let that = this
+            api.getGroupInfo(data).then((res) => {
+                that.groupInfo = res.data
+                if (that.groupInfo.admins) {
+                    that.groupInfo.admins.forEach(admin => {
+                        if (admin._id === that.userId) {
+                            that.isInGroup = true
+                        }
+                    });
+                    that.groupInfo.members.forEach(member => {
+                        if (member._id === that.userId) {
+                            that.isInGroup = true
+                        }
+                    });
+                }
+            }, (err) => {
             })
         },
         logout() {
@@ -97,10 +145,27 @@ export default {
                     type: 'success',
                     message: '报名成功'
                 })
+                this.isInEvent = true
             }, (err) => {
                 this.$message({
                     type: 'info',
                     message: '报名失败'
+                })
+            })
+        },
+        leave(eventId) {
+            let request = {}
+            request.id = eventId
+            api.leaveEvent(request).then((data) => {
+                this.$message({
+                    type: 'success',
+                    message: '退出成功'
+                })
+                this.isInEvent = false
+            }, (err) => {
+                this.$message({
+                    type: 'info',
+                    message: '退出失败'
                 })
             })
         }
