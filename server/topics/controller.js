@@ -57,7 +57,18 @@ const Create = (req, res) => {
 const GetTopicInfoById = (req, res) => {
 	model.Topic.findById(req.query.id)
 		.populate('user')
-		.populate('comments')
+		.populate({
+			path: 'comments',
+			populate: {
+				path: 'user', 
+				select: {
+					password: 0,
+					token: 0,
+					groups: 0,
+					create_time: 0
+				}
+			}
+		})
 		.exec((err, topic) => {
 			if (err || !topic) {
 				res.json({
