@@ -120,6 +120,11 @@ export default {
 		return instance.post('/hapi/joinEvent', data)
 	},
 
+	// 取消参加event
+	leaveEvent(data) {
+		return instance.post('/hapi/leaveEvent', data)
+	},
+
 	// 创建活动
 	createEvent(data) {
 		return instance.post('/hapi/event/create', data)

@@ -211,6 +211,28 @@ const JoinEvent = (req, res) => {
 	}
 }
 
+// 用户退出event
+const LeaveEvent = (req, res) => {
+	let isSuccess = true;
+	let user = getToken(req, res)
+	if (user) {
+		model.Event.findById(req.body.id, (err, eventDoc) => {
+			if (eventDoc.members) {
+				eventDoc.members = eventDoc.members.filter((member) => {
+					member != user.id
+				})
+				eventDoc.save((err, updatedEvent) => {
+					if (err) console.log(err)
+					isSuccess = false;
+				})
+			}
+		})
+	}
+	res.json({
+		success: isSuccess
+	})
+}
+
 module.exports = {
 	Register,
 	Login,
@@ -219,5 +241,6 @@ module.exports = {
 	JoinGroup,
 	LeaveGroup,
 	JoinEvent,
+	LeaveEvent,
 	ConfirmJoinGroup
 }

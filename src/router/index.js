@@ -37,6 +37,15 @@ const router = new Router({
 		}
 	},
 	{
+		path: '/group/:gid/event/:eid',
+		name: 'event',
+		component(resolve) {
+			require.ensure(['@/pages/EventDetail.vue'], () => {
+				resolve(require('@/pages/EventDetail.vue'));
+			});
+		}
+	},
+	{
 		path: '/group/:gid/admin',
 		name: 'GroupAdmin',
 		component(resolve) {
@@ -77,15 +86,6 @@ const router = new Router({
 		component(resolve) {
 			require.ensure(['@/pages/Register.vue'], () => {
 				resolve(require('@/pages/Register.vue'));
-			});
-		}
-	},
-	{
-		path: '/event/:id',
-		name: 'event',
-		component(resolve) {
-			require.ensure(['@/pages/EventDetail.vue'], () => {
-				resolve(require('@/pages/EventDetail.vue'));
 			});
 		}
 	},
