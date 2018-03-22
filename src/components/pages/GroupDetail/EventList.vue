@@ -104,6 +104,13 @@ export default {
                     }
                 }
             }
+            if (this.groupInfo.admins) {
+                for (let i = 0; i < this.groupInfo.admins.length; i++) {
+                    if (this.groupInfo.admins[i]._id === this.userId) {
+                        return true;
+                    }
+                }
+            }
             return false;
         },
         orderedEvents: {
