@@ -104,7 +104,7 @@ export default {
             if(typeof date === "number"){
                 date = moment.unix(date)
             }
-            return moment(String(date)).format('YYYY/MM/DD hh:mm')
+            return moment(String(date)).format('YYYY/MM/DD HH:mm')
         }
     },
     methods: {
@@ -135,6 +135,7 @@ export default {
                     created_at: Date.now()/1000
                 }
                 that.comments.push(newComment);
+                this.newComment = '';
                 this.$message({
                     type: 'success',
                     message: '发帖成功'
