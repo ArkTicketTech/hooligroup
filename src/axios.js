@@ -115,6 +115,11 @@ export default {
 		return instance.post('/hapi/topic/create', data)
 	},
 
+	// 发布回复
+	createComment(data) {
+		return instance.post('/hapi/comment/create', data)
+	},
+
 	// 报名参加event
 	joinEvent(data) {
 		return instance.post('/hapi/joinEvent', data)
