@@ -92,13 +92,21 @@ const User = (req, res) => {
 const UpdateUserInfo = (req, res) => {
 	model.User.findByIdAndUpdate({
 		_id: req.body.id, 
-		userInfo: req.body
+		userInfo: {
+			username: req.body.username
+		}
 	}, err => {
-		if (err) console.log(err)
-		console.log('更新用户信息成功')
-		res.json({
-			success: true
-		})
+		if (err) {
+			console.log(err)
+			res.json({
+				success: false
+			})
+		} else {
+			console.log('更新用户信息成功')
+			res.json({
+				success: true
+			})
+		}
 	})
 }
 
@@ -106,13 +114,19 @@ const UpdateUserInfo = (req, res) => {
 const UpdatePassword = (req, res) => {
 	model.User.findByIdAndUpdate({
 		_id: req.body.id, 
-		userInfo: { password: req.body.password }
+		userInfo: { password: sha1(req.body.password) }
 	}, err => {
-		if (err) console.log(err)
-		console.log('更新密码成功')
-		res.json({
-			success: true
-		})
+		if (err) {
+			console.log(err)
+			res.json({
+				success: false
+			})
+		} else {
+			console.log('更新密码成功')
+			res.json({
+				success: true
+			})
+		}
 	})
 }
 
