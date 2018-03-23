@@ -7,22 +7,25 @@
                         <el-breadcrumb-item :to="{ path: '/group/'+groupId}">论坛</el-breadcrumb-item>
                         <el-breadcrumb-item>{{title}}</el-breadcrumb-item>
                     </el-breadcrumb>
+                    <el-switch class="toggleButton" style="float: right;" v-model="onlyOwner" active-text="只看楼主"></el-switch>
                 </div>
                 <div class="topic-content">
                     <el-row>
                         <span v-html="content"></span>
                         <div class="bottom clearfix">
-                            <time class="time">{{ this.user }}发表于{{ this.date  | formatDate }}</time>
+                            <el-tag size="mini">楼主</el-tag>
+                            <time class="time">{{ this.user.username }}发表于{{ this.date  | formatDate }}</time>
                             <el-button type="text" @click="showCommentModal" class="button">回复</el-button>
                         </div>
                     </el-row>
                 </div>
             </el-card>
-            <div v-for="comment in comments" v-bind:key="comment._id" class="topic-content">
+            <div v-for="comment in filteredComments" v-bind:key="comment._id" class="topic-content">
                     <el-card class="box-card">
                         <el-row>
                             <span v-html="comment.content"></span>
                             <div class="bottom clearfix">
+                                <el-tag size="mini" v-if="isOwner(comment.user)">楼主</el-tag>
                                 <time class="time">{{ comment.user.username }}发表于{{ comment.created_at  | formatDate }}</time>
                             </div>
                         </el-row>
@@ -38,7 +41,7 @@
             </div>
             <span slot="footer" class="dialog-footer">
                 <el-button @click="commentModalVisible = false">取 消</el-button>
-                <el-button type="primary" @click="commentModalVisible">回复</el-button>
+                <el-button type="primary" @click="createComment">回复</el-button>
             </span>
         </el-dialog>
     </el-container>
@@ -61,6 +64,7 @@ export default {
             user: '',
             id: '',
             commentModalVisible: false,
+            onlyOwner: false,
             editorOption: {
                 placeholder: '您想说点什么？',
                 modules: {
@@ -81,6 +85,17 @@ export default {
             newComment: ''
         }
     },
+    computed: {
+        filteredComments: function(){
+            if(this.onlyOwner){
+                return this.comments.filter( comment=>{
+                    return comment.user._id === this.user._id
+                })
+            }else{
+                return this.comments
+            }
+        }
+    },
     components: {
         quillEditor
     },
@@ -93,6 +108,13 @@ export default {
         }
     },
     methods: {
+        isOwner(user) {
+            if(user._id === this.user._id){
+                return true
+            }else{
+                return false
+            }
+        },
         showCommentModal() {
             this.commentModalVisible = true
         },
@@ -102,7 +124,6 @@ export default {
                 topic: this.id
             }
             let that = this
-            console.log("ok, click")
             api.createComment(data).then(res => {
                 that.commentModalVisible = false;
                 let newComment = {
@@ -128,8 +149,6 @@ export default {
         }
     },
     mounted() {
-        console.log("test date")
-        console.log(Date.now())
         this.userId = localStorage.getItem('userid')
         this.username = localStorage.getItem('username')
         this.editorOption.toolbar = this.toolbarOptions
@@ -142,7 +161,7 @@ export default {
             that.content = res.data.content;
             that.title = res.data.title;
             that.date = res.data.created_at;
-            that.user = res.data.user.username;
+            that.user = res.data.user;
             that.id = res.data._id;
             that.comments = res.data.comments;
         }, (err) => {
@@ -192,6 +211,9 @@ export default {
         .el-row {
             margin-bottom: 20px;
         }
+    }
+    .toggleButton {
+        height: 0px;
     }
 
 </style>
