@@ -152,15 +152,15 @@ export default {
             let request = {}
             request.id = groupId
             api.joinGroup(request).then((data) => {
-                this.groups.forEach((eachGroup, index) => {
-                    if (eachGroup._id === groupId) {
-                        this.myGroups.push(eachGroup)
-                        this.groups.splice(index, 1)
-                    }
-                });
+                // this.groups.forEach((eachGroup, index) => {
+                //     if (eachGroup._id === groupId) {
+                //         this.myGroups.push(eachGroup)
+                //         this.groups.splice(index, 1)
+                //     }
+                // });
                 this.$message({
                     type: 'success',
-                    message: '报名成功'
+                    message: '报名成功，请等待管理员审核'
                 })
             }, (err) => {
                 this.$message({

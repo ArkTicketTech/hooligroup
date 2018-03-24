@@ -88,6 +88,83 @@ const User = (req, res) => {
 	})
 }
 
+// 更新用户信息
+const UpdateUserInfo = (req, res) => {
+	let user = getToken(req, res)
+	if (!user) {
+		console.log("账号不存在")
+		res.json({
+			info: false
+		})
+		return
+	}
+	console.log(req.body)
+	console.log(user)
+	model.User.findByIdAndUpdate(
+		user.id,
+		{
+			name: req.body.name
+		},
+		(err, updatedUser) => {
+			if (err) {
+				console.log(err)
+				res.json({
+					success: false
+				})
+			} else {
+				console.log('更新用户信息成功')
+				res.json({
+					success: true
+				})
+			}
+		})
+}
+
+// 更新密码
+const UpdatePassword = (req, res) => {
+	let user = getToken(req, res)
+	if (!user) {
+		console.log("账号不存在")
+		res.json({
+			info: false
+		})
+	} else {
+		let updatePassword = {
+			oldPassword: req.body.oldPassword,
+			newPassword: req.body.newPassword
+		}
+		model.User.findById(user.id, (err, doc) => {
+			if (!doc) {
+				res.json({success: false})
+				return
+			}
+			if (doc.password !== sha1(updatePassword.oldPassword)) {
+				console.log('密码错误')
+				res.json({
+					success: false
+				})
+			} else {
+				model.User.findByIdAndUpdate(
+					user.id,
+					{ password: sha1(updatePassword.newPassword) },
+					(err, updatedUser) => {
+						if (err) {
+							console.log(err)
+							res.json({
+								success: false
+							})
+						} else {
+							console.log('更新密码成功')
+							res.json({
+								success: true
+							})
+						}
+					})
+			}
+		})
+	}
+}
+
 // 删除用户
 const DelUser = (req, res) => {
 	model.User.findOneAndRemove({
@@ -154,7 +231,7 @@ const ConfirmJoinGroup = (req, res) => {
 			})
 		})
 	}
-	res.json({success: isSuccess})
+	res.json({ success: isSuccess })
 }
 
 // 用户退出group
@@ -237,6 +314,8 @@ module.exports = {
 	Register,
 	Login,
 	User,
+	UpdateUserInfo,
+	UpdatePassword,
 	DelUser,
 	JoinGroup,
 	LeaveGroup,

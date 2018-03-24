@@ -47,6 +47,14 @@ export default {
 	UserLogin(data) {
 		return instance.post('/hapi/login', data)
 	},
+	// 修改用户名
+	UpdateUserInfo(data) {
+		return instance.post('/hapi/updateUser', data)
+	},
+	// 修改密码
+	UpdatePassword(data) {
+		return instance.post('/hapi/updatePassword', data)
+	},
 	// 获取用户
 	getUser() {
 		return instance.get('/hapi/user')
@@ -110,9 +118,24 @@ export default {
 		return instance.get('/hapi/topic/getTopicInfoById?id=' + data.id)
 	},
 
+	// 删除主题
+	deleteTopic(data) {
+		return instance.post('/hapi/topic/delete', data)
+	},
+
 	// 发布主题
 	createTopic(data) {
 		return instance.post('/hapi/topic/create', data)
+	},
+
+	// 发布回复
+	createComment(data) {
+		return instance.post('/hapi/comment/create', data)
+	},
+
+	// 删除回复
+	deleteComment(data) {
+		return instance.post('/hapi/comment/delete', data)
 	},
 
 	// 报名参加event

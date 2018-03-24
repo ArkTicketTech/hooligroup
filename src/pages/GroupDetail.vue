@@ -37,7 +37,8 @@
                         <topic-list :sections="groupInfo.sections"
                                     :groupId="groupInfo._id"
                                     :topics="groupInfo.topics"
-                                    :isAdmin="isAdmin"></topic-list>
+                                    :isAdmin="isAdmin"
+                                    :isInGroup="isInGroup"></topic-list>
                     </el-tab-pane>
                 </el-tabs>
             </el-col>
@@ -107,6 +108,14 @@ export default {
                     }
                 }
             }
+            if (this.groupInfo.admins) {
+                for (let i = 0; i < this.groupInfo.admins.length; i++) {
+                    if (this.groupInfo.admins[i]._id === this.userId) {
+                        this.indexOfUser = i;
+                        return true;
+                    }
+                }
+            }
             return false;
         }
     },
@@ -134,7 +143,7 @@ export default {
             let request = {}
             request.id = groupId
             api.joinGroup(request).then((data) => {
-                var newUser = {};
+                let newUser = {};
                 newUser._id = this.userId;
                 newUser.name = this.username;
                 this.groupInfo.members.push(newUser)
