@@ -5,10 +5,17 @@
         <el-menu-item index="/">小组</el-menu-item>
         <el-menu-item index="/event">活动</el-menu-item>
 
-        <el-submenu index="$route.path" class="right">
-            <template slot="title">{{username}}</template>
-            <el-menu-item index="$route.path" @click="logout()">登出</el-menu-item>
-        </el-submenu>
+        <el-menu-item index="" class="right">
+            <el-dropdown @command="handleCommand">
+                <span class="el-dropdown-link">
+                {{username}}<i class="el-icon-arrow-down" style="font-size:12px"></i>
+                </span>
+                <el-dropdown-menu slot="dropdown">
+                    <el-dropdown-item command="Account">个人中心</el-dropdown-item>
+                    <el-dropdown-item command="logout" divided>登出</el-dropdown-item>
+                </el-dropdown-menu>
+            </el-dropdown>
+        </el-menu-item>
     </el-menu>
 </template>
 
@@ -24,13 +31,23 @@ export default {
     data() {
         return {
             user: '',
-            username: ''
+            username: '' 
         }
     },
     mounted() {
         this.username = localStorage.getItem('username')
     },
     methods: {
+        handleCommand(command) {
+            switch(command){
+                case "Account": 
+                  this.$options.methods.Account.bind(this)(); 
+                  break;
+                case "logout": 
+                  this.$options.methods.logout.bind(this)(); 
+                  break;
+            }
+        },
         logout() {
             this.$store.dispatch('UserLogout')
             if (!this.$store.state.token) {
@@ -45,6 +62,10 @@ export default {
                     message: '登出失败'
                 })
             }
+        },
+        Account() {
+            let url = '/Account/'
+            this.$router.push({ path: url })
         }
     },
     computed: {
@@ -70,4 +91,9 @@ export default {
   float: right !important;
   margin-right: 20px;
 }
+
+.el-dropdown-link {
+  cursor: pointer;
+}
+
 </style>

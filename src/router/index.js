@@ -98,6 +98,15 @@ const router = new Router({
 			});
 		}
 	},
+	{
+		path: '/Account',
+		name: 'UserInfomation',
+		component(resolve) {
+			require.ensure(['@/pages/Account.vue'], () => {
+				resolve(require('@/pages/Account.vue'));
+			});
+		}
+	},
 	// 简单设置404页面
 	{
 		path: '*',

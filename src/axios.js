@@ -47,6 +47,14 @@ export default {
 	UserLogin(data) {
 		return instance.post('/hapi/login', data)
 	},
+	// 修改用户名
+	UpdateUserInfo(data) {
+		return instance.post('/hapi/updateUser', data)
+	},
+	// 修改密码
+	UpdatePassword(data) {
+		return instance.post('/hapi/updatePassword', data)
+	},
 	// 获取用户
 	getUser() {
 		return instance.get('/hapi/user')
