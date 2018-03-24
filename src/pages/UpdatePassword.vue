@@ -81,7 +81,7 @@ export default {
             this.$refs[formName].validate((valid) => {
                 if (valid) {
                     let opt = this.newPasswordForm;
-                    api.PasswordModify(opt).then(({
+                    api.UpdatePassword(opt).then(({
                             data
                         }) => {
                         if (data.success) {

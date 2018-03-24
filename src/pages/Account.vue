@@ -7,23 +7,23 @@
             <el-col :span="10" :offset="6">
                 <el-tabs tab-position="left" style="height: 230px;" v-model="activeName" @tab-click="handleClick">
                     <el-tab-pane label="基本信息" name="first">
-                        <el-col @keyup.enter.native="submitForm('ModifyValidateForm')">
-                            <el-form :model="ModifyValidateForm" label-width="100px" ref="ModifyValidateForm">
+                        <el-col @keyup.enter.native="submitForm('UpdateInfoForm')">
+                            <el-form :model="UpdateInfoForm" label-width="100px" ref="UpdateInfoForm">
                                 <el-form-item prop="username" label="用户名" :rules="rules.username">
-                                    <el-input  v-model="ModifyValidateForm.username"></el-input>
+                                    <el-input  v-model="UpdateInfoForm.username"></el-input>
                                 </el-form-item>
                                 <el-form-item prop="name" label="真实姓名" :rules="rules.name">
-                                    <el-input v-model="ModifyValidateForm.name"></el-input>
+                                    <el-input v-model="UpdateInfoForm.name"></el-input>
                                 </el-form-item>
                                 <el-form-item prop="password" label="确认密码" :rules="rules.password">
-                                    <el-input type="password" v-model="ModifyValidateForm.password"></el-input>
+                                    <el-input type="password" v-model="UpdateInfoForm.password"></el-input>
                                 </el-form-item>
                             </el-form>
                         </el-col>
-                        <el-button type="primary" style="float:right" @click="submitForm('ModifyValdateForm')">确认修改</el-button>
+                        <el-button type="primary" style="float:right" @click="submitForm('UpdateInfoForm')">确认修改</el-button>
                     </el-tab-pane>
                     <el-tab-pane label="修改密码" name="second">
-                        <PasswordModify></PasswordModify>
+                        <UpdatePassword></UpdatePassword>
                     </el-tab-pane>
                 </el-tabs>
             </el-col>
@@ -32,7 +32,7 @@
 </template>
 
 <script>
-import PasswordModify from '@/pages/PasswordModify.vue'
+import UpdatePassword from '@/pages/UpdatePassword.vue'
 import * as types from '../store/types'
 import api from '../axios'
 export default {
@@ -40,7 +40,7 @@ export default {
     data() {
         return {
             username: '',
-            ModifyValidateForm: {
+            UpdateInfoForm: {
                 username: '',
                 name: '',
                 password: ''
@@ -67,12 +67,10 @@ export default {
         }
     },
     components: {
-        PasswordModify
+        UpdatePassword
     },
     mounted() {
         this.username = localStorage.getItem('username')
-        //console.log(ModifyValidateForm.username)
-        //this.userId = localStorage.getItem('userid')
     },
     methods: {
         handleClick(tab, event) {},
@@ -84,8 +82,8 @@ export default {
         submitForm(formName) {
             this.$refs[formName].validate((valid) => {
                 if (valid) {
-                    let opt = this.ModifyValidateForm;
-                    api.AccountModify(opt).then(({
+                    let opt = this.UpdateInfoForm;
+                    api.UpdateUserInfo(opt).then(({
                         data
                     }) => {
                         if (!data.info) {
