@@ -23,32 +23,32 @@
             </div>
         </el-card>
         <el-dialog title="创建活动" :visible.sync="eventModalVisible" width="30%">
-            <el-form ref="eventForm" :model="eventForm" label-width="80px">
-                <el-form-item label="活动名称">
+            <el-form ref="eventForm" status-icon :model="eventForm" label-width="120px" :rules="rules">
+                <el-form-item label="活动名称" prop="name">
                     <el-input v-model="eventForm.name"></el-input>
                 </el-form-item>
-                <el-form-item label="活动地点">
+                <el-form-item label="活动地点" prop="location">
                     <el-input v-model="eventForm.location" placeholder="请选择活动区域"></el-input>
                 </el-form-item>
-                <el-form-item label="报名截止时间">
-                    <el-date-picker v-model="eventForm.enroll_end_time" type="datetime" placeholder="选择日期时间">
+                <el-form-item label="报名截止时间" prop="enroll_end_time">
+                    <el-date-picker v-model="eventForm.enroll_end_time" type="datetime" :editable="false" placeholder="选择日期时间">
                     </el-date-picker>
                 </el-form-item>
-                <el-form-item label="活动开始时间">
-                    <el-date-picker v-model="eventForm.begin_time" type="datetime" placeholder="选择日期时间">
+                <el-form-item label="活动开始时间" prop="begin_time">
+                    <el-date-picker v-model="eventForm.begin_time" type="datetime" :editable="false" placeholder="选择日期时间">
                     </el-date-picker>
                 </el-form-item>
-                <el-form-item label="活动截止时间">
-                    <el-date-picker v-model="eventForm.end_time" type="datetime" placeholder="选择日期时间">
+                <el-form-item label="活动截止时间" prop="end_time">
+                    <el-date-picker v-model="eventForm.end_time" type="datetime" :editable="false" placeholder="选择日期时间">
                     </el-date-picker>
                 </el-form-item>
-                <el-form-item label="活动简介">
+                <el-form-item label="活动简介" prop="description">
                     <el-input type="textarea" v-model="eventForm.description"></el-input>
                 </el-form-item>
             </el-form>
             <span slot="footer" class="dialog-footer">
                 <el-button @click="eventModalVisible = false">取 消</el-button>
-                <el-button type="primary" @click="createEvent">创建活动</el-button>
+                <el-button type="primary" @click="submitForm('eventForm')">创建活动</el-button>
             </span>
         </el-dialog>
     </div>
@@ -67,6 +67,31 @@ import {
 export default {
     name: 'EventList',
     data() {
+        var validateEnrollEndTime = (rule, value, callback) => {
+            if(value === ''){
+                callback(new Error('请输入报名截止时间'));
+            }else{
+                    callback();
+            }
+        };
+        var validateBeginTime = (rule, value, callback) => {
+            if(value === ''){
+                callback(new Error('请输入活动开始时间'));
+            }else{
+                callback();
+            }
+        };
+        var validateEndTime = (rule, value, callback) => {
+            if(value === ''){
+                callback(new Error('请输入活动终止时间'));
+            }else{
+                if(Date.parse(this.eventForm.begin_time)<Date.parse(value)){
+                    callback();
+                }else{
+                    callback(new Error('起止时间不符常理'));
+                }
+            }
+        };
         return {
             userId: '',
             eventForm: {
@@ -76,8 +101,28 @@ export default {
                 enroll_begin_time: '',
                 enroll_end_time: ''
             },
-            eventModalVisible: false
-        }
+            eventModalVisible: false,
+            rules:{
+                name:[
+                    {required:true, message:'请输入活动名称', trigger:'blur'}
+                ],
+                location:[
+                    {required:true, message:'请输入活动地点', trigger:'blur'}
+                ],
+                enroll_end_time:[
+                    {validator: validateEnrollEndTime, trigger:'blur'}
+                ],
+                begin_time:[
+                    {validator: validateBeginTime, trigger:'blur'}
+                ],
+                end_time:[
+                    {validator: validateEndTime, trigger:'blur'}
+                ],
+                description:[
+                    {required:false}
+                ]
+            }
+        };
     },
     props: {
         groupInfo: {
@@ -174,34 +219,43 @@ export default {
             })
         },
         showEventModal() {
+            console.log('calling showEventModal')
             this.eventModalVisible = true
         },
-        createEvent() {
+        submitForm(formName) {
             let that = this
-            let request = Object.assign({}, that.eventForm)
-            request.group = this.$router.currentRoute.params.id
-            api.createEvent(request).then((data) => {
-                that.eventForm = {
-                    name: '',
-                    location: '',
-                    begin_time: '',
-                    enroll_begin_time: '',
-                    enroll_end_time: '',
-                    description: ''
+            that.$refs[formName].validate((valide) => {
+                if (valide) {
+                    let request = Object.assign({}, that.eventForm)
+                    request.group = this.$router.currentRoute.params.id
+                    api.createEvent(request).then(
+                        (data) => {
+                            that.eventForm = {
+                                name: '',
+                                location: '',
+                                begin_time: '',
+                                enroll_begin_time: '',
+                                enroll_end_time: '',
+                                description: ''
+                            };
+                            that.$message({
+                                type: 'success',
+                                message: '创建成功'
+                            });
+                            that.groupInfo.events.push(request);
+                        }, 
+                        (err) => {
+                            that.$message({
+                                type: 'info',
+                                message: '创建失败'
+                            })
+                        })
+                    that.eventModalVisible=false
+                }else{
+                    console.log('error submit!!');
+                    return false;
                 }
-                that.eventModalVisible = false
-                that.$message({
-                    type: 'success',
-                    message: '创建成功'
-                });
-                that.groupInfo.events.push(request);
-            }, (err) => {
-                that.eventModalVisible = false
-                that.$message({
-                    type: 'info',
-                    message: '创建失败'
-                })
-            })
+            });
         }
     }
 }
