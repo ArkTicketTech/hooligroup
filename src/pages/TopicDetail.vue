@@ -16,6 +16,8 @@
                             <el-tag size="mini">楼主</el-tag>
                             <time class="time">{{ this.user.username }}发表于{{ this.date  | formatDate }}</time>
                             <el-button type="text" @click="showCommentModal" v-if="isInGroup" class="button">回复</el-button>
+                            <el-button type="text" @click="updateTopic" v-if="user._id === userId" class="button">编辑</el-button>
+                            <el-button type="text" @click="deleteTopic" v-if="user._id === userId" class="button">删除</el-button>
                         </div>
                     </el-row>
                 </div>
@@ -54,7 +56,7 @@ import { quillEditor } from 'vue-quill-editor'
 export default {
     data() {
         return {
-            userId: '',
+            userId: '', //current user
             username: '',
             content: '',
             title: '',
@@ -62,7 +64,7 @@ export default {
             groupInfo: '',
             comments: '',
             date: '',
-            user: '',
+            user: '', // owner
             id: '',
             commentModalVisible: false,
             onlyOwner: false,
@@ -135,6 +137,26 @@ export default {
         },
         showCommentModal() {
             this.commentModalVisible = true
+        },
+        updateTopic() {
+
+        },
+        deleteTopic() {
+            let data = {
+                id: this.id
+            }
+            api.deleteTopic(data).then(res => {
+                this.$message({
+                    type: 'success',
+                    message: '删帖成功'
+                })
+            }, err => {
+                console.log(err)
+                this.$message({
+                    type: 'info',
+                    message: '删帖失败'
+                })
+            })
         },
         createComment() {
             let data = {

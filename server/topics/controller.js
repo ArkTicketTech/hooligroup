@@ -4,6 +4,7 @@ const moment = require('moment')
 const objectIdToTimestamp = require('objectid-to-timestamp')
 const checkToken = require('../middleware/checkToken.js')
 const getToken = require('../middleware/getToken.js')
+var async = require("async");
 
 // 创建topic
 const Create = (req, res) => {
@@ -60,7 +61,7 @@ const GetTopicInfoById = (req, res) => {
 		.populate({
 			path: 'comments',
 			populate: {
-				path: 'user', 
+				path: 'user',
 				select: {
 					password: 0,
 					token: 0,
@@ -80,7 +81,45 @@ const GetTopicInfoById = (req, res) => {
 		})
 }
 
+// Delete topic
+const DeleteTopic = (req, res) => {
+	let isSuccess = true
+	async.waterfall([
+		function (callback) {
+			// code a: Remove Topic
+			model.Topic.findOneAndRemove(
+				{ _id: req.body.id },
+				function (err, topic) {
+					if (err) callback(err)
+					callback(null, topic)
+				}
+			);
+		},
+
+		function (doc, callback) {
+			// code b: Remove associated comments
+			if (!doc) {
+				callback(new Error('null topic'))
+				return
+			}
+			var commentList = doc.comments || [];
+			model.Comment
+				.remove({ "_id": { "$in": commentList } })
+				.exec(
+					function (err, res) {
+						if (err) callback(err)
+						callback(null, doc)
+					}
+				)
+		}
+	], function (err, result) {
+		if (err) res.json({success: false})
+		else res.json({success: true})
+	})
+}
+
 module.exports = {
 	Create,
-	GetTopicInfoById
+	GetTopicInfoById,
+	DeleteTopic
 }
