@@ -11,5 +11,6 @@ module.exports = (router) => {
 		router.post('/joinGroup', checkToken, userController.JoinGroup),
 		router.post('/confirmJoinGroup', checkToken, userController.ConfirmJoinGroup),
 		router.post('/leaveGroup', checkToken, userController.LeaveGroup),
-		router.post('/joinEvent', checkToken, userController.JoinEvent)
+		router.post('/joinEvent', checkToken, userController.JoinEvent),
+		router.post('/leaveEvent', checkToken, userController.LeaveEvent)
 }

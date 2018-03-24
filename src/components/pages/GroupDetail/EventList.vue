@@ -10,7 +10,8 @@
                     <div slot="header" class="clearfix">
                         <span style="line-height: 36px;">{{event.name}}</span>
                         <el-button style="float: right; margin-left: 5px;" type="success" @click="goDetail(event._id)">详情</el-button>
-                        <el-button style="float: right; margin-left: 5px;" type="primary" @click="enrollEvent(event._id)">报名</el-button>
+                        <el-button style="float: right; margin-left: 5px;" type="primary" v-if="!event.members.includes(userId) && isInGroup" @click="enrollEvent(event._id)">报名</el-button>
+                        <el-button style="float: right; margin-left: 5px;" type="danger" v-if="event.members.includes(userId) && isInGroup" @click="leaveEvent(event._id)">退出</el-button>
                     </div>
                     <div class="text item">
                         报名截止时间：{{event.enroll_end_time | formatDate}}
@@ -103,6 +104,13 @@ export default {
                     }
                 }
             }
+            if (this.groupInfo.admins) {
+                for (let i = 0; i < this.groupInfo.admins.length; i++) {
+                    if (this.groupInfo.admins[i]._id === this.userId) {
+                        return true;
+                    }
+                }
+            }
             return false;
         },
         orderedEvents: {
@@ -117,12 +125,18 @@ export default {
     methods: {
         enrollEvent(eventId) {
             let request = {}
+            let that = this
             request.id = eventId
             api.joinEvent(request).then((data) => {
                 this.$message({
                     type: 'success',
                     message: '报名成功'
                 })
+                that.groupInfo.events.forEach(event => {
+                    if (event._id === eventId) {
+                        event.members.push(that.userId)
+                    }
+                });
             }, (err) => {
                 this.$message({
                     type: 'info',
@@ -130,8 +144,31 @@ export default {
                 })
             })
         },
+        leaveEvent(eventId) {
+            let request = {}
+            let that = this
+            request.id = eventId
+            api.leaveEvent(request).then((data) => {
+                this.$message({
+                    type: 'success',
+                    message: '退出成功'
+                })
+                that.groupInfo.events.forEach(event => {
+                    if (event._id === eventId) {
+                        event.members = event.members.filter((member) => {
+                            return member !== that.userId
+                        }) 
+                    }
+                });
+            }, (err) => {
+                this.$message({
+                    type: 'info',
+                    message: '退出失败'
+                })
+            })
+        },
         goDetail(eventId) {
-            let url = '/event/' + eventId
+            let url = '/group/'+ this.groupInfo._id +'/event/' + eventId
             this.$router.push({
                 path: url
             })
