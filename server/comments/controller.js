@@ -17,7 +17,8 @@ const Create = (req, res) => {
 		likes: 0
 	})
 	// check if the groupId is legal
-	model.Comment.findById(req.body.topic, function (err, topicDoc) {
+	console.log(req.body.topic)
+	model.Topic.findById(req.body.topic, function (err, topicDoc) {
 		if (err) {
 			console.log(err)
 			res.send(err)

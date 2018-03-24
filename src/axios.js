@@ -110,6 +110,11 @@ export default {
 		return instance.get('/hapi/topic/getTopicInfoById?id=' + data.id)
 	},
 
+	// 删除主题
+	deleteTopic(data) {
+		return instance.post('/hapi/topic/delete', data)
+	},
+
 	// 发布主题
 	createTopic(data) {
 		return instance.post('/hapi/topic/create', data)
@@ -118,6 +123,11 @@ export default {
 	// 发布回复
 	createComment(data) {
 		return instance.post('/hapi/comment/create', data)
+	},
+
+	// 删除回复
+	deleteComment(data) {
+		return instance.post('/hapi/comment/delete', data)
 	},
 
 	// 报名参加event

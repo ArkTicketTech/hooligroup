@@ -16,8 +16,7 @@
                             <el-tag size="mini">楼主</el-tag>
                             <time class="time">{{ this.user.username }}发表于{{ this.date  | formatDate }}</time>
                             <el-button type="text" @click="showCommentModal" v-if="isInGroup" class="button">回复</el-button>
-                            <el-button type="text" @click="updateTopic" v-if="user._id === userId" class="button">编辑</el-button>
-                            <el-button type="text" @click="deleteTopic" v-if="user._id === userId" class="button">删除</el-button>
+                            <el-button type="text" @click="deleteTopic(id)" v-if="user._id === userId" class="button">删除</el-button>
                         </div>
                     </el-row>
                 </div>
@@ -29,6 +28,7 @@
                             <div class="bottom clearfix">
                                 <el-tag size="mini" v-if="isOwner(comment.user)">楼主</el-tag>
                                 <time class="time">{{ comment.user.username }}发表于{{ comment.created_at  | formatDate }}</time>
+                                <el-button type="text" @click="deleteComment(comment._id)" v-if="comment.user._id === userId" class="button">删除</el-button>
                             </div>
                         </el-row>
                     </el-card>
@@ -65,7 +65,7 @@ export default {
             comments: '',
             date: '',
             user: '', // owner
-            id: '',
+            id: '', // topic id
             commentModalVisible: false,
             onlyOwner: false,
             editorOption: {
@@ -89,12 +89,12 @@ export default {
         }
     },
     computed: {
-        filteredComments: function(){
-            if(this.onlyOwner){
-                return this.comments.filter( comment=>{
+        filteredComments: function () {
+            if (this.onlyOwner) {
+                return this.comments.filter(comment => {
                     return comment.user._id === this.user._id
                 })
-            }else{
+            } else {
                 return this.comments
             }
         },
@@ -120,8 +120,8 @@ export default {
         quillEditor
     },
     filters: {
-        formatDate: function(date){
-            if(typeof date === "number"){
+        formatDate: function (date) {
+            if (typeof date === "number") {
                 date = moment.unix(date)
             }
             return moment(String(date)).format('YYYY/MM/DD HH:mm')
@@ -129,17 +129,14 @@ export default {
     },
     methods: {
         isOwner(user) {
-            if(user._id === this.user._id){
+            if (user._id === this.user._id) {
                 return true
-            }else{
+            } else {
                 return false
             }
         },
         showCommentModal() {
             this.commentModalVisible = true
-        },
-        updateTopic() {
-
         },
         deleteTopic() {
             let data = {
@@ -149,6 +146,30 @@ export default {
                 this.$message({
                     type: 'success',
                     message: '删帖成功'
+                })
+                let url = '/group/' + this.groupInfo._id
+                this.$router.push({
+                    path: url
+                })
+            }, err => {
+                console.log(err)
+                this.$message({
+                    type: 'info',
+                    message: '删帖失败'
+                })
+            })
+        },
+        deleteComment(commentId) {
+            let data = {
+                id: commentId
+            }
+            api.deleteComment(data).then(res => {
+                this.$message({
+                    type: 'success',
+                    message: '删帖成功'
+                })
+                this.comments = this.comments.filter( comment => {
+                    comment._id != commentId
                 })
             }, err => {
                 console.log(err)
@@ -172,7 +193,7 @@ export default {
                         username: that.username
                     },
                     content: that.newComment,
-                    created_at: Date.now()/1000
+                    created_at: Date.now() / 1000
                 }
                 that.comments.push(newComment);
                 this.newComment = '';
@@ -219,48 +240,47 @@ export default {
 </script>
 
 <style lang="scss" scoped>
-    .topic-content {
-        .el-row {
-            margin-bottom: 20px;
-        }
-        .time {
-            font-size: 13px;
-            color: #999;
-        }
-        
-        .bottom {
-            margin-top: 13px;
-            line-height: 12px;
-        }
+.topic-content {
+  .el-row {
+    margin-bottom: 20px;
+  }
+  .time {
+    font-size: 13px;
+    color: #999;
+  }
 
-        .button {
-            padding: 0;
-            float: right;
-        }
+  .bottom {
+    margin-top: 13px;
+    line-height: 12px;
+  }
 
-        .image {
-            width: 100%;
-            display: block;
-        }
+  .button {
+    padding: 0;
+    float: right;
+  }
 
-        .clearfix:before,
-        .clearfix:after {
-            display: table;
-            content: "";
-        }
-        
-        .clearfix:after {
-            clear: both
-        }
-    }
+  .image {
+    width: 100%;
+    display: block;
+  }
 
-    .topic-editor {
-        .el-row {
-            margin-bottom: 20px;
-        }
-    }
-    .toggleButton {
-        height: 0px;
-    }
+  .clearfix:before,
+  .clearfix:after {
+    display: table;
+    content: '';
+  }
 
+  .clearfix:after {
+    clear: both;
+  }
+}
+
+.topic-editor {
+  .el-row {
+    margin-bottom: 20px;
+  }
+}
+.toggleButton {
+  height: 0px;
+}
 </style>
