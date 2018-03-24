@@ -37,7 +37,8 @@
                         <topic-list :sections="groupInfo.sections"
                                     :groupId="groupInfo._id"
                                     :topics="groupInfo.topics"
-                                    :isAdmin="isAdmin"></topic-list>
+                                    :isAdmin="isAdmin"
+                                    :isInGroup="isInGroup"></topic-list>
                     </el-tab-pane>
                 </el-tabs>
             </el-col>
@@ -102,6 +103,14 @@ export default {
             if (this.groupInfo.members) {
                 for (let i = 0; i < this.groupInfo.members.length; i++) {
                     if (this.groupInfo.members[i]._id === this.userId) {
+                        this.indexOfUser = i;
+                        return true;
+                    }
+                }
+            }
+            if (this.groupInfo.admins) {
+                for (let i = 0; i < this.groupInfo.admins.length; i++) {
+                    if (this.groupInfo.admins[i]._id === this.userId) {
                         this.indexOfUser = i;
                         return true;
                     }

@@ -2,7 +2,7 @@
     <div>
         <div style="margin-bottom: 15px;">
             <el-button v-for="section in sections" v-bind:key="section" @click="selectSection(section)" :type="section === selectedSection ? 'primary' : ''" round>{{section}}</el-button>
-            <el-button @click="toCreateTopic(groupId)" style="float: right; margin-left: 5px;" type="primary">发帖</el-button>
+            <el-button @click="toCreateTopic(groupId)" v-if="isInGroup" style="float: right; margin-left: 5px;" type="primary">发帖</el-button>
         </div>
         <el-card v-for="topic in filteredTopics" v-bind:key="topic._id" class="box-card">
             <el-tag type="success">{{topic.section}}</el-tag>
@@ -42,6 +42,9 @@ export default {
         },
         groupId: {
             type: String
+        },
+        isInGroup: {
+            type: Boolean
         }
     },
     mounted() {
@@ -55,7 +58,7 @@ export default {
                 return topic.section === this.selectedSection
             })
             return topics
-        }
+        },
     },
     methods: {
         toCreateTopic(groupId) {

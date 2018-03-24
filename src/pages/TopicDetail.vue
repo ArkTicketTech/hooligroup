@@ -15,7 +15,7 @@
                         <div class="bottom clearfix">
                             <el-tag size="mini">楼主</el-tag>
                             <time class="time">{{ this.user.username }}发表于{{ this.date  | formatDate }}</time>
-                            <el-button type="text" @click="showCommentModal" class="button">回复</el-button>
+                            <el-button type="text" @click="showCommentModal" v-if="isInGroup" class="button">回复</el-button>
                         </div>
                     </el-row>
                 </div>
@@ -59,6 +59,7 @@ export default {
             content: '',
             title: '',
             groupId: '',
+            groupInfo: '',
             comments: '',
             date: '',
             user: '',
@@ -94,7 +95,24 @@ export default {
             }else{
                 return this.comments
             }
-        }
+        },
+        isInGroup: function () {
+            if (this.groupInfo.members) {
+                for (let i = 0; i < this.groupInfo.members.length; i++) {
+                    if (this.groupInfo.members[i]._id === this.userId) {
+                        return true;
+                    }
+                }
+            }
+            if (this.groupInfo.admins) {
+                for (let i = 0; i < this.groupInfo.admins.length; i++) {
+                    if (this.groupInfo.admins[i]._id === this.userId) {
+                        return true;
+                    }
+                }
+            }
+            return false;
+        },
     },
     components: {
         quillEditor
@@ -154,11 +172,17 @@ export default {
         this.username = localStorage.getItem('username')
         this.editorOption.toolbar = this.toolbarOptions
         this.groupId = this.$route.params.gid
-        let data = {
+        let requestTopicData = {
             id: this.$route.params.tid
         }
+        let requestGroupData = {
+            id: this.$route.params.gid
+        }
         let that = this
-        api.getTopicInfo(data).then((res) => {
+        api.getGroupInfo(requestGroupData).then(res => {
+            that.groupInfo = res.data
+        })
+        api.getTopicInfo(requestTopicData).then((res) => {
             that.content = res.data.content;
             that.title = res.data.title;
             that.date = res.data.created_at;
