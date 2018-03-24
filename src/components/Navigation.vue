@@ -11,7 +11,7 @@
                 {{username}}<i class="el-icon-arrow-down" style="font-size:12px"></i>
                 </span>
                 <el-dropdown-menu slot="dropdown">
-                    <el-dropdown-item command="Account">个人中心</el-dropdown-item>
+                    <el-dropdown-item command="account">个人中心</el-dropdown-item>
                     <el-dropdown-item command="logout" divided>登出</el-dropdown-item>
                 </el-dropdown-menu>
             </el-dropdown>
@@ -40,8 +40,8 @@ export default {
     methods: {
         handleCommand(command) {
             switch(command){
-                case "Account": 
-                  this.$options.methods.Account.bind(this)(); 
+                case "account": 
+                  this.$options.methods.account.bind(this)(); 
                   break;
                 case "logout": 
                   this.$options.methods.logout.bind(this)(); 
@@ -63,8 +63,8 @@ export default {
                 })
             }
         },
-        Account() {
-            let url = '/Account/'
+        account() {
+            let url = '/account/'
             this.$router.push({ path: url })
         }
     },

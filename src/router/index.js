@@ -99,7 +99,7 @@ const router = new Router({
 		}
 	},
 	{
-		path: '/Account',
+		path: '/account',
 		name: 'UserInfomation',
 		component(resolve) {
 			require.ensure(['@/pages/Account.vue'], () => {

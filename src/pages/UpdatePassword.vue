@@ -1,11 +1,11 @@
 <template lang="html">
     <div @keyup.enter = "submitForm('newPasswordForm')" class="">
         <el-form :model="newPasswordForm" label-width="100px" ref="newPasswordForm">
-            <el-form-item prop="oldpassword" label="原密码" :rules="rules.oldpassword">
-                <el-input type="password" v-model="newPasswordForm.oldpassword"></el-input>
+            <el-form-item prop="oldPassword" label="原密码" :rules="rules.oldPassword">
+                <el-input type="password" v-model="newPasswordForm.oldPassword"></el-input>
             </el-form-item>
-            <el-form-item prop="newpassword" label="新密码" :rules="rules.newpassword">
-                <el-input type="password" v-model="newPasswordForm.newpassword"></el-input>
+            <el-form-item prop="newPassword" label="新密码" :rules="rules.newPassword">
+                <el-input type="password" v-model="newPasswordForm.newPassword"></el-input>
             </el-form-item>
             <el-form-item prop="checkPass" label="再次输入" :rules="rules.checkPass">
                 <el-input type="password" v-model="newPasswordForm.checkPass"></el-input>
@@ -35,22 +35,22 @@ export default {
         // 监测两次密码是否相同
         let validatePass2 = (rule, value, callback) => {
             value === '' ? callback(new Error('请再次输入密码')) :
-                value !== this.newPasswordForm.newpassword ? callback(new Error('两次输入密码不一致!')) :
+                value !== this.newPasswordForm.newPassword ? callback(new Error('两次输入密码不一致!')) :
                     callback()
         };
         return {
             newPasswordForm: {
-                oldpassword: '',
-                newpassword: '',
+                oldPassword: '',
+                newPassword: '',
                 checkPass: '',
             },
             rules: {
-                oldpassword: [{
+                oldPassword: [{
                     required: true,
                     message: '请输入原密码',
                     trigger: 'blur'
                 }],
-                newpassword: [{
+                newPassword: [{
                     required: true,
                     message: '请输入新密码',
                     trigger: 'blur'

@@ -9,14 +9,8 @@
                     <el-tab-pane label="基本信息" name="first">
                         <el-col @keyup.enter.native="submitForm('UpdateInfoForm')">
                             <el-form :model="UpdateInfoForm" label-width="100px" ref="UpdateInfoForm">
-                                <el-form-item prop="username" label="用户名" :rules="rules.username">
-                                    <el-input  v-model="UpdateInfoForm.username"></el-input>
-                                </el-form-item>
                                 <el-form-item prop="name" label="真实姓名" :rules="rules.name">
                                     <el-input v-model="UpdateInfoForm.name"></el-input>
-                                </el-form-item>
-                                <el-form-item prop="password" label="确认密码" :rules="rules.password">
-                                    <el-input type="password" v-model="UpdateInfoForm.password"></el-input>
                                 </el-form-item>
                             </el-form>
                         </el-col>
@@ -100,7 +94,7 @@ export default {
                         } else {
                             this.$message({
                                 type: 'info',
-                                message: '密码错误'
+                                message: '修改失败'
                             })
                         }
                     })

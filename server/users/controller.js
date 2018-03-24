@@ -98,24 +98,26 @@ const UpdateUserInfo = (req, res) => {
 		})
 		return
 	}
-	model.User.findByIdAndUpdate({
-		_id: req.body.id, 
-		userInfo: {
-			username: req.body.username
-		}
-	}, err => {
-		if (err) {
-			console.log(err)
-			res.json({
-				success: false
-			})
-		} else {
-			console.log('更新用户信息成功')
-			res.json({
-				success: true
-			})
-		}
-	})
+	console.log(req.body)
+	console.log(user)
+	model.User.findByIdAndUpdate(
+		user.id,
+		{
+			name: req.body.name
+		},
+		(err, updatedUser) => {
+			if (err) {
+				console.log(err)
+				res.json({
+					success: false
+				})
+			} else {
+				console.log('更新用户信息成功')
+				res.json({
+					success: true
+				})
+			}
+		})
 }
 
 // 更新密码
@@ -127,34 +129,37 @@ const UpdatePassword = (req, res) => {
 			info: false
 		})
 	} else {
-		let updatePassword = new model.User({
-			oldPassword: sha1(req.body.oldPassword),
-			newPassword: sha1(req.body.newPassword),
-			id: user.id,
-		})
-		model.User.findById(updatePassword.id, (err, doc) => {
-			if (doc.password !== oldPassword) {
+		let updatePassword = {
+			oldPassword: req.body.oldPassword,
+			newPassword: req.body.newPassword
+		}
+		model.User.findById(user.id, (err, doc) => {
+			if (!doc) {
+				res.json({success: false})
+				return
+			}
+			if (doc.password !== sha1(updatePassword.oldPassword)) {
 				console.log('密码错误')
 				res.json({
 					success: false
 				})
 			} else {
-				model.User.findByIdAndUpdate({
-					_id: updatePassword.id, 
-					userInfo: { password: updatePassword.newPassword }
-				}, err => {
-					if (err) {
-						console.log(err)
-						res.json({
-							success: false
-						})
-					} else {
-						console.log('更新密码成功')
-						res.json({
-							success: true
-						})
-					}
-				})
+				model.User.findByIdAndUpdate(
+					user.id,
+					{ password: sha1(updatePassword.newPassword) },
+					(err, updatedUser) => {
+						if (err) {
+							console.log(err)
+							res.json({
+								success: false
+							})
+						} else {
+							console.log('更新密码成功')
+							res.json({
+								success: true
+							})
+						}
+					})
 			}
 		})
 	}
@@ -226,7 +231,7 @@ const ConfirmJoinGroup = (req, res) => {
 			})
 		})
 	}
-	res.json({success: isSuccess})
+	res.json({ success: isSuccess })
 }
 
 // 用户退出group
