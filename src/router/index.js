@@ -92,6 +92,7 @@ const router = new Router({
 	{
 		path: '/vote',
 		name: 'vote',
+<<<<<<< HEAD
 		component(resolve) {
 			require.ensure(['@/pages/Vote.vue'], () => {
 				resolve(require('@/pages/Vote.vue'));
@@ -101,6 +102,8 @@ const router = new Router({
 	{
 		path: '/Account',
 		name: 'UserInfomation',
+=======
+>>>>>>> upstream/master
 		component(resolve) {
 			require.ensure(['@/pages/Account.vue'], () => {
 				resolve(require('@/pages/Account.vue'));
