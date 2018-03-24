@@ -71,28 +71,43 @@ export default {
 		return instance.post('/hapi/joinGroup', data)
 	},
 
+	// 通过用户加入group申请
+	confirmJoinGroup(data) {
+		return instance.post('/hapi/confirmJoinGroup', data)
+	},
+
 	leaveGroup(data) {
-		return instance.post('/hapi/leaveGroup',data)
+		return instance.post('/hapi/leaveGroup', data)
 	},
 
 	// 获得小组信息
 	getGroupInfo(data) {
-		return instance.get('/hapi/group/getGroupInfoById?id='+data.id)
+		return instance.get('/hapi/group/getGroupInfoById?id=' + data.id)
 	},
 
 	// 获得小组论坛板块
 	getGroupSections(data) {
-		return instance.get('/hapi/group/getGroupSectionsById?id='+data.id)
+		return instance.get('/hapi/group/getGroupSectionsById?id=' + data.id)
+	},
+
+	// 新增小组论坛板块
+	newGroupSection(data) {
+		return instance.post('/hapi/group/section/new', data)
+	},
+
+	// 删除小组论坛板块
+	deleteGroupSection(data) {
+		return instance.post('/hapi/group/section/delete', data)
 	},
 
 	// 获得活动信息
 	getEventInfo(data) {
-		return instance.get('/hapi/event/getEventInfoById?id='+data.id)
+		return instance.get('/hapi/event/getEventInfoById?id=' + data.id)
 	},
 
 	// 获得主题信息
 	getTopicInfo(data) {
-		return instance.get('/hapi/topic/getTopicInfoById?id='+data.id)
+		return instance.get('/hapi/topic/getTopicInfoById?id=' + data.id)
 	},
 
 	// 发布主题
@@ -103,6 +118,11 @@ export default {
 	// 报名参加event
 	joinEvent(data) {
 		return instance.post('/hapi/joinEvent', data)
+	},
+
+	// 取消参加event
+	leaveEvent(data) {
+		return instance.post('/hapi/leaveEvent', data)
 	},
 
 	// 创建活动

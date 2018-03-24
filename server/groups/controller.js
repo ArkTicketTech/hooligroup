@@ -60,6 +60,15 @@ const GetGroupInfoById = (req, res) => {
 			}
 		})
 		.populate({
+			path: 'pendingMembers',
+			select: {
+				password: 0,
+				token: 0,
+				groups: 0,
+				create_time: 0
+			}
+		})
+		.populate({
 			path: 'admins',
 			select: {
 				password: 0,
@@ -81,9 +90,9 @@ const GetGroupInfoById = (req, res) => {
 		})
 }
 
-// Group info
+// Get group sections
 const GetGroupSectionsById = (req, res) => {
-	model.Group.findById(req.query.id).select({ "sections": 1})
+	model.Group.findById(req.query.id).select({ "sections": 1 })
 		.exec((err, group) => {
 			if (err || !group) {
 				res.json({
@@ -95,9 +104,60 @@ const GetGroupSectionsById = (req, res) => {
 		})
 }
 
+// Delete group section
+const DeleteGroupSection = (req, res) => {
+	let isSuccess = true
+	model.Group.findById(req.body.groupId, (err, groupDoc) => {
+		if (err) {
+			console.log(err)
+			isSuccess = false
+		}
+		console.log(req.body)
+		if (groupDoc.sections) {
+			groupDoc.sections = groupDoc.sections.filter((section) => {
+				return section !== req.body.section
+			})
+			groupDoc.save((err, updatedGroup) => {
+				if (err) {
+					console.log(err)
+					isSuccess = false
+				}
+			})
+		}
+	})
+	res.json({
+		success: true
+	})
+}
+
+// New group section
+const NewGroupSection = (req, res) => {
+	let isSuccess = true
+	model.Group.findById(req.body.groupId, (err, groupDoc) => {
+		if (err) {
+			console.log(err)
+			isSuccess = false
+		}
+		if (groupDoc.sections) {
+			groupDoc.sections.addToSet(req.body.section)
+			groupDoc.save((err, updatedGroup) => {
+				if (err) {
+					console.log(err)
+					isSuccess = false
+				}
+			})
+		}
+	})
+	res.json({
+		success: true
+	})
+}
+
 module.exports = {
 	Groups,
 	Create,
 	GetGroupInfoById,
-	GetGroupSectionsById
+	GetGroupSectionsById,
+	DeleteGroupSection,
+	NewGroupSection
 }
