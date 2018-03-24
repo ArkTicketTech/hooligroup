@@ -148,9 +148,9 @@ export default {
                 })
             }
         },
-        enroll(group) {
+        enroll(groupId) {
             let request = {}
-            request.id = group._id
+            request.id = groupId
             api.joinGroup(request).then((data) => {
                 this.groups.forEach((eachGroup, index) => {
                     if (eachGroup._id === groupId) {
@@ -169,9 +169,9 @@ export default {
                 })
             })
         },
-        leaveGroup(group) {
+        leaveGroup(groupId) {
             let request = {}
-            request.id = group._id
+            request.id = groupId
             api.leaveGroup(request).then((data) => {
                 this.myGroups.forEach((eachGroup, index) => {
                     if (eachGroup._id === groupId) {
