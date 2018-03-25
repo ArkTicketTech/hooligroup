@@ -31,7 +31,7 @@
                 <el-card class="box-card">
                     <div slot="header"
                          class="clearfix">
-                        <span style="line-height: 36px;">成员列表</span>
+                        <span style="line-height: 36px;">他们也会去</span>
                         <el-button style="float: right;"
                                    type="primary"
                                    v-if="isInGroup && !isInEvent"

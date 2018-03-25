@@ -48,16 +48,18 @@
                          class="clearfix">
                         <span style="line-height: 36px;">成员列表</span>
                     </div>
-                    <div v-for="admin in groupInfo.admins"
-                         v-bind:key="admin._id"
-                         class="text item">
-                        {{ admin.name }}
-                        <el-tag type="success">管理员</el-tag>
-                    </div>
-                    <div v-for="member in groupInfo.members"
-                         v-bind:key="member._id"
-                         class="text item">
-                        {{ member.name }}
+                    <div style="max-height: 500px; overflow-y: scroll;">
+                        <div v-for="admin in groupInfo.admins"
+                            v-bind:key="admin._id"
+                            class="text item">
+                            {{ admin.name }}
+                            <el-tag type="success">管理员</el-tag>
+                        </div>
+                        <div v-for="member in groupInfo.members"
+                            v-bind:key="member._id"
+                            class="text item">
+                            {{ member.name }}
+                        </div>
                     </div>
                 </el-card>
             </el-col>
