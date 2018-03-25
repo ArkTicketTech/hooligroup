@@ -11,14 +11,14 @@
                                        style="float: right;"
                                        type="primary"
                                        @click="goAdmin(groupInfo._id)">管理</el-button>
-                            <el-button v-if="isInGroup && !isAdmin"
+                            <!-- <el-button v-if="isInGroup && !isAdmin"
                                        style="float: right;"
                                        type="danger"
                                        @click="leaveGroup(groupInfo._id)">退出</el-button>
                             <el-button v-if="!isInGroup && !isAdmin"
                                        style="float: right;"
                                        type="primary"
-                                       @click="enroll(groupInfo._id)">报名</el-button>
+                                       @click="enroll(groupInfo._id)">报名</el-button> -->
                         </div>
                         <div class="text item">
                             {{groupInfo.description}}
