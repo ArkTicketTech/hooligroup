@@ -43,7 +43,8 @@
                     </div>
                     <div v-for="member in eventInfo.members"
                          v-bind:key="member.id"
-                         class="text item">
+                         class="text item"
+                         style="max-height: 500px; overflow-y: scroll;">
                         {{ member.name }}
                     </div>
                 </el-card>
