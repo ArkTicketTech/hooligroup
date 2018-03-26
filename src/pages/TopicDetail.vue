@@ -16,7 +16,8 @@
                             <el-tag size="mini">楼主</el-tag>
                             <time class="time">{{ this.user.username }}发表于{{ this.date  | formatDate }}</time>
                             <el-button type="text" @click="showCommentModal" v-if="isInGroup" class="button">回复</el-button>
-                            <el-button type="text" @click="deleteTopic(id)" v-if="user._id === userId" class="button">删除</el-button>
+                            <el-button type="text" @click="editTopic(id)" v-if="user._id === userId" class="button">编辑</el-button>
+                            <el-button type="text" @click="deleteTopic(id)" v-if="user._id === userId || isAdmin" class="button">删除</el-button>
                         </div>
                     </el-row>
                 </div>
@@ -28,7 +29,7 @@
                             <div class="bottom clearfix">
                                 <el-tag size="mini" v-if="isOwner(comment.user)">楼主</el-tag>
                                 <time class="time">{{ comment.user.username }}发表于{{ comment.created_at  | formatDate }}</time>
-                                <el-button type="text" @click="deleteComment(comment._id)" v-if="comment.user._id === userId" class="button">删除</el-button>
+                                <el-button type="text" @click="deleteComment(comment._id)" v-if="comment.user._id === userId || isAdmin" class="button">删除</el-button>
                             </div>
                         </el-row>
                     </el-card>
@@ -115,6 +116,16 @@ export default {
             }
             return false;
         },
+        isAdmin: function () {
+            if (this.groupInfo.admins) {
+                for (let i = 0; i < this.groupInfo.admins.length; i++) {
+                    if (this.groupInfo.admins[i]._id === this.userId) {
+                        return true;
+                    }
+                }
+            }
+            return false;
+        }
     },
     components: {
         quillEditor
@@ -168,7 +179,7 @@ export default {
                     type: 'success',
                     message: '删帖成功'
                 })
-                this.comments = this.comments.filter( comment => {
+                this.comments = this.comments.filter(comment => {
                     comment._id != commentId
                 })
             }, err => {
@@ -177,6 +188,11 @@ export default {
                     type: 'info',
                     message: '删帖失败'
                 })
+            })
+        },
+        editTopic(id) {
+            this.$router.push({
+                path: 'edit'
             })
         },
         createComment() {

@@ -31,7 +31,7 @@
                 <el-card class="box-card">
                     <div slot="header"
                          class="clearfix">
-                        <span style="line-height: 36px;">成员列表</span>
+                        <span style="line-height: 36px;">他们也会去</span>
                         <el-button style="float: right;"
                                    type="primary"
                                    v-if="isInGroup && !isInEvent"
@@ -43,7 +43,8 @@
                     </div>
                     <div v-for="member in eventInfo.members"
                          v-bind:key="member.id"
-                         class="text item">
+                         class="text item"
+                         style="max-height: 500px; overflow-y: scroll;">
                         {{ member.name }}
                     </div>
                 </el-card>
