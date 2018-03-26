@@ -86,20 +86,7 @@ const UpdateTopic = (req, res) => {
 	let user = getToken(req, res)
 	let isSuccess = true
 
-	// create topic
-	let topicUpdate = new model.Topic({
-		title: req.body.title,
-		content: req.body.content,
-		section: req.body.section,
-		group: req.body.group,
-		user: user.id,
-		likes: 0,
-		views: 0
-	})
-
 	model.Topic.findById(req.body.topic, function (err, doc) {
-		console.log(req.body.topic)
-		console.log(doc)
 		if (err || !doc || doc.user != user.id) {
 			isSuccess = false;
 			return;
