@@ -211,7 +211,7 @@ const ConfirmJoinGroup = (req, res) => {
 				isSuccess = false;
 			}
 			doc.pendingMembers = doc.pendingMembers.filter((member) => {
-				member != req.body.uid
+				return member != req.body.uid
 			})
 			doc.members.addToSet(req.body.uid)
 			doc.save(function (err, updatedGroup) {
@@ -241,10 +241,10 @@ const LeaveGroup = (req, res) => {
 		model.Group.findById(req.body.id, (err, groupDoc) => {
 			if (groupDoc.members) {
 				groupDoc.members = groupDoc.members.filter((member) => {
-					member != user.id
+					return member != user.id
 				})
 				groupDoc.pendingMembers = groupDoc.pendingMembers.filter((member) => {
-					member != user.id
+					return member != user.id
 				})
 				groupDoc.save((err, updatedGroup) => {
 					if (err) console.log(err)
@@ -254,7 +254,7 @@ const LeaveGroup = (req, res) => {
 		model.User.findById(user.id, (err, userDoc) => {
 			if (userDoc.groups) {
 				userDoc.groups = userDoc.groups.filter((group) => {
-					group != req.body.id
+					return group != req.body.id
 				})
 				userDoc.save((err, updatedUser) => {
 					if (err) console.log(err)
@@ -296,7 +296,7 @@ const LeaveEvent = (req, res) => {
 		model.Event.findById(req.body.id, (err, eventDoc) => {
 			if (eventDoc.members) {
 				eventDoc.members = eventDoc.members.filter((member) => {
-					member != user.id
+					return member != user.id
 				})
 				eventDoc.save((err, updatedEvent) => {
 					if (err) console.log(err)
