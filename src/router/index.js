@@ -37,6 +37,15 @@ const router = new Router({
 		}
 	},
 	{
+		path: '/group/:gid/topic/:tid/edit',
+		name: 'TopicUpdate',
+		component(resolve) {
+			require.ensure(['@/pages/TopicUpdate.vue'], () => {
+				resolve(require('@/pages/TopicUpdate.vue'));
+			});
+		}
+	},
+	{
 		path: '/group/:gid/event/:eid',
 		name: 'event',
 		component(resolve) {

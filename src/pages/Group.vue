@@ -2,7 +2,7 @@
     <div class="group container">
         <el-row>
             <h2>我的小组</h2>
-            <el-button style="float: right; margin-left: 5px;" type="primary" @click="createGroupModal()">添加小组</el-button>
+            <!-- <el-button style="float: right; margin-left: 5px;" type="primary" @click="createGroupModal()">添加小组</el-button> -->
         </el-row>
         <el-row :gutter="20">
             <el-col :span="6" v-for="group in myGroups" v-bind:key="group._id">

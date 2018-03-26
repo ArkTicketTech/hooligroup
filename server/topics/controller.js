@@ -81,6 +81,40 @@ const GetTopicInfoById = (req, res) => {
 		})
 }
 
+// update topic
+const UpdateTopic = (req, res) => {
+	let user = getToken(req, res)
+	let isSuccess = true
+
+	// create topic
+	let topicUpdate = new model.Topic({
+		title: req.body.title,
+		content: req.body.content,
+		section: req.body.section,
+		group: req.body.group,
+		user: user.id,
+		likes: 0,
+		views: 0
+	})
+
+	model.Topic.findById(req.body.topic, function (err, doc) {
+		console.log(req.body.topic)
+		console.log(doc)
+		if (err || !doc || doc.user != user.id) {
+			isSuccess = false;
+			return;
+		}
+
+		doc.title =  req.body.title
+		doc.content = req.body.content
+		doc.section = req.body.section
+
+		doc.save();
+	});
+
+	res.json({success: isSuccess})
+}
+
 // Delete topic
 const DeleteTopic = (req, res) => {
 	let isSuccess = true
@@ -113,13 +147,14 @@ const DeleteTopic = (req, res) => {
 				)
 		}
 	], function (err, result) {
-		if (err) res.json({success: false})
-		else res.json({success: true})
+		if (err) res.json({ success: false })
+		else res.json({ success: true })
 	})
 }
 
 module.exports = {
 	Create,
 	GetTopicInfoById,
-	DeleteTopic
+	DeleteTopic,
+	UpdateTopic
 }

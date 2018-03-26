@@ -128,6 +128,11 @@ export default {
 		return instance.post('/hapi/topic/create', data)
 	},
 
+	// 编辑主题
+	updateTopic(data) {
+		return instance.post('/hapi/topic/update', data)
+	},
+
 	// 发布回复
 	createComment(data) {
 		return instance.post('/hapi/comment/create', data)
