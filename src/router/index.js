@@ -116,6 +116,15 @@ const router = new Router({
 			});
 		}
 	},
+	{
+		path: '/oauth/jaccount',
+		name: 'oauthJaccount',
+		component(resolve) {
+			require.ensure(['@/pages/Jaccount.vue'], () => {
+				resolve(require('@/pages/Jaccount.vue'));
+			});
+		}
+	},
 	// 简单设置404页面
 	{
 		path: '*',
