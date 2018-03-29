@@ -21,7 +21,7 @@ const LoginByJaccount = (req, nRes) => {
 				client_secret: config.J_CLIENT_SECRET,
 				grant_type: 'authorization_code',
 				code: req.body.code,
-				redirect_uri: 'http://localhost:8089/oauth/jaccount'
+				redirect_uri: config.BASE_URL + 'oauth/jaccount'
 			}
 		}, function (err, res, body) {
 			let statusCode = res.statusCode
@@ -57,6 +57,9 @@ const LoginByJaccount = (req, nRes) => {
 								userRegister.save((err, userDoc) => {
 									if (err) {
 										isSuccess = false
+										nRes.json({
+											success: isSuccess
+										})
 										return
 									}
 									user = userDoc
