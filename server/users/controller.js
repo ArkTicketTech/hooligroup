@@ -5,6 +5,108 @@ const objectIdToTimestamp = require('objectid-to-timestamp')
 const createToken = require('../middleware/createToken.js')
 const sha1 = require('sha1')
 const getToken = require('../middleware/getToken.js')
+const config = require('config-lite')
+const request = require('request')
+
+const LoginByJaccount = (req, nRes) => {
+	let statusCode
+	let jaccountEntity = null
+	let isSuccess = true
+	let user = null
+	request
+		.post({
+			url: 'https://jaccount.sjtu.edu.cn/oauth2/token',
+			form: {
+				client_id: config.J_CLIENT_ID,
+				client_secret: config.J_CLIENT_SECRET,
+				grant_type: 'authorization_code',
+				code: req.body.code,
+				redirect_uri: 'http://localhost:8089/oauth/jaccount'
+			}
+		}, function (err, res, body) {
+			let statusCode = res.statusCode
+			let access_token = JSON.parse(body).access_token
+			if (err) isSuccess = false
+			if (res.statusCode === 200 && isSuccess) {
+				request.get({
+					url: 'https://api.sjtu.edu.cn/v1/me/profile?access_token=' + access_token
+				}, function (err, res, body) {
+					if (err) isSuccess = false
+					if (res.statusCode !== 200) isSuccess = false
+					jaccountEntity = JSON.parse(body).entities[0]
+					if (isSuccess && jaccountEntity) {
+						model.User.findOne({
+							j_id: jaccountEntity.id
+						}, (err, userDoc) => {
+							if (err) {
+								isSuccess = false
+								nRes.json({
+									success: false
+								})
+								return
+							}
+							if (!userDoc) {
+								let userRegister = new model.User({
+									j_username: jaccountEntity.account,
+									j_id: jaccountEntity.id,
+									name: jaccountEntity.name,
+									token: createToken(this.j_username, this._id)
+								})
+								userRegister.create_time = moment(objectIdToTimestamp(userRegister._id))
+									.format('YYYY-MM-DD HH:mm:ss');
+								userRegister.save((err, userDoc) => {
+									if (err) {
+										isSuccess = false
+										return
+									}
+									user = userDoc
+									if (!isSuccess || !user) {
+										nRes.json({ success: false })
+									} else {
+										nRes.json({
+											success: isSuccess,
+											username: user.j_username,
+											_id: user._id,
+											// 账户创建日期
+											time: moment(objectIdToTimestamp(user._id))
+												.format('YYYY-MM-DD HH:mm:ss'),
+											// token 信息验证
+											token: createToken(user.j_username, user._id)
+										})
+									}
+								})
+							} else {
+								user = userDoc
+								if (!isSuccess || !user) {
+									nRes.json({ success: isSuccess })
+								} else {
+									nRes.json({
+										success: isSuccess,
+										username: user.j_username,
+										_id: user._id,
+										// 账户创建日期
+										time: moment(objectIdToTimestamp(user._id))
+											.format('YYYY-MM-DD HH:mm:ss'),
+										// token 信息验证
+										token: createToken(user.name, user._id)
+									})
+								}
+							}
+						})
+					} else {
+						nRes.json({
+							success: false
+						})
+					}
+				})
+			} else {
+				nRes.json({
+					success: false
+				})
+			}
+		})
+
+}
 
 // 注册
 const Register = (req, res) => {
@@ -33,7 +135,6 @@ const Register = (req, res) => {
 		} else {
 			userRegister.save(err => {
 				if (err) console.log(err)
-				console.log('register success')
 				res.json({
 					success: true
 				})
@@ -135,7 +236,7 @@ const UpdatePassword = (req, res) => {
 		}
 		model.User.findById(user.id, (err, doc) => {
 			if (!doc) {
-				res.json({success: false})
+				res.json({ success: false })
 				return
 			}
 			if (doc.password !== sha1(updatePassword.oldPassword)) {
@@ -321,5 +422,6 @@ module.exports = {
 	LeaveGroup,
 	JoinEvent,
 	LeaveEvent,
-	ConfirmJoinGroup
+	ConfirmJoinGroup,
+	LoginByJaccount
 }

@@ -4,6 +4,7 @@ const checkToken = require('../middleware/checkToken.js')
 module.exports = (router) => {
 	router.post('/register', userController.Register),
 		router.post('/login', userController.Login),
+		router.post('/login/jaccount', userController.LoginByJaccount),	
 		router.get('/user', checkToken, userController.User),
 		router.post('/updateUser', userController.UpdateUserInfo),
 		router.post('/updatePassword', userController.UpdatePassword),

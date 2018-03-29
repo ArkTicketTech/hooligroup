@@ -5,6 +5,7 @@ import store from '../store/index.js'
 Vue.use(Router)
 
 const router = new Router({
+	mode: 'history',
 	routes: [{
 		path: '/',
 		name: 'Group',
@@ -113,6 +114,15 @@ const router = new Router({
 		component(resolve) {
 			require.ensure(['@/pages/Account.vue'], () => {
 				resolve(require('@/pages/Account.vue'));
+			});
+		}
+	},
+	{
+		path: '/oauth/jaccount',
+		name: 'oauthJaccount',
+		component(resolve) {
+			require.ensure(['@/pages/Jaccount.vue'], () => {
+				resolve(require('@/pages/Jaccount.vue'));
 			});
 		}
 	},

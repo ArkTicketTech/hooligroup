@@ -21,7 +21,8 @@
                       <el-input type="password" v-model="dynamicValidateForm.password"></el-input>
                     </el-form-item>
                     <el-button type="primary" @click="submitForm('dynamicValidateForm')">登录</el-button>
-                    <el-button @click="resetForm('dynamicValidateForm')">重置</el-button>
+                    <el-button type="primary" @click="goJaccount()">jaccount登陆</el-button>
+                    <!-- <el-button @click="resetForm('dynamicValidateForm')">重置</el-button> -->
               </el-form>
             </el-col>
           </el-tab-pane>
@@ -38,6 +39,7 @@
 import Register from '@/pages/Register.vue'
 import * as types from '../store/types'
 import api from '../axios'
+import Config from '../common/config'
 export default {
     name: 'login',
     data() {
@@ -71,6 +73,10 @@ export default {
         // 重置
         resetForm(formName) {
             this.$refs[formName].resetFields();
+        },
+        goJaccount() {
+            let url = 'https://jaccount.sjtu.edu.cn/oauth2/authorize?client_id=ctWcG2PsIK5VWWnCnh7v&scope=basic&response_type=code&redirect_uri='+Config.base_url
+            window.location.href = url
         },
         // 登录
         submitForm(formName) {
