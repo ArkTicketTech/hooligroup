@@ -21,7 +21,8 @@
                       <el-input type="password" v-model="dynamicValidateForm.password"></el-input>
                     </el-form-item>
                     <el-button type="primary" @click="submitForm('dynamicValidateForm')">登录</el-button>
-                    <el-button @click="resetForm('dynamicValidateForm')">重置</el-button>
+                    <el-button type="primary" @click="goJaccount()">jaccount登陆</el-button>
+                    <!-- <el-button @click="resetForm('dynamicValidateForm')">重置</el-button> -->
               </el-form>
             </el-col>
           </el-tab-pane>
@@ -71,6 +72,10 @@ export default {
         // 重置
         resetForm(formName) {
             this.$refs[formName].resetFields();
+        },
+        goJaccount() {
+            let url = 'https://jaccount.sjtu.edu.cn/oauth2/authorize?client_id=ctWcG2PsIK5VWWnCnh7v&scope=basic&response_type=code&redirect_uri=http://localhost:8089/oauth/jaccount'
+            window.location.href = url
         },
         // 登录
         submitForm(formName) {

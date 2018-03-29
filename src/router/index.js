@@ -5,6 +5,7 @@ import store from '../store/index.js'
 Vue.use(Router)
 
 const router = new Router({
+	mode: 'history',
 	routes: [{
 		path: '/',
 		name: 'Group',
