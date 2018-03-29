@@ -39,6 +39,7 @@
 import Register from '@/pages/Register.vue'
 import * as types from '../store/types'
 import api from '../axios'
+import Config from '../common/config'
 export default {
     name: 'login',
     data() {
@@ -74,7 +75,7 @@ export default {
             this.$refs[formName].resetFields();
         },
         goJaccount() {
-            let url = 'https://jaccount.sjtu.edu.cn/oauth2/authorize?client_id=ctWcG2PsIK5VWWnCnh7v&scope=basic&response_type=code&redirect_uri=http://localhost:8089/oauth/jaccount'
+            let url = 'https://jaccount.sjtu.edu.cn/oauth2/authorize?client_id=ctWcG2PsIK5VWWnCnh7v&scope=basic&response_type=code&redirect_uri='+Config.base_url
             window.location.href = url
         },
         // 登录
