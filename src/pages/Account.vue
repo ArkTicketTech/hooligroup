@@ -6,6 +6,8 @@
         <el-row>
             <el-col :span="10" :offset="6">
                 <el-tabs tab-position="left" style="height: 230px;" v-model="activeName" @tab-click="handleClick">
+                    <!-- TODO: name is first and second? wtf -->
+                    <!-- TODO: encrypt password in front end -->
                     <el-tab-pane label="基本信息" name="first">
                         <el-col @keyup.enter.native="submitForm('UpdateInfoForm')">
                             <el-form :model="UpdateInfoForm" label-width="100px" ref="UpdateInfoForm">
@@ -30,9 +32,11 @@ import UpdatePassword from '@/pages/UpdatePassword.vue'
 import * as types from '../store/types'
 import api from '../axios'
 export default {
+    // props order should be changed and unified
     name: 'account',
     data() {
         return {
+            // camelCase or PascalCase
             username: '',
             UpdateInfoForm: {
                 username: '',
