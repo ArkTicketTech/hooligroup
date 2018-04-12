@@ -343,6 +343,7 @@ const LeaveGroup = (req, res) => {
 	let user = getToken(req, res)
 	if (user) {
 		model.Group.findById(req.body.id, (err, groupDoc) => {
+			// TODO: I think use filter to remove members is too dangerous.
 			if (groupDoc.members) {
 				groupDoc.members = groupDoc.members.filter((member) => {
 					return member != user.id

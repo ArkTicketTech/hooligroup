@@ -4,13 +4,9 @@
             <el-col :span="16">
                 <el-row>
                     <el-card class="box-card">
-                        <div slot="header"
-                             class="clearfix">
+                        <div slot="header" class="clearfix">
                             <span style="line-height: 36px;">{{groupInfo.name}}</span>
-                            <el-button v-if="isAdmin"
-                                       style="float: right;"
-                                       type="primary"
-                                       @click="goAdmin(groupInfo._id)">管理</el-button>
+                            <el-button v-if="isAdmin" style="float: right;" type="primary" @click="goAdmin(groupInfo._id)">管理</el-button>
                             <!-- <el-button v-if="isInGroup && !isAdmin"
                                        style="float: right;"
                                        type="danger"
@@ -25,39 +21,26 @@
                         </div>
                     </el-card>
                 </el-row>
-                <el-tabs v-model="currentPanel"
-                         @tab-click="selectPanel">
-                    <el-tab-pane label="活动"
-                                 name="events">
-                        <event-list :groupInfo="groupInfo"
-                                    :isAdmin="isAdmin"></event-list>
+                <el-tabs v-model="currentPanel" @tab-click="selectPanel">
+                    <el-tab-pane label="活动" name="events">
+                        <event-list :groupInfo="groupInfo" :isAdmin="isAdmin"></event-list>
                     </el-tab-pane>
-                    <el-tab-pane label="论坛"
-                                 name="forum">
-                        <topic-list :sections="groupInfo.sections"
-                                    :groupId="groupInfo._id"
-                                    :topics="groupInfo.topics"
-                                    :isAdmin="isAdmin"
-                                    :isInGroup="isInGroup"></topic-list>
+                    <el-tab-pane label="论坛" name="forum">
+                        <topic-list :sections="groupInfo.sections" :groupId="groupInfo._id" :topics="groupInfo.topics" :isAdmin="isAdmin" :isInGroup="isInGroup"></topic-list>
                     </el-tab-pane>
                 </el-tabs>
             </el-col>
             <el-col :span="8">
                 <el-card class="box-card">
-                    <div slot="header"
-                         class="clearfix">
+                    <div slot="header" class="clearfix">
                         <span style="line-height: 36px;">成员列表</span>
                     </div>
                     <div style="max-height: 500px; overflow-y: scroll;">
-                        <div v-for="admin in groupInfo.admins"
-                            v-bind:key="admin._id"
-                            class="text item">
+                        <div v-for="admin in groupInfo.admins" v-bind:key="admin._id" class="text item">
                             {{ admin.name }}
                             <el-tag type="success">管理员</el-tag>
                         </div>
-                        <div v-for="member in groupInfo.members"
-                            v-bind:key="member._id"
-                            class="text item">
+                        <div v-for="member in groupInfo.members" v-bind:key="member._id" class="text item">
                             {{ member.name }}
                         </div>
                     </div>

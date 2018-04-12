@@ -38,6 +38,7 @@ instance.interceptors.response.use(response => {
 	return Promise.reject(err)
 })
 
+// TODO: redesign restful apis
 export default {
 	// 用户注册
 	userRegister(data) {

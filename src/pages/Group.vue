@@ -5,7 +5,7 @@
             <!-- <el-button style="float: right; margin-left: 5px;" type="primary" @click="createGroupModal()">添加小组</el-button> -->
         </el-row>
         <el-row :gutter="20">
-            <el-col :span="6" v-for="group in myGroups" v-bind:key="group._id">
+            <el-col :span="6" v-for="group in myGroups" :key="group._id">
                 <el-card class="box-card">
                     <div slot="header" class="clearfix">
                         <span style="line-height: 36px;">{{group.name}}</span>
@@ -22,7 +22,7 @@
             <h2>可能感兴趣的</h2>
         </el-row>
         <el-row :gutter="20">
-            <el-col :span="6" v-for="group in groups" v-bind:key="group._id">
+            <el-col :span="6" v-for="group in groups" :key="group._id">
                 <el-card class="box-card">
                     <div slot="header" class="clearfix">
                         <span style="line-height: 36px;">{{group.name}}</span>
@@ -50,6 +50,7 @@
                 </el-form-item>
             </el-form>
             <span slot="footer" class="dialog-footer">
+                <!-- TODO: ... -->
                 <el-button @click="groupModalVisible = false">取 消</el-button>
                 <el-button type="primary" @click="createGroup">创建小组</el-button>
             </span>
@@ -71,6 +72,7 @@ export default {
     data() {
         return {
             msg: 'Welcome to Hooli Group',
+            // TODO: ...
             username: '',
             userId: '',
             groups: [],
@@ -93,7 +95,7 @@ export default {
             let loadingInstance = Loading.service();
             let that = this
             api.getGroups().then((res) => {
-                //TODO: seperate my group API
+                // TODO: seperate my group API
                 if (res.data.length > 0) {
                     let allGroups = res.data
                     that.myGroups = allGroups.filter((each) => {
@@ -113,6 +115,7 @@ export default {
         },
         createGroup() {
             let that = this
+            // Best Practice:
             let request = Object.assign({}, that.groupForm)
             api.createGroup(request).then((data) => {
                 that.groupForm = {
@@ -190,6 +193,7 @@ export default {
                 })
             })
         },
+        // TODO: ...
         goDetail(groupId) {
             let url = '/group/' + groupId
             this.$router.push({ path: url })

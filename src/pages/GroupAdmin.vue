@@ -19,6 +19,7 @@
                                 @close="deleteSection(section)">
                                 {{section}}
                             </el-tag>
+                            <!-- TODO: -->
                             <el-input
                                 class="input-new-section"
                                 v-if="inputSectionVisible"
@@ -155,6 +156,7 @@ export default {
         handleSectionInputConfirm() {
             let inputSection = this.inputSection;
             let that = this
+            // TODO: rename
             let data = {
                 groupId: this.groupId,
                 section: inputSection

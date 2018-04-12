@@ -76,6 +76,7 @@ export default {
         }
     },
     mounted() {
+        // TODO: mp2o
         this.userId = localStorage.getItem('userid')
         this.username = localStorage.getItem('username')
         this.getEventInfo()
@@ -83,6 +84,7 @@ export default {
     },
     methods: {
         getEventInfo() {
+            // Q: any problems?
             let data = {
                 id: this.$router.currentRoute.params.eid
             }

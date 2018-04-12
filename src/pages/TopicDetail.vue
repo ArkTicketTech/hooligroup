@@ -57,6 +57,8 @@ import { quillEditor } from 'vue-quill-editor'
 export default {
     data() {
         return {
+            // TODO: ...
+            // wtf???? 
             userId: '', //current user
             username: '',
             content: '',

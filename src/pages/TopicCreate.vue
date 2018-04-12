@@ -37,6 +37,7 @@
 <script>
 import api from '../axios'
 import { quillEditor } from 'vue-quill-editor'
+// TODO: move quillEditor to a single component
 
 export default {
     data() {

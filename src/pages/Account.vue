@@ -8,6 +8,7 @@
                 <el-tabs tab-position="left" style="height: 230px;" v-model="activeName" @tab-click="handleClick">
                     <!-- TODO: name is first and second? wtf -->
                     <!-- TODO: encrypt password in front end -->
+                    <!-- TODO： move to new component -->
                     <el-tab-pane label="基本信息" name="first">
                         <el-col @keyup.enter.native="submitForm('UpdateInfoForm')">
                             <el-form :model="UpdateInfoForm" label-width="100px" ref="UpdateInfoForm">
@@ -16,6 +17,7 @@
                                 </el-form-item>
                             </el-form>
                         </el-col>
+                        <!-- TODO: remove inline style -->
                         <el-button type="primary" style="float:right" @click="submitForm('UpdateInfoForm')">确认修改</el-button>
                     </el-tab-pane>
                     <el-tab-pane label="修改密码" name="second">
@@ -35,14 +37,16 @@ export default {
     // props order should be changed and unified
     name: 'account',
     data() {
+        // Q: why function
         return {
-            // camelCase or PascalCase
-            username: '',
+            // TODO: camelCase or PascalCase? 
+            username: '', // TODO: move it to private properties
             UpdateInfoForm: {
                 username: '',
                 name: '',
                 password: ''
             },
+            // Q: is the usage of $store correct?
             activeName: this.$store.state.activeName,
             // 输入校验
             rules: {
@@ -74,10 +78,12 @@ export default {
         handleClick(tab, event) {},
         // 重置
         resetForm(formName) {
+            // Q: what is $ref?
             this.$refs[formName].resetFields();
         },
         // 登录
         submitForm(formName) {
+            // TODO: some problem here?
             this.$refs[formName].validate((valid) => {
                 if (valid) {
                     let opt = this.UpdateInfoForm;

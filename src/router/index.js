@@ -139,6 +139,7 @@ const router = new Router({
 	]
 })
 
+// TODO: not all pages need check token
 // 验证 token，存在才跳转
 router.beforeEach((to, from, next) => {
 	let token = localStorage.getItem('token')
