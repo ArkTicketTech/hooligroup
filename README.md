@@ -15,6 +15,16 @@
 ```bash
 npm install
 ```
+* Please make sure config/default.js is correct, looks like following:
+```
+module.exports = {
+    port: 3000,
+    mongodb: 'mongodb://localhost/kk',
+    J_CLIENT_ID: 'XXXX',
+    J_CLIENT_SECRET: 'XXXX',
+    BASE_URL: 'http://localhost:8089/'
+}
+```
 
 ## Develop
 
@@ -50,7 +60,7 @@ mongod
 
 ```bash
 # then run server
-node server.js
+nodemon server.js
 ```
 
 ## Restful API
